@@ -1,0 +1,43 @@
+﻿<UserControl x:Class="TopDeck.FiltersPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:local="clr-namespace:TopDeck"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <StackPanel>
+            <local:FilterRowTextBox x:Name="NameFilterField" FilterText="Name"/>
+            <local:FilterRowTextBox x:Name="TypeFilterField" FilterText="Type" KeyUp="TypeFilterField_KeyUp"/>
+            <local:FilterRowTextBox x:Name="PowerFilterField" FilterText="Power" Visibility="Collapsed"/>
+            <local:FilterRowTextBox x:Name="ToughnessFilterField" FilterText="Toughness" Visibility="Collapsed"/>
+            <local:FilterRowTextBox x:Name="ConvertedManaCostFilterField" FilterText="Converted Mana Cost"/>
+            <local:FilterRowTextBox x:Name="ManaCostFilterField" FilterText="Mana Cost"/>
+            <StackPanel Name="ColorFilters" Orientation="Horizontal">
+                <local:FilterRowCheckBox x:Name="WhiteColor" FilterText="Red"/>
+                <local:FilterRowCheckBox x:Name="BlueColor" FilterText="Blue"/>
+                <local:FilterRowCheckBox x:Name="BlackColor" FilterText="Black"/>
+                <local:FilterRowCheckBox x:Name="RedColor" FilterText="Red"/>
+                <local:FilterRowCheckBox x:Name="GreenColor" FilterText="Green"/>
+                <local:FilterRowCheckBox x:Name="ColorlessColor" FilterText="Colorless"/>
+            </StackPanel>
+            <local:FilterRowCheckBox x:Name="RequireMulticolored" FilterText="Require Multicolored"/>
+            <StackPanel Name="Types" Orientation="Horizontal">
+                <local:FilterRowCheckBox x:Name="ArtifactCheckbox" FilterText="Artifact"/>
+                <local:FilterRowCheckBox x:Name="CreatureCheckbox" FilterText="Creature"/>
+                <local:FilterRowCheckBox x:Name="EnchantmentCheckbox" FilterText="Enchantment"/>
+                <local:FilterRowCheckBox x:Name="InstantCheckbox" FilterText="Instant"/>
+                <local:FilterRowCheckBox x:Name="SorceryCheckbox" FilterText="Sorcery"/>
+                <local:FilterRowCheckBox x:Name="LandCheckbox" FilterText="Land"/>
+                <local:FilterRowCheckBox x:Name="PlaneswalkerCheckbox" FilterText="Planeswalker"/>
+            </StackPanel>
+            <StackPanel Name="Rarities" Orientation="Horizontal">
+                <local:FilterRowCheckBox x:Name="CommonCheckbox" FilterText="Common"/>
+                <local:FilterRowCheckBox x:Name="UncommonCheckbox" FilterText="Uncommon"/>
+                <local:FilterRowCheckBox x:Name="RareCheckbox" FilterText="Rare"/>
+            </StackPanel>
+            <local:FilterRowTextBox x:Name="SubtypeTextbox" FilterText="Subtypes"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

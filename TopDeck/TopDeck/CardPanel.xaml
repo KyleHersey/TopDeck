@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="TopDeck.CardPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <Image Source="Magic_the_gathering-card_back.jpg" Height="250" Width="150"/>
+            <ListBox>
+                <ListBoxItem>First Set Here</ListBoxItem>
+                <ListBoxItem>Second Set Here</ListBoxItem>
+            </ListBox>
+        </StackPanel>
+        <Button>Rulings</Button>
+        <TextBox Grid.Row="1">Rules text goes here</TextBox>
+    </StackPanel>    
+</UserControl>
