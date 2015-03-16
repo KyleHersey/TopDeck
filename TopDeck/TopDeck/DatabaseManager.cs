@@ -23,18 +23,7 @@ namespace TopDeck
         int hashedJSONFile;
         string mainJSONFileName = "AllCards-x.json";
 
-        /*public static void Main()
-        {
-            DatabaseManager m = new DatabaseManager();
-            List<string> cards = m.GetCards("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "artifact", null, "", "", "");
-            foreach (string card in cards)
-            {
-                Debug.WriteLine(card);
-            }
-            //Card c = m.GetCard("Fire Elemental");
-            //Debug.WriteLine(c.Name);
-            //m.DownloadNewFile();
-        } */
+        
 
         public DatabaseManager() {
 
