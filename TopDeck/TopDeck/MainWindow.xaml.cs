@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,18 +27,19 @@ namespace TopDeck
         {
             InitializeComponent();
 
-            /* Databasey stuff
+            /* Databasey stuff */
         
             DatabaseManager m = new DatabaseManager();
-            List<string> cards = m.GetCards("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "artifact", null, "", "", "");
+            /*List<string> cards = m.GetCards("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "artifact", null, "", "", "");
             foreach (string card in cards)
             {
                 Debug.WriteLine(card);
-            }
-            //Card c = m.GetCard("Fire Elemental");
-            //Debug.WriteLine(c.Name);
-            //m.DownloadNewFile();
-         */
+            }*/
+            /*Card c = m.GetCard("Sen Triplets");
+            Debug.WriteLine(c.Colors.Count);
+            foreach (string color in c.Colors) {
+                Debug.WriteLine(color);
+            }*/
 
         }
     }

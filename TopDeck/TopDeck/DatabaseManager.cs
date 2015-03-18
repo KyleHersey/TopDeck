@@ -528,8 +528,6 @@ namespace TopDeck
                     c.Border = (string) reader["border"];
                 c.CMC = (double) reader["cmc"];
 
-                // add colors from table
-
                 if (!(reader["flavor"] is DBNull))
                     c.Flavor = (string)reader["flavor"];
 
@@ -546,8 +544,6 @@ namespace TopDeck
                 c.MultiverseId = (long)reader["multiverse_id"];
 
                 c.Name = (string)reader["name"];
-                
-                // add names from names table
 
                 if (!(reader["number"] is DBNull))
                     c.Number = (string)reader["number"];
@@ -558,10 +554,6 @@ namespace TopDeck
 
                 if (!(reader["release_date"] is DBNull))
                     c.ReleaseDate = (string)reader["release_date"];
-                
-                // add subtypes from subtypes table
-
-                // add supertypes from supertypes table
 
                 if (!(reader["card_text"] is DBNull))
                     c.Text = (string)reader["card_text"];
@@ -574,15 +566,101 @@ namespace TopDeck
                 c.Toughness = (string)reader["toughness"];
 
                 c.Type = (string)reader["type"];
-                
-                // add types
-                
-                // add variations
 
                 if (!(reader["watermark"] is DBNull))
                     c.Watermark = (string)reader["watermark"];
             }
 
+            // add colors from table
+            sql = @"select color
+                    from COLORS
+                    where name like @name";
+
+            cmd = dbConnection.CreateCommand();
+            cmd.CommandText = sql;
+            cmd.Parameters.Add(new SQLiteParameter("@name") { Value = name });
+
+            reader = cmd.ExecuteReader();
+            c.Colors = new List<string>();
+
+            while (reader.Read())
+            {
+                c.Colors.Add((string)reader["color"]);
+            }
+
+            // add names from names table
+            sql = @"select alternate_name
+                    from NAMES
+                    where name like @name";
+
+            cmd = dbConnection.CreateCommand();
+            cmd.CommandText = sql;
+            cmd.Parameters.Add(new SQLiteParameter("@name") { Value = name });
+
+            reader = cmd.ExecuteReader();
+            c.Names = new List<string>();
+
+            while (reader.Read())
+            {
+                c.Names.Add((string)reader["alternate_name"]);
+            }
+
+            // add foreign names
+            // HOW DO WE WANT TO REPRESENT FOREIGN NAMES AND OTHER OBJECTS
+
+            // add subtypes from subtypes table
+            sql = @"select subtype
+                    from SUBTYPES
+                    where name like @name";
+
+            cmd = dbConnection.CreateCommand();
+            cmd.CommandText = sql;
+            cmd.Parameters.Add(new SQLiteParameter("@name") { Value = name });
+
+            reader = cmd.ExecuteReader();
+            c.Subtypes = new List<string>();
+
+            while (reader.Read())
+            {
+                c.Subtypes.Add((string)reader["subtype"]);
+            }
+
+            // add supertypes from supertypes table
+            sql = @"select supertype
+                    from SUPERTYPES
+                    where name like @name";
+
+            cmd = dbConnection.CreateCommand();
+            cmd.CommandText = sql;
+            cmd.Parameters.Add(new SQLiteParameter("@name") { Value = name });
+
+            reader = cmd.ExecuteReader();
+            c.Supertypes = new List<string>();
+
+            while (reader.Read())
+            {
+                c.Supertypes.Add((string)reader["supertype"]);
+            }
+
+            // add types
+            sql = @"select type
+                    from TYPES
+                    where name like @name";
+
+            cmd = dbConnection.CreateCommand();
+            cmd.CommandText = sql;
+            cmd.Parameters.Add(new SQLiteParameter("@name") { Value = name });
+
+            reader = cmd.ExecuteReader();
+            c.Types = new List<string>();
+
+            while (reader.Read())
+            {
+                c.Types.Add((string)reader["type"]);
+            }
+
+            // add variations
+            // legalities?
             return c;
         }
 
