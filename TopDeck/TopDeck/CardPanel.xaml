@@ -13,7 +13,9 @@
                 <ListBoxItem>Second Set Here</ListBoxItem>
             </ListBox>
         </StackPanel>
-        <Button>Rulings</Button>
-        <TextBox Grid.Row="1">Rules text goes here</TextBox>
+        <Border Margin="10, 5, 10, 5">
+            <Button>Rulings</Button>
+        </Border>
+        <TextBox Grid.Row="1" Margin="10, 5, 10, 5">Rules text goes here</TextBox>
     </StackPanel>    
 </UserControl>
