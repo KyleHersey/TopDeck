@@ -3,6 +3,132 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <!--<Style TargetType="TabControl">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="White"/>
+            <Setter Property="Foreground" Value="Blue"/>
+        </Style> -->
+        <!--<Style TargetType="TabItem">
+            
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Background" Value="Transparent"/>
+        </Style> -->
+        <Style TargetType="DockPanel">
+            <Setter Property="Background" Value="DarkSlateGray"/>
+        </Style>
+        <Style TargetType="Menu">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0.5,1" EndPoint="0.5,0">
+                        <GradientStop Color="#2f4f4f" Offset="0.5"/>
+                        <GradientStop Color="#162525" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Foreground" Value="DarkGray"/>
+        </Style>
+        <Style TargetType="MenuItem">
+            <Setter Property="Foreground" Value="Black"/>
+        </Style>
+        <Style TargetType="ListBox">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                        <GradientStop Color="#2f4f4f" Offset="1"/>
+                        <GradientStop Color="#162525" Offset="0.5"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="LightBlue"/>
+            <Setter Property="BorderThickness" Value="0, 0, 1, 1"/>
+            <Setter Property="BorderBrush" Value="LightBlue"/>
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="LightBlue"/>
+        </Style>
+        <Style TargetType="{x:Type CheckBox}">
+            <Setter Property="Background" Value="DarkSlateGray"/>
+            <Setter Property="Foreground" Value="LightBlue"/>
+        </Style>
+        <Style TargetType="{x:Type TabControl}">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                        <GradientStop Color="#2f4f4f" Offset="1"/>
+                        <GradientStop Color="#162525" Offset="0.5"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabControl">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Border BorderThickness="0, 1, 0, 0" BorderBrush="#1F3434" Grid.Row="1">
+                                <Border BorderThickness="{TemplateBinding BorderThickness}" 
+                BorderBrush="{TemplateBinding BorderBrush}">
+                                    <Border Background="{TemplateBinding Background}">
+                                        <ContentPresenter ContentSource="SelectedContent"/>
+                                    </Border>
+                                </Border>
+                            </Border>
+                            <TabPanel Grid.Row="0" IsItemsHost="true"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="TabItem">
+            <Setter Property="Background" Value="DarkSlateGray"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="1, 1, 1, 1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TabItem}">
+                        <Border>
+                            <Grid>
+                                <Grid>
+                                    <Border x:Name="Panel" CornerRadius="3,3,0,0" Background="DarkSlateGray" 
+                   BorderBrush="Lavender" 
+                   BorderThickness="1, 1, 1, 0"/>
+                                    <Border x:Name="Panel2" CornerRadius="3,3,0,0" Background="DarkSlateGray" 
+                   BorderBrush="Lavender" 
+                   BorderThickness="0, 0, 0, 1"/>
+                                </Grid>
+                                <Border BorderThickness="1, 1, 1, 0" />
+                                <ContentPresenter ContentSource="Header" 
+                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Panel" Property="BorderBrush" Value="DarkSlateGray"/>
+                                <Setter TargetName="Panel" Property="BorderThickness" Value="1, 1, 1, 0"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="False">
+                                <Setter TargetName="Panel" Property="BorderBrush" Value="#2f4f4f"/>
+                                <Setter TargetName="Panel" Property="BorderThickness" Value="1"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
     </Application.Resources>
 </Application>

@@ -6,7 +6,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <ListBox ScrollViewer.VerticalScrollBarVisibility="Visible">
+        <ListBox ScrollViewer.VerticalScrollBarVisibility="Auto">
             <ListBoxItem>Sample Name 1</ListBoxItem>
             <ListBoxItem>Sample Name 2</ListBoxItem>
         </ListBox>

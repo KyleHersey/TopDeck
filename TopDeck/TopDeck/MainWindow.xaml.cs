@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -41,6 +43,25 @@ namespace TopDeck
                 Debug.WriteLine(color);
             }*/
 
+        }
+
+        private void NewDeckFile_Click(object sender, RoutedEventArgs e)
+        {
+            /*Process fileExplorer = Process.Start("explorer.exe"); */
+            string path = "";
+            OpenFileDialog file = new OpenFileDialog();
+            bool? userClickedOK = file.ShowDialog();
+            if (userClickedOK == true)
+            {
+                path = file.SafeFileName;
+                Debug.WriteLine(path);
+            }
+
+            Regex checkExtension = new Regex(".*\\.dec");
+            if (checkExtension.IsMatch(path))
+            {
+                Debug.WriteLine("yes");
+            }
         }
     }
 }

@@ -10,9 +10,11 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        
-        <TextBlock Name="FilterType" Grid.Column="0" Text="{Binding FilterText}"/>
-        <TextBox Name="Input"  Grid.Column="1"></TextBox>
-        
+
+        <TextBlock Name="FilterType" Grid.Column="0" Text="{Binding FilterText}" Margin="10, 30, 0, 30"/>
+        <Border Grid.Column="1" Margin="0, 30, 10, 30">
+            <TextBox Name="Input"/>
+        </Border>
+
     </Grid>
 </UserControl>

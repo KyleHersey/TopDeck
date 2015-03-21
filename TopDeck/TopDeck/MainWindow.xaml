@@ -4,7 +4,15 @@
         xmlns:local="clr-namespace:TopDeck"
         Title="MainWindow" Height="350" Width="525">
     
-    <Grid Name="MainGrid">
+    <DockPanel Name="MainGrid">
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="File">
+                <MenuItem Header="New" Click="NewDeckFile_Click"/>
+                <MenuItem Header="Open"/>
+                <MenuItem Header="Recent"/>
+                <MenuItem Header="Save"/>
+            </MenuItem>
+        </Menu>
         <TabControl>
             <TabItem Header="Filters">
                 <local:ListCardsView/>
@@ -13,5 +21,5 @@
                 <local:DeckView/>
             </TabItem>
         </TabControl>
-    </Grid>
+    </DockPanel>
 </Window>

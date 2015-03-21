@@ -10,7 +10,7 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <TextBlock Name="FilterType" Grid.Column="0" Text="{Binding FilterText}"/>
-        <CheckBox Name="Color"  Grid.Column="1"></CheckBox>
+        <TextBlock Name="FilterType" Grid.Column="0" Text="{Binding FilterText}" Margin="5, 30, 5, 30"/>
+        <CheckBox Name="Color"  Grid.Column="1" Margin="5, 30, 5, 30"></CheckBox>
     </Grid>
 </UserControl>
