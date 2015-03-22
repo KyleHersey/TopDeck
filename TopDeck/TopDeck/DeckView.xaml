@@ -12,8 +12,8 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <local:ListPanel Grid.Column="0"/>
-        <local:CardPanel Grid.Column="1"/>
-        <local:StatsPanel Grid.Column="2"/>
+        <local:ListPanel Grid.Column="0" BorderThickness="0, 0, 1, 0" BorderBrush="#2f4f4f"/>
+        <local:CardPanel Grid.Column="1" BorderThickness="1, 0, 1, 0" BorderBrush="#2f4f4f"/>
+        <local:StatsPanel Grid.Column="2" BorderThickness="1, 0, 0, 0" BorderBrush="#2f4f4f"/>
     </Grid>
 </UserControl>
