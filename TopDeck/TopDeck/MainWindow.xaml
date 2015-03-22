@@ -30,7 +30,7 @@
                         <TextBlock Style="{StaticResource MenuFont}">Save</TextBlock>
                     </MenuItem.Header>
                 </MenuItem>
-                <MenuItem>
+                <MenuItem  Click="SaveAsDeckFile_Click">
                     <MenuItem.Header>
                         <TextBlock Style="{StaticResource MenuFont}">Save as...</TextBlock>
                     </MenuItem.Header>
