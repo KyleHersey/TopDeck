@@ -7,10 +7,39 @@
     <DockPanel Name="MainGrid">
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File">
-                <MenuItem Header="New" Click="NewDeckFile_Click"/>
-                <MenuItem Header="Open"/>
-                <MenuItem Header="Recent"/>
-                <MenuItem Header="Save"/>
+                <MenuItem>
+                    <MenuItem.Header>
+                        <TextBlock Style="{StaticResource MenuFont}">New</TextBlock>
+                    </MenuItem.Header>
+                </MenuItem>
+                <MenuItem Click="OpenDeckFile_Click">
+                    <MenuItem.Header>
+                        <TextBlock Style="{StaticResource MenuFont}">Open</TextBlock>
+                    </MenuItem.Header>
+                </MenuItem>
+                <MenuItem>
+                    <MenuItem.Header>
+                        <TextBlock Style="{StaticResource MenuFont}">Recent</TextBlock>
+                    </MenuItem.Header>
+                    <TextBlock Style="{StaticResource MenuFont}">SampleFile1.dec</TextBlock>
+                    <TextBlock Style="{StaticResource MenuFont}">SampleFile1.dec</TextBlock>
+                    <TextBlock Style="{StaticResource MenuFont}">SampleFile1.dec</TextBlock>
+                </MenuItem>
+                <MenuItem>
+                    <MenuItem.Header>
+                        <TextBlock Style="{StaticResource MenuFont}">Save</TextBlock>
+                    </MenuItem.Header>
+                </MenuItem>
+                <MenuItem>
+                    <MenuItem.Header>
+                        <TextBlock Style="{StaticResource MenuFont}">Save as...</TextBlock>
+                    </MenuItem.Header>
+                </MenuItem>
+                <MenuItem>
+                    <MenuItem.Header>
+                        <TextBlock Style="{StaticResource MenuFont}">Update</TextBlock>
+                    </MenuItem.Header>
+                </MenuItem>
             </MenuItem>
         </Menu>
         <TabControl>

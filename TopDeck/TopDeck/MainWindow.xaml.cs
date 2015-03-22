@@ -45,7 +45,7 @@ namespace TopDeck
 
         }
 
-        private void NewDeckFile_Click(object sender, RoutedEventArgs e)
+        private void OpenDeckFile_Click(object sender, RoutedEventArgs e)
         {
             /*Process fileExplorer = Process.Start("explorer.exe"); */
             string path = "";
