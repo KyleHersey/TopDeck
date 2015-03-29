@@ -44,10 +44,10 @@
         </Menu>
         <TabControl>
             <TabItem Header="Filters">
-                <local:ListCardsView/>
+                <local:ListCardsView x:Name="FiltersTab"/>
             </TabItem>
             <TabItem Header="Deck">
-                <local:DeckView/>
+                <local:DeckView  x:Name="DeckTab"/>
             </TabItem>
         </TabControl>
     </DockPanel>

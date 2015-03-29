@@ -20,6 +20,19 @@ namespace TopDeck
     /// </summary>
     public partial class ListPanel : UserControl
     {
+
+        public DatabaseManager DBMan
+        {
+            get;
+            set;
+        }
+
+        public CardPanel RightPanel
+        {
+            get;
+            set;
+        }
+
         public ListPanel()
         {
             InitializeComponent();

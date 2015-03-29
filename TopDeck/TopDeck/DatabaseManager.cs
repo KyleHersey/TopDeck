@@ -17,7 +17,7 @@ using System.Diagnostics;
 
 namespace TopDeck
 {
-    class DatabaseManager
+    public class DatabaseManager
     {
         SQLiteConnection dbConnection;
         int hashedJSONFile;

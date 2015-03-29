@@ -23,7 +23,7 @@ namespace TopDeck
     /// </summary>
     public partial class MainWindow : Window
     {
-
+        
 
         public MainWindow()
         {
@@ -42,6 +42,8 @@ namespace TopDeck
             foreach (string color in c.Colors) {
                 Debug.WriteLine(color);
             }*/
+
+            FiltersTab.DBMan = m;
 
         }
 

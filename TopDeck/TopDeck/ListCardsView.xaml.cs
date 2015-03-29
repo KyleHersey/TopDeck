@@ -20,9 +20,20 @@ namespace TopDeck
     /// </summary>
     public partial class ListCardsView : UserControl
     {
+        public DatabaseManager DBMan
+        {
+            get;
+            set;
+        }
+
         public ListCardsView()
         {
             InitializeComponent();
+            FilterFiltersPanel.MiddlePanel = FilterListPanel;
+            FilterListPanel.RightPanel = CardPanel;
+
+            FilterFiltersPanel.DBMan = this.DBMan;
+            FilterListPanel.DBMan = this.DBMan;
         }
     }
 }

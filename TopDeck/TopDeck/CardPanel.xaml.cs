@@ -20,6 +20,7 @@ namespace TopDeck
     /// </summary>
     public partial class CardPanel : UserControl
     {
+
         public CardPanel()
         {
             InitializeComponent();

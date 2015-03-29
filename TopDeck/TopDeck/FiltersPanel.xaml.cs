@@ -21,6 +21,18 @@ namespace TopDeck
     public partial class FiltersPanel : UserControl
     {
 
+        public DatabaseManager DBMan
+        {
+            get;
+            set;
+        }
+        
+        public ListPanel MiddlePanel
+        {
+            get;
+            set;
+        }
+
         public List<String> RarityList
         {
             get{
@@ -38,7 +50,7 @@ namespace TopDeck
         {
             InitializeComponent();
 
-            
+
         }
 
         private void TypeFilterField_KeyUp(object sender, KeyEventArgs e)

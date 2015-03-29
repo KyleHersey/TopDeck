@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TopDeck
 {
-    class Card
+    public class Card
     {
         public Card(JSONDTO c)
         {
