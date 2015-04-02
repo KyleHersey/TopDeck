@@ -37,5 +37,9 @@ namespace TopDeck
         {
             InitializeComponent();
         }
+
+        public void setItemsSource(List<string> names){
+            theList.ItemsSource = names;
+        }
     }
 }

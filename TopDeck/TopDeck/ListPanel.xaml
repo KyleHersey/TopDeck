@@ -10,26 +10,9 @@
             <ColumnDefinition Width="5*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <ListBox Grid.Column="0" ScrollViewer.VerticalScrollBarVisibility="Visible" Margin="5, 20, 0, 20">
-            <ListBoxItem>Sample Name 1</ListBoxItem>
-            <ListBoxItem>Sample Name 2</ListBoxItem>
-            <ListBoxItem>Sample Name 1</ListBoxItem>
-            <ListBoxItem>Sample Name 2</ListBoxItem>
-            <ListBoxItem>Sample Name 1</ListBoxItem>
-            <ListBoxItem>Sample Name 2</ListBoxItem>
-            <ListBoxItem>Sample Name 1</ListBoxItem>
-            <ListBoxItem>Sample Name 2</ListBoxItem>
-            <ListBoxItem>Sample Name 1</ListBoxItem>
-            <ListBoxItem>Sample Name 2</ListBoxItem>
-            <ListBoxItem>Sample Name 1</ListBoxItem>
-            <ListBoxItem>Sample Name 1</ListBoxItem>
-            <ListBoxItem>Sample Name 1</ListBoxItem>
-            <ListBoxItem>Sample Name 1</ListBoxItem>
-            <ListBoxItem>Sample Name 2</ListBoxItem>
-            <ListBoxItem>Sample Name 2</ListBoxItem>
-            <ListBoxItem>Sample Name 2</ListBoxItem>
-            <ListBoxItem>Sample Name 2</ListBoxItem>
-        </ListBox>
+        
+        <ListBox Name="theList" Grid.Column="0" ScrollViewer.VerticalScrollBarVisibility="Visible" Margin="5, 20, 0, 20"/>
+        
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="4*"/>

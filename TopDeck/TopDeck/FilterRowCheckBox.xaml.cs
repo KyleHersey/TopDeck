@@ -22,6 +22,13 @@ namespace TopDeck
 
     public partial class FilterRowCheckBox : UserControl
     {
+        public bool isChecked()
+        {
+            Console.WriteLine(Color.IsChecked.HasValue);
+            Console.WriteLine(Color.IsChecked);
+            return (bool)Color.IsChecked;
+        }
+
         public string FilterText
         {
             get;

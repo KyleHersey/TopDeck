@@ -8,6 +8,7 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <StackPanel>
+            <Button Name="SearchButton" Content="Search" Click="FilterQuery"/>
             <local:FilterRowTextBox x:Name="NameFilterField" FilterText="Name"/>
             <local:FilterRowTextBox x:Name="TypeFilterField" FilterText="Type" KeyUp="TypeFilterField_KeyUp"/>
             <local:FilterRowTextBox x:Name="PowerFilterField" FilterText="Power" Visibility="Collapsed"/>
@@ -15,7 +16,7 @@
             <local:FilterRowTextBox x:Name="ConvertedManaCostFilterField" FilterText="Converted Mana Cost"/>
             <local:FilterRowTextBox x:Name="ManaCostFilterField" FilterText="Mana Cost"/>
             <StackPanel Name="ColorFilters" Orientation="Horizontal">
-                <local:FilterRowCheckBox x:Name="WhiteColor" FilterText="Red"/>
+                <local:FilterRowCheckBox x:Name="WhiteColor" FilterText="White"/>
                 <local:FilterRowCheckBox x:Name="BlueColor" FilterText="Blue"/>
                 <local:FilterRowCheckBox x:Name="BlackColor" FilterText="Black"/>
                 <local:FilterRowCheckBox x:Name="RedColor" FilterText="Red"/>

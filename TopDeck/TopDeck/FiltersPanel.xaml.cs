@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Diagnostics;
 
 namespace TopDeck
 {
@@ -50,7 +51,6 @@ namespace TopDeck
         {
             InitializeComponent();
 
-
         }
 
         private void TypeFilterField_KeyUp(object sender, KeyEventArgs e)
@@ -66,6 +66,16 @@ namespace TopDeck
                     PowerFilterField.Visibility = System.Windows.Visibility.Collapsed;
                     ToughnessFilterField.Visibility = System.Windows.Visibility.Collapsed;
                 }
+        }
+
+        private void FilterQuery(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("clicked");
+            if (RedColor.isChecked() == true)
+            {
+                Debug.WriteLine("stuff");
+                MiddlePanel.setItemsSource(DBMan.GetCards("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", null, "red", "", ""));
+            }
         }
     }
 }
