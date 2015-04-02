@@ -77,5 +77,10 @@ namespace TopDeck
                 MiddlePanel.setItemsSource(DBMan.GetCards("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", null, "red", "", ""));
             }
         }
+
+        public void setDatabaseManager(DatabaseManager db)
+        {
+            DBMan = db;
+        }
     }
 }

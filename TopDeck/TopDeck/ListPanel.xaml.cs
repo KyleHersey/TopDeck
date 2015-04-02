@@ -41,5 +41,10 @@ namespace TopDeck
         public void setItemsSource(List<string> names){
             theList.ItemsSource = names;
         }
+
+        public void setDatabaseManager(DatabaseManager db)
+        {
+            DBMan = db;
+        }
     }
 }

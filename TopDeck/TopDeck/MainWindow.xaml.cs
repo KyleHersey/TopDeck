@@ -27,11 +27,13 @@ namespace TopDeck
 
         public MainWindow()
         {
+            
+
             InitializeComponent();
 
             /* Databasey stuff */
         
-            DatabaseManager m = new DatabaseManager();
+            
             /*List<string> cards = m.GetCards("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "artifact", null, "", "", "");
             foreach (string card in cards)
             {
@@ -43,7 +45,9 @@ namespace TopDeck
                 Debug.WriteLine(color);
             }*/
 
-            FiltersTab.DBMan = m;
+            DatabaseManager db = new DatabaseManager();
+
+            FiltersTab.setDatabaseManager(db);
 
         }
 

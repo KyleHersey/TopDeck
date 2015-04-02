@@ -31,9 +31,12 @@ namespace TopDeck
             InitializeComponent();
             FilterFiltersPanel.MiddlePanel = FilterListPanel;
             FilterListPanel.RightPanel = CardPanel;
+        }
 
-            FilterFiltersPanel.DBMan = this.DBMan;
-            FilterListPanel.DBMan = this.DBMan;
+        public void setDatabaseManager(DatabaseManager db){
+            DBMan = db;
+            FilterFiltersPanel.setDatabaseManager(db);
+            FilterListPanel.setDatabaseManager(db);
         }
     }
 }
