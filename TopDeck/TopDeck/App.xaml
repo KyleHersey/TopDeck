@@ -25,6 +25,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        
         <Style TargetType="ScrollBar">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Foreground" Value="Black"/>
@@ -53,7 +54,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        
+
         <Style TargetType="{x:Type Button}">
             <Setter Property="Background" Value="Black" />
             <Setter Property="Foreground" Value="White" />
@@ -104,14 +105,7 @@
         </Style>
         
         <Style TargetType="ListBox">
-            <Setter Property="Background">
-                <Setter.Value>
-                    <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
-                        <GradientStop Color="#2f4f4f" Offset="1"/>
-                        <GradientStop Color="#162525" Offset="0.5"/>
-                    </LinearGradientBrush>
-                </Setter.Value>
-            </Setter>
+            <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
         </Style>
         

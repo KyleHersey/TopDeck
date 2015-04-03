@@ -7,38 +7,48 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <StackPanel>
-            <Button Name="SearchButton" Content="Search" Click="FilterQuery"/>
-            <local:FilterRowTextBox x:Name="NameFilterField" FilterText="Name"/>
-            <local:FilterRowTextBox x:Name="TypeFilterField" FilterText="Type" KeyUp="TypeFilterField_KeyUp"/>
-            <local:FilterRowTextBox x:Name="PowerFilterField" FilterText="Power" Visibility="Collapsed"/>
-            <local:FilterRowTextBox x:Name="ToughnessFilterField" FilterText="Toughness" Visibility="Collapsed"/>
-            <local:FilterRowTextBox x:Name="ConvertedManaCostFilterField" FilterText="Converted Mana Cost"/>
-            <local:FilterRowTextBox x:Name="ManaCostFilterField" FilterText="Mana Cost"/>
-            <StackPanel Name="ColorFilters" Orientation="Horizontal">
-                <local:FilterRowCheckBox x:Name="WhiteColor" FilterText="White"/>
-                <local:FilterRowCheckBox x:Name="BlueColor" FilterText="Blue"/>
-                <local:FilterRowCheckBox x:Name="BlackColor" FilterText="Black"/>
-                <local:FilterRowCheckBox x:Name="RedColor" FilterText="Red"/>
-                <local:FilterRowCheckBox x:Name="GreenColor" FilterText="Green"/>
-                <local:FilterRowCheckBox x:Name="ColorlessColor" FilterText="Colorless"/>
-            </StackPanel>
-            <local:FilterRowCheckBox x:Name="RequireMulticolored" FilterText="Require Multicolored"/>
-            <StackPanel Name="Types" Orientation="Horizontal">
-                <local:FilterRowCheckBox x:Name="ArtifactCheckbox" FilterText="Artifact"/>
-                <local:FilterRowCheckBox x:Name="CreatureCheckbox" FilterText="Creature"/>
-                <local:FilterRowCheckBox x:Name="EnchantmentCheckbox" FilterText="Enchantment"/>
-                <local:FilterRowCheckBox x:Name="InstantCheckbox" FilterText="Instant"/>
-                <local:FilterRowCheckBox x:Name="SorceryCheckbox" FilterText="Sorcery"/>
-                <local:FilterRowCheckBox x:Name="LandCheckbox" FilterText="Land"/>
-                <local:FilterRowCheckBox x:Name="PlaneswalkerCheckbox" FilterText="Planeswalker"/>
-            </StackPanel>
-            <StackPanel Name="Rarities" Orientation="Horizontal">
-                <local:FilterRowCheckBox x:Name="CommonCheckbox" FilterText="Common"/>
-                <local:FilterRowCheckBox x:Name="UncommonCheckbox" FilterText="Uncommon"/>
-                <local:FilterRowCheckBox x:Name="RareCheckbox" FilterText="Rare"/>
-            </StackPanel>
-            <local:FilterRowTextBox x:Name="SubtypeTextbox" FilterText="Subtypes"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Button Name="SearchButton" Content="Search" Click="FilterQuery" Grid.Row="0"/>
+        <local:FilterRowTextBox x:Name="NameFilterField" FilterText="Name" Grid.Row="1" VerticalAlignment="Center"/>
+        <local:FilterRowTextBox x:Name="TypeFilterField" FilterText="Type" KeyUp="TypeFilterField_KeyUp" Grid.Row="2" VerticalAlignment="Center"/>
+        <local:FilterRowTextBox x:Name="PowerFilterField" FilterText="Power" Visibility="Collapsed" VerticalAlignment="Center"/>
+        <local:FilterRowTextBox x:Name="ToughnessFilterField" FilterText="Toughness" Visibility="Collapsed" VerticalAlignment="Center"/>
+        <local:FilterRowTextBox x:Name="ConvertedManaCostFilterField" FilterText="Converted Mana Cost" Grid.Row="3" VerticalAlignment="Center"/>
+        <local:FilterRowTextBox x:Name="ManaCostFilterField" FilterText="Mana Cost" Grid.Row="4" VerticalAlignment="Center"/>
+        <StackPanel Name="ColorFilters" Orientation="Horizontal" Grid.Row="5" VerticalAlignment="Center">
+            <local:FilterRowCheckBox x:Name="WhiteColor" FilterText="White"/>
+            <local:FilterRowCheckBox x:Name="BlueColor" FilterText="Blue"/>
+            <local:FilterRowCheckBox x:Name="BlackColor" FilterText="Black"/>
+            <local:FilterRowCheckBox x:Name="RedColor" FilterText="Red"/>
+            <local:FilterRowCheckBox x:Name="GreenColor" FilterText="Green"/>
+            <local:FilterRowCheckBox x:Name="ColorlessColor" FilterText="Colorless"/>
         </StackPanel>
+        <local:FilterRowCheckBox x:Name="RequireMulticolored" FilterText="Require Multicolored" Grid.Row="6" VerticalAlignment="Center"/>
+        <StackPanel Name="Types" Orientation="Horizontal" Grid.Row="7" VerticalAlignment="Center">
+            <local:FilterRowCheckBox x:Name="ArtifactCheckbox" FilterText="Artifact"/>
+            <local:FilterRowCheckBox x:Name="CreatureCheckbox" FilterText="Creature"/>
+            <local:FilterRowCheckBox x:Name="EnchantmentCheckbox" FilterText="Enchantment"/>
+            <local:FilterRowCheckBox x:Name="InstantCheckbox" FilterText="Instant"/>
+            <local:FilterRowCheckBox x:Name="SorceryCheckbox" FilterText="Sorcery"/>
+            <local:FilterRowCheckBox x:Name="LandCheckbox" FilterText="Land"/>
+            <local:FilterRowCheckBox x:Name="PlaneswalkerCheckbox" FilterText="Planeswalker"/>
+        </StackPanel>
+        <StackPanel Name="Rarities" Orientation="Horizontal" Grid.Row="8" VerticalAlignment="Center">
+            <local:FilterRowCheckBox x:Name="CommonCheckbox" FilterText="Common"/>
+            <local:FilterRowCheckBox x:Name="UncommonCheckbox" FilterText="Uncommon"/>
+            <local:FilterRowCheckBox x:Name="RareCheckbox" FilterText="Rare"/>
+        </StackPanel>
+        <local:FilterRowTextBox x:Name="SubtypeTextbox" FilterText="Subtypes" Grid.Row="9" VerticalAlignment="Center"/>
     </Grid>
 </UserControl>

@@ -7,12 +7,12 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Name="FilterType" Grid.Column="0" Text="{Binding FilterText}" Margin="10, 30, 0, 30"/>
-        <Border Grid.Column="1" Margin="0, 30, 10, 30">
+        <TextBlock Name="FilterType" Grid.Column="0" Text="{Binding FilterText}" Margin="10, 0, 10, 0"/>
+        <Border Grid.Column="1" Margin="10, 0, 10, 0">
             <TextBox Name="Input"/>
         </Border>
 
