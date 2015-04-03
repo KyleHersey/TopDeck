@@ -417,7 +417,6 @@ namespace TopDeck
                 cmd2.CommandText = sqlColor;
                 cmd2.Parameters.Add(new SQLiteParameter("@color") { Value = "%" + color + "%" });
                 SQLiteDataReader reader2 = cmd2.ExecuteReader();
-                reader2.Close();
 
                 HashSet<string> cardNamesWithColors = new HashSet<string>();
 

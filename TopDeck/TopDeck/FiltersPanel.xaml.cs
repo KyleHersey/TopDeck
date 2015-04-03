@@ -75,6 +75,7 @@ namespace TopDeck
             {
                 Debug.WriteLine("stuff");
                 MiddlePanel.setItemsSource(DBMan.GetCards("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", null, "red", "", ""));
+                //MiddlePanel.theList.ItemsSource
             }
         }
 

@@ -21,9 +21,21 @@ namespace TopDeck
     public partial class CardPanel : UserControl
     {
 
+        public Card selectedCard
+        {
+            get;
+            set;
+        }
+
         public CardPanel()
         {
             InitializeComponent();
+        }
+
+        public void setCard(Card c)
+        {
+            selectedCard = c;
+            RulesText.Text = c.Text;
         }
     }
 }

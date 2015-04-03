@@ -18,6 +18,6 @@
                 <TextBlock FontSize="20">Rulings</TextBlock>
             </Button>
         </Border>
-        <TextBox Grid.Row="1" Margin="10, 5, 10, 5">Rules text goes here</TextBox>
+        <TextBox Name="RulesText" Grid.Row="1" Margin="10, 5, 10, 5"/>
     </StackPanel>    
 </UserControl>

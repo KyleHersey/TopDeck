@@ -40,11 +40,17 @@ namespace TopDeck
 
         public void setItemsSource(List<string> names){
             theList.ItemsSource = names;
+            names.Sort();
         }
 
         public void setDatabaseManager(DatabaseManager db)
         {
             DBMan = db;
+        }
+
+        private void theList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            RightPanel.setCard(DBMan.GetCard(theList.SelectedItem.ToString()));
         }
     }
 }
