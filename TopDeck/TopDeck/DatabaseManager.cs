@@ -342,7 +342,7 @@ namespace TopDeck
             string cmc, string releaseDate, string border, 
             string watermark, string multiverseId, string loyalty, string rarity, string flavor,
             string artist, string number, string power, string life, string imageName, string cardText, 
-            string type, bool? timeShifted, string color, string subtype, string supertype)
+            string type, bool? timeShifted, bool requireMultiColor, List<string> colors, string subtype, string supertype)
         {
             // id
             // timeshifted
@@ -409,20 +409,66 @@ namespace TopDeck
             reader.Close();
 
             // what about the original color of the card? fix
-            if (color != "") {
+            /*List<string> allColors = new List<string>();
+            allColors.Add("red");
+            allColors.Add("blue");
+            allColors.Add("black");
+            allColors.Add("green");
+            allColors.Add("white");
+
+            List<string> unwantedColors = allColors.Except(colors).ToList<string>(); */
+
+            HashSet<string> cardNamesWithColors = null;
+            for (int i = 0; i < colors.Count; i++) {
                 string sqlColor = @"select name
                                 from COLORS
                                 where color like @color";
                 var cmd2 = dbConnection.CreateCommand();
                 cmd2.CommandText = sqlColor;
+                string color = colors[i];
                 cmd2.Parameters.Add(new SQLiteParameter("@color") { Value = "%" + color + "%" });
                 SQLiteDataReader reader2 = cmd2.ExecuteReader();
 
-                HashSet<string> cardNamesWithColors = new HashSet<string>();
+                HashSet<string> tempCardsWithColors = new HashSet<string>();
 
                 while (reader2.Read())
-                    cardNamesWithColors.Add((string) reader2["name"]);
+                    tempCardsWithColors.Add((string) reader2["name"]);
 
+                if (i == 0)
+                {
+                    cardNamesWithColors = tempCardsWithColors;
+                } else if (cardNamesWithColors != null) {
+                    if (requireMultiColor)
+                        cardNamesWithColors.IntersectWith(tempCardsWithColors);
+                    else
+                        cardNamesWithColors.UnionWith(tempCardsWithColors);
+                }
+            }
+
+            /*if (cardNamesWithColors != null && cardNamesWithColors.Count > 0 && requireMultiColor)
+            {
+                for (int i = 0; i < unwantedColors.Count; i++)
+                {
+                    string sqlColor = @"select name
+                                from COLORS
+                                where color like @color";
+                    var cmd2 = dbConnection.CreateCommand();
+                    cmd2.CommandText = sqlColor;
+                    string color = unwantedColors[i];
+                    cmd2.Parameters.Add(new SQLiteParameter("@color") { Value = "%" + color + "%" });
+                    SQLiteDataReader reader2 = cmd2.ExecuteReader();
+
+                    HashSet<string> tempCardsWithColors = new HashSet<string>();
+
+                    while (reader2.Read())
+                        tempCardsWithColors.Add((string)reader2["name"]);
+                    List<string> cardNamesWithColorsList = cardNamesWithColors.Except(cardNamesWithColors).ToList<string>();
+                    cardNamesWithColors = new HashSet<string>(cardNamesWithColorsList);
+                }
+                cardNamesWithoutColors.IntersectWith(cardNamesWithColors);
+            }
+            else*/ if (cardNamesWithColors != null && cardNamesWithColors.Count > 0)
+            {
                 cardNamesWithoutColors.IntersectWith(cardNamesWithColors);
             }
 

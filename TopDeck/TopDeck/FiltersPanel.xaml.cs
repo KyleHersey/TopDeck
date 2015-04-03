@@ -70,13 +70,37 @@ namespace TopDeck
 
         private void FilterQuery(object sender, RoutedEventArgs e)
         {
+            List<string> colors = new List<string>();
+            bool requireMulticolor = false;
             Debug.WriteLine("clicked");
             if (RedColor.isChecked() == true)
             {
                 Debug.WriteLine("stuff");
-                MiddlePanel.setItemsSource(DBMan.GetCards("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", null, "red", "", ""));
+                colors.Add("red");
                 //MiddlePanel.theList.ItemsSource
             }
+            if (BlueColor.isChecked() == true)
+            {
+                colors.Add("blue");
+            }
+            if (WhiteColor.isChecked() == true)
+            {
+                colors.Add("white");
+            }
+            if (GreenColor.isChecked() == true)
+            {
+                colors.Add("green");
+            }
+            if (BlackColor.isChecked() == true)
+            {
+                colors.Add("black");
+            }
+            if (RequireMulticolored.isChecked() == true)
+            {
+                requireMulticolor = true;
+            }
+            // what about colorless?
+            MiddlePanel.setItemsSource(DBMan.GetCards("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", null, requireMulticolor, colors, "", ""));
         }
 
         public void setDatabaseManager(DatabaseManager db)
