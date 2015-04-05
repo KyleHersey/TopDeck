@@ -50,7 +50,10 @@ namespace TopDeck
 
         private void theList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            RightPanel.setCard(DBMan.GetCard(theList.SelectedItem.ToString()));
+            if (theList.SelectedItem != null)
+            {
+                RightPanel.setCard(DBMan.GetCard(theList.SelectedItem.ToString()));
+            }
         }
     }
 }
