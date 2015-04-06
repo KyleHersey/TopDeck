@@ -53,21 +53,6 @@ namespace TopDeck
 
         }
 
-        private void TypeFilterField_KeyUp(object sender, KeyEventArgs e)
-        {
-            FilterRowTextBox sentBy = (FilterRowTextBox)sender;
-                if (sentBy.Input.Text == "Creature")
-                {
-                    PowerFilterField.Visibility = System.Windows.Visibility.Visible;
-                    ToughnessFilterField.Visibility = System.Windows.Visibility.Visible;
-                }
-                else
-                {
-                    PowerFilterField.Visibility = System.Windows.Visibility.Collapsed;
-                    ToughnessFilterField.Visibility = System.Windows.Visibility.Collapsed;
-                }
-        }
-
         private void FilterQuery(object sender, RoutedEventArgs e)
         {
             List<string> colors = new List<string>();
