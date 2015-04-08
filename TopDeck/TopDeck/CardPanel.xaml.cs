@@ -37,5 +37,10 @@ namespace TopDeck
             selectedCard = c;
             RulesText.Text = c.Text;
         }
+
+        private void RulingsClick(object sender, RoutedEventArgs e)
+        {
+            RulingPopup.IsOpen = true;
+        }
     }
 }
