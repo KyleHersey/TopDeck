@@ -11,9 +11,9 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Name="FilterType" Grid.Column="0" Text="{Binding FilterText}" Margin="10, 0, 10, 0"/>
+        <TextBlock x:Name="FilterType" Grid.Column="0" Text="{Binding FilterText}" Margin="10, 0, 10, 0"/>
         <Border Grid.Column="1" Margin="10, 0, 10, 0">
-            <TextBox Name="Input"/>
+            <TextBox x:Name="Input"/>
         </Border>
 
     </Grid>
