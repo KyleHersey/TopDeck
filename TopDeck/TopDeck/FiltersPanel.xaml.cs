@@ -34,19 +34,6 @@ namespace TopDeck
             set;
         }
 
-        public List<String> RarityList
-        {
-            get{
-                List<String> tempList = new List<String>();
-                tempList.Add("Rarity");
-                tempList.Add("Rare");
-                tempList.Add("Uncommon");
-                tempList.Add("Common");
-
-                return tempList;
-            }
-        }
-
         public FiltersPanel()
         {
             InitializeComponent();
@@ -85,7 +72,30 @@ namespace TopDeck
                 requireMulticolor = true;
             }
             // what about colorless?
-            MiddlePanel.setItemsSource(DBMan.GetCards("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", null, requireMulticolor, colors, "", ""));
+            MiddlePanel.setItemsSource(DBMan.GetCards(
+                NameFilterField.Input.Text,                 //Name
+                ToughnessFilterField.Input.Text,            //Toughness
+                "",                                         //Hand
+                ConvertedManaCostFilterField.Input.Text,    //Converted Mana Cost
+                "",                                         //Release Date
+                "",                                         //Border
+                "",                                         //Watermark
+                "",                                         //Multiverse ID
+                LoyaltyFilterField.Input.Text,              //Loyalty
+                "",                                         //Rarity
+                "",                                         //Flavor
+                "",                                         //Artist
+                "",                                         //Number
+                "",                                         //Power
+                "",                                         //Life
+                "",                                         //Image Name
+                Text.Input.Text,                            //Card Text
+                "",                                         //Types
+                null,                                       //Timeshifted
+                requireMulticolor,                          //Require Multicolored
+                colors,                                     //Colors
+                "",                                         //subtype
+                ""));                                       //supertype
         }
 
         public void setDatabaseManager(DatabaseManager db)

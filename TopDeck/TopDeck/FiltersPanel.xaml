@@ -42,7 +42,7 @@
             </StackPanel>
             <local:FilterRowTextBox x:Name="PowerFilterField" FilterText="Power"/>
             <local:FilterRowTextBox x:Name="ToughnessFilterField" FilterText="Toughness"/>
-            <local:FilterRowTextBox x:Name="LoyaltyFilterField" FilterText="Loyalty" Visibility="Collapsed"/>
+            <local:FilterRowTextBox x:Name="LoyaltyFilterField" FilterText="Loyalty"/>
         </StackPanel>
 
         <local:FilterRowTextBox x:Name="SubtypeTextbox" FilterText="Subtypes"/>
