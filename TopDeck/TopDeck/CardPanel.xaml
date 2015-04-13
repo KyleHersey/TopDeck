@@ -6,13 +6,17 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <StackPanel>
-        <StackPanel Orientation="Horizontal">
-            <Image Source="Magic_the_gathering-card_back.jpg" Height="250" Width="150"/>
-            <ListBox>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Image x:Name="CardImage" Source="Magic_the_gathering-card_back.jpg" Grid.Column="0"/>
+            <ListBox Grid.Column="1">
                 <ListBoxItem>First Set Here</ListBoxItem>
                 <ListBoxItem>Second Set Here</ListBoxItem>
             </ListBox>
-        </StackPanel>
+        </Grid>
         <Border Margin="10, 5, 10, 5">
             <Button>
                 <TextBlock FontSize="20">Rulings</TextBlock>

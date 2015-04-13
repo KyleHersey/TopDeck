@@ -37,5 +37,15 @@ namespace TopDeck
             selectedCard = c;
             RulesText.Text = c.Text;
         }
+
+        public void UpdateImage()
+        {
+            BitmapImage img = new BitmapImage();
+            img.BeginInit();
+            // can try to use GetAMultiverseId in DBManager, but will need to check if null
+            img.UriSource = new Uri("http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=" + selectedCard.MultiverseId + "&type=card");
+            img.EndInit();
+            CardImage.Source = img;
+        }
     }
 }

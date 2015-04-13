@@ -10,7 +10,7 @@ namespace TopDeck
     {
         public Card(JSONDTO c)
         {
-            Id = c.id;
+            Layout = c.layout;
             Name = c.name;
             //Names = c.names;
             CMC = c.cmc;
@@ -29,7 +29,6 @@ namespace TopDeck
             Loyalty = c.loyalty;
             MultiverseId = c.multiverseid;
             Variations = c.variations;
-            ImageName = c.imageName;
             Watermark = c.watermark;
             Border = c.border;
             Timeshifted = c.timeshifted;
@@ -43,7 +42,7 @@ namespace TopDeck
 
         }
 
-        public string Id { get; set; }
+        public string Layout { get; set; }
         public string Name { get; set; }
         public List<string> Names { get; set; }
         public double CMC { get; set; }
@@ -62,7 +61,6 @@ namespace TopDeck
         public long Loyalty { get; set; }
         public long MultiverseId { get; set; }
         public List<int> Variations { get; set; }
-        public string ImageName { get; set; }
         public string Watermark { get; set; }
         public string Border { get; set; }
         public bool Timeshifted { get; set; }
