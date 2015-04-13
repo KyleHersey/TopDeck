@@ -718,16 +718,6 @@ namespace TopDeck
             return c;
         }
 
-        public Card GetCardByMultiverseId(string multiverseId)
-        {
-            string cardName = GetAName(multiverseId);
-            if (cardName != null)
-            {
-                return GetCard(cardName);
-            }
-            return null;
-        }
-
         //gets a name from a multiverse ID
         public string GetAName(string multiverseID)
         {
