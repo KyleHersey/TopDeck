@@ -12,9 +12,12 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <Image x:Name="CardImage" Source="Magic_the_gathering-card_back.jpg" Grid.Column="0"/>
-            <ListBox Grid.Column="1">
-                <ListBoxItem>First Set Here</ListBoxItem>
-                <ListBoxItem>Second Set Here</ListBoxItem>
+            <ListBox Grid.Column="1" x:Name="SetList" SelectionChanged="SetList_SelectionChanged">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Item1}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
             </ListBox>
         </Grid>
         <Border Margin="10, 5, 10, 5">
@@ -24,10 +27,12 @@
         </Border>
         <Popup x:Name="RulingPopup" IsOpen="False" StaysOpen="False" PlacementTarget="{Binding ElementName=RulingsButton}">
             <StackPanel>
-                <ListView x:Name="RulingsListView">
-                    <!--<TextBlock>I'm a ruling</TextBlock>
-                    <TextBlock>I'm a significantly longer ruling to as to test placement</TextBlock>
-                    <TextBlock>Ruling 3</TextBlock>-->
+                <ListView x:Name="RulingsListView" Style="{StaticResource RulingsListBox}" ScrollViewer.CanContentScroll="False" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
+                    <!--<ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock TextWrapping="Wrap"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate> -->
                 </ListView>
             </StackPanel>
         </Popup>

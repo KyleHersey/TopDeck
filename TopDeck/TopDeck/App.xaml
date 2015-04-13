@@ -83,7 +83,11 @@
         <Style TargetType="DockPanel">
             <Setter Property="Background" Value="DarkSlateGray"/>
         </Style>
-        
+
+        <Style x:Key="RulingsListBox" TargetType="ListBox">
+            <Setter Property="Background" Value="Black"/>
+        </Style>
+
         <Style TargetType="Menu">
             <Setter Property="Background">
                 <Setter.Value>

@@ -684,8 +684,20 @@ namespace TopDeck
             }
 
             // return multiverse_id and set as dictionary, set is key, multiverse_id is value
+            List<Tuple<string, string>> multiverseIds = new List<Tuple<string, string>>();
+            sql = @"select setName, multiverse_id
+                    from MULTIVERSEID_SET
+                    where name = @name";
+            cmd = dbConnection.CreateCommand();
+            cmd.CommandText = sql;
+            cmd.Parameters.Add(new SQLiteParameter("@name") { Value = name });
+            reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                multiverseIds.Add(Tuple.Create((string)reader["setName"], (string)reader["multiverse_id"]));
+            }
+            c.MultiverseIds = multiverseIds;
 
-            // add variations
             sql = @"select date, ruling_text
                     from RULINGS
                     where name = @name";

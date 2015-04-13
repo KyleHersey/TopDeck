@@ -68,5 +68,6 @@ namespace TopDeck
         public long Life { get; set; }
         public string ReleaseDate { get; set; }
         public List<string> Rulings { get; set; }
+        public List<Tuple<string, string>> MultiverseIds { get; set; }
     }
 }
