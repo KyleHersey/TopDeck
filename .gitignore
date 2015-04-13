@@ -232,3 +232,6 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+TopDeck/TopDeck/bin/Debug/TopDeck.exe
+TopDeck/TopDeck/bin/Debug/TopDeck.vshost.exe
