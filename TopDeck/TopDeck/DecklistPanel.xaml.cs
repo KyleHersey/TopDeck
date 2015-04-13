@@ -66,7 +66,10 @@ namespace TopDeck
             {
                 Card c = DBMan.GetCard(theList.SelectedItem.ToString());
                 RightPanel.setCard(c);
-                RightPanel.UpdateImage();
+                if (c.MultiverseIds.Count > 0)
+                {
+                    RightPanel.UpdateImage(c.MultiverseIds[0].Item2);
+                }
             }
         }
     }
