@@ -336,7 +336,7 @@ namespace TopDeck
             string sqlCard = @"select name 
                            from CARD
                            where name like @name
-                           and toughness like @toughness
+
                            and hand like @hand
                            and cmc like @cmc
                            and (release_date like @releaseDate or release_date is null)
@@ -347,10 +347,17 @@ namespace TopDeck
                            and (flavor like @flavor or flavor is null)
                            and (artist like @artist or artist is null)
                            and (number like @number or number is null)
-                           and power like @power
                            and life like @life
-                           and card_text like @cardText
-                           and type like @type";
+                           and card_text like @cardText";
+
+            if (!type.Equals(""))
+                sqlCard += "and type like @type";
+
+            if (type.Equals("Creature"))
+            {
+                sqlCard += @"and toughness like @toughness
+                             and power like @power";
+            }
 
             if (timeShifted != null)
             {
@@ -360,7 +367,6 @@ namespace TopDeck
             var cmd = dbConnection.CreateCommand();
             cmd.CommandText = sqlCard;
             cmd.Parameters.Add(new SQLiteParameter("@name") { Value = "%" + name + "%" });
-            cmd.Parameters.Add(new SQLiteParameter("@toughness") { Value = "%" + toughness + "%" });
             cmd.Parameters.Add(new SQLiteParameter("@hand") { Value = "%" + hand + "%"});
             cmd.Parameters.Add(new SQLiteParameter("@cmc") { Value = "%" + cmc + "%" });
             cmd.Parameters.Add(new SQLiteParameter("@releaseDate") { Value = "%" + releaseDate + "%"});
@@ -371,10 +377,19 @@ namespace TopDeck
             cmd.Parameters.Add(new SQLiteParameter("@flavor") { Value = "%" + flavor + "%"});
             cmd.Parameters.Add(new SQLiteParameter("@artist") { Value = "%" + artist + "%"});
             cmd.Parameters.Add(new SQLiteParameter("@number") { Value = "%" + number + "%"});
-            cmd.Parameters.Add(new SQLiteParameter("@power") { Value = "%" + power + "%"});
             cmd.Parameters.Add(new SQLiteParameter("@life") { Value = "%" + life + "%"});
             cmd.Parameters.Add(new SQLiteParameter("@cardText") { Value = "%" + cardText + "%"});
-            cmd.Parameters.Add(new SQLiteParameter("@type") { Value = "%" + type + "%"});
+
+            if (type.Equals("Creature"))
+            {
+                cmd.Parameters.Add(new SQLiteParameter("@toughness") { Value = "%" + toughness + "%" });
+                cmd.Parameters.Add(new SQLiteParameter("@power") { Value = "%" + power + "%" });
+            }
+
+            if (!type.Equals(""))
+            {
+                cmd.Parameters.Add(new SQLiteParameter("@type") { Value = "%" + type + "%" });
+            }
 
             if (timeShifted != null)
             {
@@ -474,7 +489,7 @@ namespace TopDeck
 
 
             // search by types, subtypes, supertypes
-            if (type != "")
+            if (!type.Equals(""))
             {
                 string sqlType = @"select name
                                    from TYPES
@@ -492,7 +507,7 @@ namespace TopDeck
                 cardNamesWithoutColors.IntersectWith(cardNamesWithTypes);
             }
 
-            if (subtype != "")
+            if (!subtype.Equals(""))
             {
                 string sqlSubtype = @"select name
                                    from SUBTYPES
@@ -510,7 +525,7 @@ namespace TopDeck
                 cardNamesWithoutColors.IntersectWith(cardNamesWithSubtypes);
             }
 
-            if (supertype != "")
+            if (!supertype.Equals(""))
             {
                 string sqlSupertype = @"select name
                                    from SUPERTYPES
@@ -570,7 +585,9 @@ namespace TopDeck
 
                 if (!(reader["number"] is DBNull))
                     c.Number = (string)reader["number"];
-                c.Power = (string)reader["power"];
+                
+                if (!(reader["power"] is DBNull))
+                    c.Power = (string)reader["power"];
 
                 if (!(reader["rarity"] is DBNull))
                     c.Rarity = (string)reader["rarity"];
@@ -586,7 +603,8 @@ namespace TopDeck
                 else
                     c.Timeshifted = true;
 
-                c.Toughness = (string)reader["toughness"];
+                if (!(reader["toughness"] is DBNull))
+                    c.Toughness = (string)reader["toughness"];
 
                 c.Type = (string)reader["type"];
 
