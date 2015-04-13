@@ -20,6 +20,11 @@ namespace TopDeck
     /// </summary>
     public partial class ListPanel : UserControl
     {
+        public DecklistManager DLMan
+        {
+            get;
+            set;
+        }
 
         public DatabaseManager DBMan
         {
@@ -38,6 +43,11 @@ namespace TopDeck
             InitializeComponent();
         }
 
+        public void openFile(string path)
+        {
+            theList.ItemsSource = DLMan.GetCardnamesFromFile(path);
+        }
+
         public void setItemsSource(List<string> names){
             theList.ItemsSource = names;
             names.Sort();
@@ -46,6 +56,7 @@ namespace TopDeck
         public void setDatabaseManager(DatabaseManager db)
         {
             DBMan = db;
+            DLMan = new DecklistManager(db);
         }
 
         private void theList_SelectionChanged(object sender, SelectionChangedEventArgs e)

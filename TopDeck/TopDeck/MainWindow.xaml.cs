@@ -48,6 +48,7 @@ namespace TopDeck
             DatabaseManager db = new DatabaseManager();
 
             FiltersTab.setDatabaseManager(db);
+            DeckTab.CardList.setDatabaseManager(db);
 
         }
 
@@ -61,6 +62,7 @@ namespace TopDeck
             {
                 path = file.SafeFileName;
                 Debug.WriteLine(path);
+                DeckTab.CardList.openFile(path);
             }
 
             Regex checkExtension = new Regex(".*\\.dec");
