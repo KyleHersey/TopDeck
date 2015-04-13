@@ -60,6 +60,7 @@
     </ApplicationDefinition>
     <Compile Include="Card.cs" />
     <Compile Include="DatabaseManager.cs" />
+    <Compile Include="DecklistManager.cs" />
     <Compile Include="StatsPanel.xaml.cs">
       <DependentUpon>StatsPanel.xaml</DependentUpon>
     </Compile>

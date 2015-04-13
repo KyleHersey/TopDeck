@@ -688,6 +688,24 @@ namespace TopDeck
             return c;
         }
 
+        //gets a name from a multiverse ID
+        public string GetAName(string multiverseID)
+        {
+            string sql = @"select name
+                            from MULTIVERSEID_SET
+                            where multiverse_id = @mv";
+            var cmd = dbConnection.CreateCommand();
+            cmd.CommandText = sql;
+            cmd.Parameters.Add(new SQLiteParameter("@mv") { Value = multiverseID });
+            var reader = cmd.ExecuteReader();
+
+            if (reader.Read())
+            {
+                return (string)reader["name"];
+            }
+            return null;
+        }
+
         public string GetHighestMultiverseId(string name)
         {
             string sql = @"select multiverse_id
