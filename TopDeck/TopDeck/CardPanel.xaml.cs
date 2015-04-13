@@ -47,5 +47,10 @@ namespace TopDeck
             img.EndInit();
             CardImage.Source = img;
         }
+
+        private void RulingsClick(object sender, RoutedEventArgs e)
+        {
+            RulingPopup.IsOpen = true;
+        }
     }
 }

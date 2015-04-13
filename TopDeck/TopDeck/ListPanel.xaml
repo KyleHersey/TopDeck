@@ -10,9 +10,9 @@
             <ColumnDefinition Width="5*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        
+
         <ListBox Name="theList" Grid.Column="0" ScrollViewer.VerticalScrollBarVisibility="Visible" Margin="5, 20, 0, 20" SelectionChanged="theList_SelectionChanged"/>
-        
+
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
@@ -28,5 +28,32 @@
                 </Button>
             </StackPanel>
         </Grid>
-        </Grid>
+    </Grid>
+    <!-- itemsSource?-->
+    <!--<ItemsControl x:Name="theList">
+        affects how items are laid out
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <WrapPanel/>
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+            <DataTemplate>
+                put styles here
+                <DataTemplate.Resources>
+                    
+                </DataTemplate.Resources>
+                now put layout
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="3*"/>
+                    </Grid.ColumnDefinitions>
+                    this is the number of cards
+                    <TextBlock x:Name="CardCount" Text="{Binding Path=CardCount}" Grid.Column="0"/>
+                    <TextBlock x:Name="CardName" Text="{Binding Path=CardName}" Grid.Column="1"/>
+                </Grid>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl> -->
 </UserControl>

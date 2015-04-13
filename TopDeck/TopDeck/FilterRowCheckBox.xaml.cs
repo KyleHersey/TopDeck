@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.ComponentModel;
 
 namespace TopDeck
 {
@@ -20,13 +21,11 @@ namespace TopDeck
     /// </summary>
     /// 
 
-    public partial class FilterRowCheckBox : UserControl
+    public partial class FilterRowCheckBox : UserControl, INotifyPropertyChanged
     {
         public bool isChecked()
         {
-            Console.WriteLine(Color.IsChecked.HasValue);
-            Console.WriteLine(Color.IsChecked);
-            return (bool)Color.IsChecked;
+            return (bool)Check.IsChecked;
         }
 
         public string FilterText
@@ -39,6 +38,28 @@ namespace TopDeck
         {
             InitializeComponent();
             FilterType.DataContext = this;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged(string check)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(check));
+            }
+        }
+
+        private void Check_Click(object sender, RoutedEventArgs e)
+        {
+            CheckBox send = (CheckBox)sender;
+
+            if (send.IsChecked == true)
+            {
+                NotifyPropertyChanged("checked");
+            } else if(send.IsChecked == false){
+                NotifyPropertyChanged("unchecked");
+            }
         }
     }
 }

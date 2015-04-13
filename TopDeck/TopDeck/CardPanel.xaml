@@ -18,10 +18,19 @@
             </ListBox>
         </Grid>
         <Border Margin="10, 5, 10, 5">
-            <Button>
+            <Button Name="RulingsButton" Click="RulingsClick">
                 <TextBlock FontSize="20">Rulings</TextBlock>
             </Button>
         </Border>
+        <Popup x:Name="RulingPopup" IsOpen="False" StaysOpen="False" PlacementTarget="{Binding ElementName=RulingsButton}">
+            <StackPanel>
+                <ListView>
+                    <TextBlock>I'm a ruling</TextBlock>
+                    <TextBlock>I'm a significantly longer ruling to as to test placement</TextBlock>
+                    <TextBlock>Ruling 3</TextBlock>
+                </ListView>
+            </StackPanel>
+        </Popup>
         <TextBlock Name="RulesText" Grid.Row="1" Margin="10, 5, 10, 5" TextWrapping="Wrap"/>
     </StackPanel>    
 </UserControl>
