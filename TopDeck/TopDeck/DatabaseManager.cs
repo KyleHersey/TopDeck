@@ -651,7 +651,7 @@ namespace TopDeck
             // add types
             sql = @"select type
                     from TYPES
-                    where name like @name";
+                    where name = @name";
 
             cmd = dbConnection.CreateCommand();
             cmd.CommandText = sql;
@@ -668,6 +668,22 @@ namespace TopDeck
             // return multiverse_id and set as dictionary, set is key, multiverse_id is value
 
             // add variations
+            sql = @"select date, ruling_text
+                    from RULINGS
+                    where name = @name";
+            cmd = dbConnection.CreateCommand();
+            cmd.CommandText = sql;
+            cmd.Parameters.Add(new SQLiteParameter("@name") { Value = name });
+
+            reader = cmd.ExecuteReader();
+            List<string> rulings = new List<string>();
+            while (reader.Read())
+            {
+                rulings.Add((string)reader["date"] + ";\t" + (string)reader["ruling_text"]);
+            }
+            c.Rulings = rulings;
+
+            //c.type
             // legalities?
             return c;
         }
@@ -690,7 +706,7 @@ namespace TopDeck
             return null;
         }
 
-        public string GetAMultiverseId(string name)
+        public string GetHighestMultiverseId(string name)
         {
             string sql = @"select multiverse_id
                            from MULTIVERSEID_SET
@@ -699,12 +715,16 @@ namespace TopDeck
             cmd.CommandText = sql;
             cmd.Parameters.Add(new SQLiteParameter("@name") { Value = name });
             var reader = cmd.ExecuteReader();
-
+            string largestMultiverseId = "";
             if (reader.Read())
             {
-                return (string)reader["multiverse_id"];
+                string currentId = (string)reader["multiverse_id"];
+                if (largestMultiverseId.CompareTo(currentId) < 0)
+                {
+                    largestMultiverseId = currentId;
+                }
             }
-            return null;
+            return largestMultiverseId;
         }
 
         public void AddToCard(JSONDTO info)

@@ -36,6 +36,7 @@ namespace TopDeck
         {
             selectedCard = c;
             RulesText.Text = c.Text;
+            RulingsListView.ItemsSource = c.Rulings;
         }
 
         public void UpdateImage()
