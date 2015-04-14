@@ -27,10 +27,10 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="1">
-                <Button Margin="5">
+                <Button x:Name="PlusButton"  Margin="5" Click="PlusButton_Click">
                     <TextBlock FontSize="20">+</TextBlock>
                 </Button>
-                <Button Margin="5">
+                <Button x:Name="MinusButton" Margin="5">
                     <TextBlock FontSize="20">-</TextBlock>
                 </Button>
             </StackPanel>

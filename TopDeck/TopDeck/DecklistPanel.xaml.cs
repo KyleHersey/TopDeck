@@ -73,5 +73,17 @@ namespace TopDeck
                 }
             }
         }
+
+        private void PlusButton_Click(object sender, RoutedEventArgs e)
+        {
+            Console.WriteLine("clicked");
+
+            if (theList.SelectedItem != null)
+            {
+                Tuple<int, string, string> cardTuple = (Tuple<int, string, string>)theList.SelectedItem;
+                cardTuple = new Tuple<int, string, string>(cardTuple.Item1 + 1, cardTuple.Item2, cardTuple.Item3);
+                theList.SelectedItem = cardTuple;
+            }
+        }
     }
 }
