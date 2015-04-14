@@ -50,6 +50,16 @@ namespace TopDeck
             CardImage.Source = img;
         }
 
+        public string CurrentMultiverseId()
+        {
+            if (SetList.SelectedItem != null)
+            {
+                Tuple<string, string> currentItem = (Tuple<string, string>)SetList.SelectedItem;
+                return currentItem.Item2;
+            }
+            return null;
+        }
+
         private void RulingsClick(object sender, RoutedEventArgs e)
         {
             RulingPopup.IsOpen = true;

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -23,27 +24,13 @@ namespace TopDeck
     /// </summary>
     public partial class MainWindow : Window
     {
-        
+        List<LocalTuple> currentDeck;
 
         public MainWindow()
         {
-            
-
             InitializeComponent();
 
-            /* Databasey stuff */
-        
-            
-            /*List<string> cards = m.GetCards("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "artifact", null, "", "", "");
-            foreach (string card in cards)
-            {
-                Debug.WriteLine(card);
-            }*/
-            /*Card c = m.GetCard("Sen Triplets");
-            Debug.WriteLine(c.Colors.Count);
-            foreach (string color in c.Colors) {
-                Debug.WriteLine(color);
-            }*/
+            currentDeck = new List<LocalTuple>();
 
             DatabaseManager db = new DatabaseManager();
 
@@ -56,7 +43,6 @@ namespace TopDeck
 
         private void OpenDeckFile_Click(object sender, RoutedEventArgs e)
         {
-            /*Process fileExplorer = Process.Start("explorer.exe"); */
             string path = "";
             OpenFileDialog file = new OpenFileDialog();
             bool? userClickedOK = file.ShowDialog();
@@ -74,19 +60,34 @@ namespace TopDeck
             }
         }
 
+        private void SaveDeck_Click(object sender, RoutedEventArgs e)
+        {
+            // will need to check if deck has not been saved before. 
+            // for now, save as default name
+            string deckName = "emeraldsdeck.dec";
+            using (StreamWriter file = new StreamWriter(deckName))
+            {
+                foreach (LocalTuple currentCard in currentDeck)
+                {
+                    if (currentCard.MultiverseId != null)
+                    {
+                        file.WriteLine(currentCard.Count + " " + currentCard.MultiverseId);
+                    }
+                    else
+                    {
+                        file.WriteLine(currentCard.Count + " " + currentCard.Name);
+                    }
+                }
+            }
+        }
+
         private void SaveAsDeckFile_Click(object sender, RoutedEventArgs e)
         {
-            /*Process fileExplorer = Process.Start("explorer.exe"); */
             string path = "";
             SaveFileDialog file = new SaveFileDialog();
             file.OverwritePrompt = true;
 
-            // Set the file name to myText.txt, set the type filter 
-            // to text files, and set the initial directory to the  
-            // MyDocuments folder.
             file.FileName = "myDeck";
-            // DefaultExt is only used when "All files" is selected from  
-            // the filter box and no extension is specified by the user.
             file.DefaultExt = "dec";
             file.Filter =
                 "Deck files (*.dec)|*.dec|All files (*.*)|*.*";
@@ -96,6 +97,18 @@ namespace TopDeck
                 path = file.SafeFileName;
                 Debug.WriteLine(path);
             }
+        }
+
+        private void NewDeck_Click(object sender, RoutedEventArgs e)
+        {
+            // don't forget to ask if they want to save?
+
+
+            // in here we want to create a new list and set all the things to reference it
+            currentDeck = new List<LocalTuple>();
+            FiltersTab.FilterListPanel.CurrentDeck = currentDeck;
+
+
         }
     }
 }

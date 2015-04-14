@@ -7,7 +7,7 @@
     <DockPanel Name="MainGrid">
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File">
-                <MenuItem>
+                <MenuItem Click="NewDeck_Click">
                     <MenuItem.Header>
                         <TextBlock Style="{StaticResource MenuFont}">New</TextBlock>
                     </MenuItem.Header>
@@ -25,7 +25,7 @@
                     <TextBlock Style="{StaticResource MenuFont}">SampleFile1.dec</TextBlock>
                     <TextBlock Style="{StaticResource MenuFont}">SampleFile1.dec</TextBlock>
                 </MenuItem>
-                <MenuItem>
+                <MenuItem Click="SaveDeck_Click" >
                     <MenuItem.Header>
                         <TextBlock Style="{StaticResource MenuFont}">Save</TextBlock>
                     </MenuItem.Header>
