@@ -11,14 +11,20 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <ListView Name="theList" Grid.Column="0" ScrollViewer.VerticalScrollBarVisibility="Visible" Margin="5, 20, 0, 20" SelectionChanged="theList_SelectionChanged">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn DisplayMemberBinding="{Binding Count}"/>
-                    <GridViewColumn DisplayMemberBinding="{Binding Name}"/>
-                </GridView>
-            </ListView.View>
-        </ListView>
+        <ListBox ScrollViewer.HorizontalScrollBarVisibility="Hidden" Name="theList" Grid.Column="0" ScrollViewer.VerticalScrollBarVisibility="Visible" Margin="5, 20, 0, 20" SelectionChanged="theList_SelectionChanged">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding Count}" Grid.Column="0" Background="Transparent" Margin="5, 0, 5, 0"/>
+                        <TextBlock Text="{Binding Name}" Grid.Column="1" Background="Transparent" Margin="5, 0, 5, 0"/>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
 
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
