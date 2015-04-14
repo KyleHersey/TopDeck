@@ -10,17 +10,17 @@ namespace TopDeck
     public class DecklistManager
     {
         DatabaseManager DBMan;
-        List<Tuple<int, string>> cardNames;
+        List<Tuple<int, string, string>> cardNames;
 
         public DecklistManager(DatabaseManager db)
         {
             DBMan = db;
         }
 
-        public List<Tuple<int, string>> GetCardnamesFromFile(string fileName)
+        public List<Tuple<int, string, string>> GetCardnamesFromFile(string fileName)
         {
-            cardNames = new List<Tuple<int, string>>();
-            StreamReader input = new StreamReader("SampleDeck.txt");
+            cardNames = new List<Tuple<int, string, string>>();
+            StreamReader input = new StreamReader(fileName);
 
             while (input.EndOfStream == false)
             {
@@ -34,7 +34,7 @@ namespace TopDeck
                     nums[i] = Convert.ToInt32(words[i]);
                 }
 
-                cardNames.Add(new Tuple<int, string>(nums[0], DBMan.GetAName(nums[1].ToString())));
+                cardNames.Add(new Tuple<int, string, string>(nums[0], DBMan.GetAName(nums[1].ToString()), nums[1].ToString()));
 
             }
 

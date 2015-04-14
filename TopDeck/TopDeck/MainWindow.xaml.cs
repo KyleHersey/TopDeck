@@ -50,6 +50,7 @@ namespace TopDeck
             FiltersTab.setDatabaseManager(db);
             DeckTab.CardList.setDatabaseManager(db);
             DeckTab.CardList.RightPanel = DeckTab.CardView;
+            DeckTab.CardView.SetList.Visibility = System.Windows.Visibility.Collapsed;
 
         }
 

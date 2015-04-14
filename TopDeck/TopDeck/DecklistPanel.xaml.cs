@@ -64,11 +64,12 @@ namespace TopDeck
         {
             if (theList.SelectedItem != null)
             {
-                Card c = DBMan.GetCard(theList.SelectedItem.ToString());
+                Tuple<int, string, string> tempTuple = (Tuple<int, string, string>) theList.SelectedItem;
+                Card c = DBMan.GetACardFromMultiverseId(tempTuple.Item3);
                 RightPanel.setCard(c);
                 if (c.MultiverseIds.Count > 0)
                 {
-                    RightPanel.UpdateImage(c.MultiverseIds[0].Item2);
+                    RightPanel.UpdateImage(tempTuple.Item3);
                 }
             }
         }
