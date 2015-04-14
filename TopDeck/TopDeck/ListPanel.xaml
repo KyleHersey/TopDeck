@@ -19,14 +19,9 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <StackPanel Grid.Row="1">
-                <Button Margin="5" Click="AddToDeck_Click">
-                    <TextBlock FontSize="20">+</TextBlock>
-                </Button>
-                <Button Margin="5">
-                    <TextBlock FontSize="20">-</TextBlock>
-                </Button>
-            </StackPanel>
+            <Button Margin="5" Click="AddToDeck_Click" Grid.Row="1">
+                <TextBlock FontSize="20">+</TextBlock>
+            </Button>
         </Grid>
     </Grid>
 </UserControl>
