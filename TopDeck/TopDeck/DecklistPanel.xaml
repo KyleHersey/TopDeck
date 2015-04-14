@@ -14,8 +14,8 @@
         <ListView Name="theList" Grid.Column="0" ScrollViewer.VerticalScrollBarVisibility="Visible" Margin="5, 20, 0, 20" SelectionChanged="theList_SelectionChanged">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn DisplayMemberBinding="{Binding Item1}"/>
-                    <GridViewColumn DisplayMemberBinding="{Binding Item2}"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Count}"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Name}"/>
                 </GridView>
             </ListView.View>
         </ListView>

@@ -25,6 +25,7 @@ namespace TopDeck
     public partial class MainWindow : Window
     {
         List<LocalTuple> currentDeck;
+        DatabaseManager db;
 
         public MainWindow()
         {
@@ -32,7 +33,7 @@ namespace TopDeck
 
             currentDeck = new List<LocalTuple>();
 
-            DatabaseManager db = new DatabaseManager();
+            db = new DatabaseManager();
 
             FiltersTab.setDatabaseManager(db);
             DeckTab.CardList.setDatabaseManager(db);
@@ -49,8 +50,11 @@ namespace TopDeck
             if (userClickedOK == true)
             {
                 path = file.SafeFileName;
-                Debug.WriteLine(path);
-                DeckTab.CardList.openFile(path);
+
+                currentDeck = GetCardnamesFromFile(path);
+                FiltersTab.FilterListPanel.CurrentDeck = currentDeck;
+                DeckTab.CardList.CurrentDeck = currentDeck;
+                DeckTab.CardList.setItemsSource();
             }
 
             Regex checkExtension = new Regex(".*\\.dec");
@@ -58,6 +62,71 @@ namespace TopDeck
             {
                 Debug.WriteLine("yes");
             }
+        }
+
+        public List<LocalTuple> GetCardnamesFromFile(string fileName)
+        {
+            List<LocalTuple> cardNames = new List<LocalTuple>();
+            StreamReader input = new StreamReader(fileName);
+
+            while (input.EndOfStream == false)
+            {
+                String tempString = input.ReadLine();
+                string[] words = tempString.Split(' ');
+                // int[] nums = new int[words.Length];           used in previous parsing method
+                int multiverseID = -1;
+                bool mvIDquery = false;
+
+                if (words.Length == 2)   //if there's a possibility we have a multiverse id...
+                {
+                    try
+                    {
+                        Debug.WriteLine(words[1]);
+                        multiverseID = Convert.ToInt32(words[1]);   //got multiverseID
+                    }
+                    catch
+                    {
+                        try
+                        {
+                            if (db.GetHighestMultiverseId(words[1]) != null)
+                            {
+                                //queried for multiverseID
+                                multiverseID = Convert.ToInt32(db.GetHighestMultiverseId(words[1]));    //only first word of a cardname
+                                mvIDquery = true;
+                            }
+                        }
+                        catch
+                        {
+                            multiverseID = -1;
+                        }
+                    }
+                }
+
+                if (multiverseID != -1) //if we got a multiverseID
+                {
+                    if (mvIDquery)  //if words[1] is a name
+                    {
+                        cardNames.Add(new LocalTuple(Convert.ToInt32(words[0]), words[1], multiverseID.ToString()));
+                    }
+                    else            //if words[1] is a number
+                    {
+                        cardNames.Add(new LocalTuple(Convert.ToInt32(words[0]), db.GetAName(words[1].ToString()), Convert.ToString(words[1])));
+                    }
+                }
+                else //if we didn't, assume #, cardname
+                {
+                    int num = Convert.ToInt32(words[0]);
+                    string name = words[1];
+                    for (int i = 2; i < words.Length; i++)
+                    {
+                        name += " ";
+                        name += words[i];
+                    }
+                    cardNames.Add(new LocalTuple(num, name, db.GetHighestMultiverseId(name)));
+                }
+            }
+
+            return cardNames;
         }
 
         private void SaveDeck_Click(object sender, RoutedEventArgs e)
@@ -107,7 +176,7 @@ namespace TopDeck
             // in here we want to create a new list and set all the things to reference it
             currentDeck = new List<LocalTuple>();
             FiltersTab.FilterListPanel.CurrentDeck = currentDeck;
-
+            DeckTab.CardList.CurrentDeck = currentDeck;
 
         }
     }

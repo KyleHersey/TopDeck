@@ -20,7 +20,8 @@ namespace TopDeck
     /// </summary>
     public partial class DecklistPanel : UserControl
     {
-        public DecklistManager DLMan
+
+        public List<LocalTuple> CurrentDeck
         {
             get;
             set;
@@ -41,35 +42,30 @@ namespace TopDeck
         public DecklistPanel()
         {
             InitializeComponent();
+            setItemsSource();
+
         }
 
-        public void openFile(string path)
+        public void setItemsSource()
         {
-            theList.ItemsSource = DLMan.GetCardnamesFromFile(path);
-        }
-
-        public void setItemsSource(List<string> names)
-        {
-            theList.ItemsSource = names;
-            names.Sort();
+            theList.ItemsSource = CurrentDeck;
         }
 
         public void setDatabaseManager(DatabaseManager db)
         {
             DBMan = db;
-            DLMan = new DecklistManager(db);
         }
 
         private void theList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (theList.SelectedItem != null)
             {
-                Tuple<int, string, string> tempTuple = (Tuple<int, string, string>) theList.SelectedItem;
-                Card c = DBMan.GetACardFromMultiverseId(tempTuple.Item3);
+                LocalTuple tempTuple = (LocalTuple) theList.SelectedItem;
+                Card c = DBMan.GetACardFromMultiverseId(tempTuple.MultiverseId);
                 RightPanel.setCard(c);
                 if (c.MultiverseIds.Count > 0)
                 {
-                    RightPanel.UpdateImage(tempTuple.Item3);
+                    RightPanel.UpdateImage(tempTuple.MultiverseId);
                 }
             }
         }
@@ -80,9 +76,8 @@ namespace TopDeck
 
             if (theList.SelectedItem != null)
             {
-                Tuple<int, string, string> cardTuple = (Tuple<int, string, string>)theList.SelectedItem;
-                cardTuple = new Tuple<int, string, string>(cardTuple.Item1 + 1, cardTuple.Item2, cardTuple.Item3);
-                theList.SelectedItem = cardTuple;
+                LocalTuple cardTuple = (LocalTuple)theList.SelectedItem;
+                cardTuple.Count++;
             }
         }
     }
