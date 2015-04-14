@@ -179,5 +179,10 @@ namespace TopDeck
             DeckTab.CardList.CurrentDeck = currentDeck;
 
         }
+
+        private void Update_Click(object sender, RoutedEventArgs e)
+        {
+            db.UpdateDB();
+        }
     }
 }

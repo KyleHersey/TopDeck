@@ -57,13 +57,13 @@ namespace TopDeck
             return file.GetHashCode();
         }
 
-        public void DownloadNewFile() {
+        public bool DownloadNewFile() {
             using (WebClient myClient = new WebClient()) {
                 Debug.WriteLine("Downloading new file");
-                myClient.DownloadFile("http://mtgjson.com/json/AllSets-x.json", "AllSets-x.json");
+                myClient.DownloadFile("http://mtgjson.com/json/AllSets-x.json", "AllSets-x2.json");
                 Debug.WriteLine("Downloaded file");
             }
-            if (hashedJSONFile != HashJSON("AllSets-x.json")) {
+            if (hashedJSONFile != HashJSON("AllSets-x2.json")) {
                 dbConnection.Close();
 
                 if (File.Exists(mainJSONFileName))
@@ -76,9 +76,11 @@ namespace TopDeck
 
                 Debug.WriteLine("Deleting database file");
                 File.Delete("TempDB.sqlite");*/
+                return true;
             }
             Debug.WriteLine("Deleting copy of json file");
             //File.Delete("AllCards-x2.json");
+            return false;
         }
 
         public void createDBFile()
@@ -312,6 +314,10 @@ namespace TopDeck
                             }
                         }
                     }
+                    using (StreamWriter file = new StreamWriter("lastSet.txt"))
+                    {
+                        file.WriteLine(elements[elements.Count - 1]);
+                    }
                 }
                 catch
                 {
@@ -320,6 +326,144 @@ namespace TopDeck
                     //File.Delete("SetsDB.sqlite");
 
                 }
+            }
+        }
+
+        public void UpdateDB()
+        {
+            if (File.Exists("SetsDB.sqlite"))
+            {
+                // connect to the database, stored in a connection object
+                // the string sets up the file we will be using
+                dbConnection = new SQLiteConnection("Data Source=SetsDB.sqlite;Version=3;");
+
+                // open the database, need to close later
+                dbConnection.Open();
+
+                Debug.WriteLine("db file was found");
+
+                String mtgJSONText = File.ReadAllText("AllSets-x.json", Encoding.UTF8);
+
+                JToken outer = JToken.Parse(mtgJSONText);
+
+                var o = JObject.Parse(mtgJSONText);
+
+                List<String> elements = new List<String>();
+                foreach (JToken child in o.Children())
+                {
+                    var property = child as JProperty;
+
+                    if (property != null)
+                    {
+                        // gets the set names
+                        elements.Add(property.Name);
+                    }
+                    else
+                    {
+                        Debug.WriteLine("null");
+                    }
+                }
+
+                using (StreamReader file = new StreamReader("lastSet.txt"))
+                {
+                    string lastSet = file.ReadLine();
+                    if (!lastSet.Equals(elements[elements.Count - 1])) {
+                        JObject inner = outer[elements[elements.Count - 1]].Value<JObject>();
+                        
+                        var ser = new DataContractJsonSerializer(typeof(JSONDTO));
+
+                        foreach (var cardInCards in inner["cards"].Children())
+                        {
+                            JObject cardJObject = JObject.Parse(cardInCards.ToString());
+
+                            string sql = @"select name
+                                           from CARD
+                                           where name = @name";
+
+                            
+                            var cmd = dbConnection.CreateCommand();
+                            cmd.CommandText = sql;
+                            cmd.Parameters.Add(new SQLiteParameter("@name") { Value = cardJObject["name"].ToString() });
+                            var reader = cmd.ExecuteReader();
+                            if (!reader.Read()) {
+                                byte[] byteArray = Encoding.UTF8.GetBytes(cardInCards.ToString());
+                                MemoryStream stream1 = new MemoryStream(byteArray);
+
+                                var info = (JSONDTO)ser.ReadObject(stream1);
+
+                                if (cardJObject["colors"] != null)
+                                    foreach (var c in cardJObject["colors"].Children())
+                                        AddColors(info.name, c.ToString());
+
+                                if (cardJObject["subtypes"] != null)
+                                    foreach (var c in cardJObject["subtypes"].Children())
+                                        AddSubtypes(info.name, c.ToString());
+
+                                if (cardJObject["types"] != null)
+                                    foreach (var c in cardJObject["types"].Children())
+                                        AddTypes(info.name, c.ToString());
+
+                                if (cardJObject["supertypes"] != null)
+                                    foreach (var c in cardJObject["supertypes"].Children())
+                                        AddSupertypes(info.name, c.ToString());
+
+                                // add the rulings
+                                if (cardJObject["rulings"] != null)
+                                {
+                                    foreach (var c in cardJObject["rulings"].Children())
+                                    {
+                                        string date = (string)c["date"];
+                                        string text = (string)c["text"];
+                                        AddRuling(info.name, date, text);
+                                    }
+                                }
+
+                                if (cardJObject["legalities"] != null)
+                                {
+                                    var c = cardJObject["legalities"].Value<JObject>();
+                                    string modern = "", legacy = "", vintage = "", freeform = "", prismatic = "", tribal = "", singleton = "", commander = "";
+                                    if (c["Modern"] != null)
+                                        modern = (string)c["Modern"];
+                                    if (c["Legacy"] != null)
+                                        legacy = (string)c["Legacy"];
+                                    if (c["Vintage"] != null)
+                                        vintage = (string)c["Vintage"];
+                                    if (c["Freeform"] != null)
+                                        freeform = (string)c["Freeform"];
+                                    if (c["Prismatic"] != null)
+                                        prismatic = (string)c["Prismatic"];
+                                    if (c["Tribal Wars Legacy"] != null)
+                                        tribal = (string)c["Tribal Wars Legacy"];
+                                    if (c["Singleton 100"] != null)
+                                        singleton = (string)c["Singleton 100"];
+                                    if (c["Commander"] != null)
+                                        commander = (string)c["Commander"];
+                                    AddLegality(info.name, modern, legacy, vintage, freeform, prismatic, tribal, singleton, commander);
+                                } 
+
+                                if (cardJObject["foreignNames"] != null)
+                                {
+                                    foreach (var c in cardJObject["foreignNames"].Children())
+                                    {
+                                        string language = (string)c["language"];
+                                        string text = (string)c["name"];
+                                        AddLanguage(info.name, language, text);
+                                    }
+                                }
+
+                                AddToCard(info); // add border info
+                            }
+                            if (cardJObject["multiverseid"] != null)
+                            {
+                                AddMultiverseId(cardJObject["name"].ToString(), inner["name"].ToString(), cardJObject["multiverseid"].ToString());
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                createDBFile();
             }
         }
 
@@ -767,7 +911,7 @@ namespace TopDeck
             return largestMultiverseId;
         }
 
-        public void AddToCard(JSONDTO info)
+        private void AddToCard(JSONDTO info)
         {
             // add this card
             string sql = @"insert into CARD(name, toughness, hand, cmc, timeshifted, reserved, release_date, border, watermark, loyalty, rarity, flavor, artist, number, power, life, card_text, type)  values (@name, @toughness, @hand, @cmc, @timeshifted, @reserved, @release_date, @border, @watermark, @loyalty, @rarity, @flavor, @artist, @number, @power, @life, @card_text, @type)";
@@ -800,7 +944,7 @@ namespace TopDeck
         // rulings
         // foreign names
         // legalities
-        public void AddMultiverseId(string name, string set, string multiverseId)
+        private void AddMultiverseId(string name, string set, string multiverseId)
         {
             string sql = @"insert into MULTIVERSEID_SET(name, setName, multiverse_id) values (@name, @setName, @multiverse_id)";
             var cmd = dbConnection.CreateCommand();
@@ -811,7 +955,7 @@ namespace TopDeck
             cmd.ExecuteNonQuery();
         }
 
-        public void AddLanguage(string name, string language, string text)
+        private void AddLanguage(string name, string language, string text)
         {
             string sql = @"insert into FOREIGN_NAMES(name, foreign_name, language) values (@name, @foreign_name, @language)";
             var cmd = dbConnection.CreateCommand();
@@ -822,7 +966,7 @@ namespace TopDeck
             cmd.ExecuteNonQuery();
         }
 
-        public void AddRuling(string name, string date, string text)
+        private void AddRuling(string name, string date, string text)
         {
             string sql = @"insert into RULINGS(name, date, ruling_text) values (@name, @date, @ruling_text)";
             var cmd = dbConnection.CreateCommand();
@@ -833,7 +977,7 @@ namespace TopDeck
             cmd.ExecuteNonQuery();
         }
 
-        public void AddLegality(string name, string modern, string legacy, string vintage, string freeform, string prismatic, string tribal, string singleton, string commander)
+        private void AddLegality(string name, string modern, string legacy, string vintage, string freeform, string prismatic, string tribal, string singleton, string commander)
         {
             string sql = @"insert into LEGALITIES(name, format, legality_for_format) values (@name, @format, @legality_for_format)";
             var cmd = dbConnection.CreateCommand();
@@ -897,7 +1041,7 @@ namespace TopDeck
             }
         }
 
-        public void AddColors(string name, string color)
+        private void AddColors(string name, string color)
         {
             string sql = "insert into COLORS (name, color) values (@name, @color)";
             var cmd = dbConnection.CreateCommand();
@@ -907,7 +1051,7 @@ namespace TopDeck
             cmd.ExecuteNonQuery();
         }
 
-        public void AddSupertypes(string name, string supertype)
+        private void AddSupertypes(string name, string supertype)
         {
             string sql = "insert into SUPERTYPES (name, supertype) values (@name, @supertype)";
             var cmd = dbConnection.CreateCommand();
@@ -918,7 +1062,7 @@ namespace TopDeck
         }
 
 
-        public void AddSubtypes(string name, string subtype)
+        private void AddSubtypes(string name, string subtype)
         {
             string sql = "insert into SUBTYPES (name, subtype) values (@name, @subtype)";
             var cmd = dbConnection.CreateCommand();
@@ -928,7 +1072,7 @@ namespace TopDeck
             cmd.ExecuteNonQuery();
         }
 
-        public void AddTypes(string name, string type)
+        private void AddTypes(string name, string type)
         {
             string sql = "insert into TYPES (name, type) values (@name, @type)";
             var cmd = dbConnection.CreateCommand();
@@ -938,7 +1082,7 @@ namespace TopDeck
             cmd.ExecuteNonQuery();
         }
 
-        public void CreateTable(string sql)
+        private void CreateTable(string sql)
         {
             // create command to execute building of table
             SQLiteCommand command = new SQLiteCommand(sql, dbConnection);
@@ -1027,7 +1171,7 @@ namespace TopDeck
     }
 
     [DataContract]
-    public class LegalitiesDTO
+    class LegalitiesDTO
     {
         [DataMember(Name = "Modern")]
         public string Modern { get; set; }
