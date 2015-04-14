@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Collections.ObjectModel;
 
 namespace TopDeck
 {
@@ -24,14 +25,14 @@ namespace TopDeck
     /// </summary>
     public partial class MainWindow : Window
     {
-        List<LocalTuple> currentDeck;
+        ObservableCollection<LocalTuple> currentDeck;
         DatabaseManager db;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            currentDeck = new List<LocalTuple>();
+            currentDeck = new ObservableCollection<LocalTuple>();
 
             db = new DatabaseManager();
 
@@ -51,7 +52,10 @@ namespace TopDeck
             {
                 path = file.SafeFileName;
 
-                currentDeck = GetCardnamesFromFile(path);
+                List<LocalTuple> cardNames = GetCardnamesFromFile(path);
+
+                currentDeck = new ObservableCollection<LocalTuple>(cardNames);
+
                 FiltersTab.FilterListPanel.CurrentDeck = currentDeck;
                 DeckTab.CardList.CurrentDeck = currentDeck;
                 DeckTab.CardList.setItemsSource();
@@ -174,9 +178,9 @@ namespace TopDeck
 
 
             // in here we want to create a new list and set all the things to reference it
-            currentDeck = new List<LocalTuple>();
+            currentDeck = new ObservableCollection<LocalTuple>();
             FiltersTab.FilterListPanel.CurrentDeck = currentDeck;
-            DeckTab.CardList.CurrentDeck = currentDeck;
+            DeckTab.CardList.CurrentDeck = new System.Collections.ObjectModel.ObservableCollection<LocalTuple>(currentDeck);
 
         }
 

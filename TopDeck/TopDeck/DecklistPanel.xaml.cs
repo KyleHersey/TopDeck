@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Collections.ObjectModel;
 
 namespace TopDeck
 {
@@ -21,7 +22,7 @@ namespace TopDeck
     public partial class DecklistPanel : UserControl
     {
 
-        public List<LocalTuple> CurrentDeck
+        public ObservableCollection<LocalTuple> CurrentDeck
         {
             get;
             set;
@@ -79,6 +80,8 @@ namespace TopDeck
                 LocalTuple cardTuple = (LocalTuple)theList.SelectedItem;
                 cardTuple.Count++;
             }
+
+            theList.Items.Refresh();
         }
     }
 }
