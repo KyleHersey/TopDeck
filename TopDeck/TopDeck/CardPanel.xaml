@@ -11,8 +11,8 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Image x:Name="CardImage" Source="Magic_the_gathering-card_back.jpg" Grid.Column="0"/>
-            <ListBox Grid.Column="1" x:Name="SetList" SelectionChanged="SetList_SelectionChanged">
+            <Image x:Name="CardImage" Source="Magic_the_gathering-card_back.jpg" Grid.Column="0" Margin="10, 10, 5, 10"/>
+            <ListBox Grid.Column="1" x:Name="SetList" SelectionChanged="SetList_SelectionChanged" Margin="5">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Item1}"/>
