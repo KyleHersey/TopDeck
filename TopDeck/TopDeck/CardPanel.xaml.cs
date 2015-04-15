@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+
 namespace TopDeck
 {
     /// <summary>
@@ -52,12 +53,20 @@ namespace TopDeck
 
         public void UpdateImage(string id)
         {
+
+            
             BitmapImage img = new BitmapImage();
+            Console.WriteLine("new bmp");
             img.BeginInit();
+            Console.WriteLine("begin init");
             // can try to use GetAMultiverseId in DBManager, but will need to check if null
             img.UriSource = new Uri("http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=" + id + "&type=card");
+            Console.WriteLine("got uri");
             img.EndInit();
+            Console.WriteLine("end init");
             CardImage.Source = img;
+            Console.WriteLine("set image");
+            
         }
 
         public string CurrentMultiverseId()

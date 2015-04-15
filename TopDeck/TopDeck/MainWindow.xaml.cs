@@ -31,6 +31,7 @@ namespace TopDeck
 
         public MainWindow()
         {
+
             InitializeComponent();
 
             currentDeck = new ObservableCollection<LocalTuple>();
@@ -41,6 +42,8 @@ namespace TopDeck
             DeckTab.CardList.setDatabaseManager(db);
             DeckTab.CardList.RightPanel = DeckTab.CardView;
             DeckTab.CardView.SetList.Visibility = System.Windows.Visibility.Collapsed;
+
+            NewDeck_Click(null, null);
 
         }
 
@@ -212,7 +215,8 @@ namespace TopDeck
             // in here we want to create a new list and set all the things to reference it
             currentDeck = new ObservableCollection<LocalTuple>();
             FiltersTab.FilterListPanel.CurrentDeck = currentDeck;
-            DeckTab.CardList.CurrentDeck = new System.Collections.ObjectModel.ObservableCollection<LocalTuple>(currentDeck);
+            DeckTab.CardList.CurrentDeck = currentDeck;
+            DeckTab.CardList.setItemsSource();
 
         }
 
