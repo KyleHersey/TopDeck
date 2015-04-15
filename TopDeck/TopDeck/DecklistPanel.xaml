@@ -36,7 +36,7 @@
                 <Button x:Name="PlusButton"  Margin="5" Click="PlusButton_Click">
                     <TextBlock FontSize="20">+</TextBlock>
                 </Button>
-                <Button x:Name="MinusButton" Margin="5">
+                <Button x:Name="MinusButton" Margin="5" Click="MinusButton_Click">
                     <TextBlock FontSize="20">-</TextBlock>
                 </Button>
             </StackPanel>

@@ -73,15 +73,27 @@ namespace TopDeck
 
         private void PlusButton_Click(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine("clicked");
-
             if (theList.SelectedItem != null)
             {
                 LocalTuple cardTuple = (LocalTuple)theList.SelectedItem;
                 cardTuple.Count++;
             }
-
             theList.Items.Refresh();
+        }
+
+        private void MinusButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (theList.SelectedItem != null)
+            {
+                LocalTuple cardTuple = (LocalTuple)theList.SelectedItem;
+                cardTuple.Count--;
+                if (cardTuple.Count <= 0)
+                {
+                    ObservableCollection<LocalTuple> cards = (ObservableCollection<LocalTuple>)theList.ItemsSource;
+                    cards.Remove(cardTuple);
+                }
+                theList.Items.Refresh();
+            }
         }
     }
 }
