@@ -11,7 +11,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <ListBox Name="theList" Grid.Column="0" ScrollViewer.VerticalScrollBarVisibility="Visible" Margin="10, 20, 0, 20" SelectionChanged="theList_SelectionChanged"/>
+        <ListBox Name="theList" Grid.Column="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible" Margin="10, 20, 0, 20" SelectionChanged="theList_SelectionChanged"/>
 
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>

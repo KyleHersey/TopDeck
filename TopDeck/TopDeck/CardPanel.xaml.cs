@@ -30,13 +30,23 @@ namespace TopDeck
         public CardPanel()
         {
             InitializeComponent();
+            RulingsButtonBorder.Visibility = System.Windows.Visibility.Hidden;
         }
 
         public void setCard(Card c)
         {
             selectedCard = c;
             RulesText.Text = c.Text;
-            RulingsListView.ItemsSource = c.Rulings;
+
+            if (c.Rulings != null && c.Rulings.Count > 0)
+            {
+                RulingsListView.ItemsSource = c.Rulings;
+                RulingsButtonBorder.Visibility = System.Windows.Visibility.Visible;
+            }
+            else
+            {
+                RulingsButtonBorder.Visibility = System.Windows.Visibility.Hidden;
+            }
             SetList.ItemsSource = c.MultiverseIds;
         }
 
