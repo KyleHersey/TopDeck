@@ -25,6 +25,7 @@ namespace TopDeck
     /// </summary>
     public partial class MainWindow : Window
     {
+        string currentDeckName;
         ObservableCollection<LocalTuple> currentDeck;
         DatabaseManager db;
 
@@ -50,6 +51,8 @@ namespace TopDeck
             bool? userClickedOK = file.ShowDialog();
             if (userClickedOK == true)
             {
+                currentDeckName = file.SafeFileName;
+
                 path = file.SafeFileName;
 
                 List<LocalTuple> cardNames = GetCardnamesFromFile(path);
@@ -135,20 +138,30 @@ namespace TopDeck
 
         private void SaveDeck_Click(object sender, RoutedEventArgs e)
         {
-            // will need to check if deck has not been saved before. 
-            // for now, save as default name
-            string deckName = "emeraldsdeck.dec";
-            using (StreamWriter file = new StreamWriter(deckName))
+            if (currentDeckName == null)
             {
-                foreach (LocalTuple currentCard in currentDeck)
+                SaveAsDeckFile_Click(sender, e);
+                return;
+            }
+            else
+            {
+                if (File.Exists(currentDeckName))
                 {
-                    if (currentCard.MultiverseId != null)
+                    File.Delete(currentDeckName);
+                }
+
+                using (StreamWriter file = new StreamWriter(currentDeckName))
+                {
+                    foreach (LocalTuple currentCard in currentDeck)
                     {
-                        file.WriteLine(currentCard.Count + " " + currentCard.MultiverseId);
-                    }
-                    else
-                    {
-                        file.WriteLine(currentCard.Count + " " + currentCard.Name);
+                        if (currentCard.MultiverseId != null)
+                        {
+                            file.WriteLine(currentCard.Count + " " + currentCard.MultiverseId);
+                        }
+                        else
+                        {
+                            file.WriteLine(currentCard.Count + " " + currentCard.Name);
+                        }
                     }
                 }
             }
@@ -156,26 +169,45 @@ namespace TopDeck
 
         private void SaveAsDeckFile_Click(object sender, RoutedEventArgs e)
         {
-            string path = "";
+            string fileName = "";
             SaveFileDialog file = new SaveFileDialog();
             file.OverwritePrompt = true;
 
-            file.FileName = "myDeck";
+            file.FileName = "*";
             file.DefaultExt = "dec";
             file.Filter =
                 "Deck files (*.dec)|*.dec|All files (*.*)|*.*";
             bool? userClickedOK = file.ShowDialog();
             if (userClickedOK == true)
             {
-                path = file.SafeFileName;
-                Debug.WriteLine(path);
+                fileName = file.SafeFileName;
+
+                if (File.Exists(fileName))
+                {
+                    File.Delete(fileName);
+                }
+
+                using (StreamWriter outputFile = new StreamWriter(fileName))
+                {
+                    foreach (LocalTuple card in currentDeck)
+                    {
+                        if (card.MultiverseId != null)
+                        {
+                            outputFile.WriteLine(card.Count + " " + card.MultiverseId);
+                        }
+                        else
+                        {
+                            outputFile.WriteLine(card.Count + " " + card.Name);
+                        }
+                    }
+                }
             }
         }
 
         private void NewDeck_Click(object sender, RoutedEventArgs e)
         {
             // don't forget to ask if they want to save?
-
+            currentDeckName = null;
 
             // in here we want to create a new list and set all the things to reference it
             currentDeck = new ObservableCollection<LocalTuple>();
