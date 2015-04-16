@@ -42,6 +42,9 @@ namespace TopDeck
             DeckTab.CardList.setDatabaseManager(db);
             DeckTab.CardList.RightPanel = DeckTab.CardView;
             DeckTab.CardView.SetList.Visibility = System.Windows.Visibility.Collapsed;
+            FiltersTab.FilterListPanel.CurrentDeck = currentDeck;
+            DeckTab.CardList.CurrentDeck = currentDeck;
+            DeckTab.CardList.setItemsSource();
 
             NewDeck_Click(null, null);
 
@@ -56,7 +59,7 @@ namespace TopDeck
             {
                 currentDeckName = file.SafeFileName;
 
-                path = file.SafeFileName;
+                path = file.FileName;
 
                 List<LocalTuple> cardNames = GetCardnamesFromFile(path);
 
@@ -183,13 +186,14 @@ namespace TopDeck
             bool? userClickedOK = file.ShowDialog();
             if (userClickedOK == true)
             {
-                fileName = file.SafeFileName;
+                fileName = file.FileName;
 
                 if (File.Exists(fileName))
                 {
                     File.Delete(fileName);
                 }
 
+                currentDeckName = fileName;
                 using (StreamWriter outputFile = new StreamWriter(fileName))
                 {
                     foreach (LocalTuple card in currentDeck)
@@ -223,6 +227,49 @@ namespace TopDeck
         private void Update_Click(object sender, RoutedEventArgs e)
         {
             db.UpdateDB();
+        }
+
+        private void Export_Click(object senter, RoutedEventArgs e)
+        {
+            // files have .cod extension
+            if (currentDeck.Count > 0)
+            {
+                string fileName = "";
+                SaveFileDialog file = new SaveFileDialog();
+                file.OverwritePrompt = true;
+
+                file.FileName = "*";
+                file.DefaultExt = "cod";
+                file.Filter =
+                    "Cockatrice files (*.cod)|*.cod|All files (*.*)|*.*";
+                bool? userClickedOK = file.ShowDialog();
+                if (userClickedOK == true)
+                {
+                    fileName = file.FileName;
+
+                    if (File.Exists(fileName))
+                    {
+                        File.Delete(fileName);
+                    }
+                    using (StreamWriter outputFile = new StreamWriter(fileName))
+                    {
+                        outputFile.WriteLine("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+                        outputFile.WriteLine("<cockatrice_deck version=\"1\">");
+                        outputFile.WriteLine("    <deckname></deckname>");
+                        outputFile.WriteLine("    <comments></comments>");
+                        outputFile.WriteLine("    <zone name=\"main\">");
+                        //        <card number="1" price="0" name="Leyline of the Void"/>
+                        foreach (LocalTuple card in currentDeck)
+                        {
+                            outputFile.WriteLine("        <card number=\"" + card.Count + "\" price=\"0\" name=\"" + card.Name + "\"/>");
+                        }
+                        outputFile.WriteLine("    </zone>");
+                        outputFile.WriteLine("    <zone name=\"side\">");
+                        outputFile.WriteLine("    </zone>");
+                        outputFile.WriteLine("</cockatrice_deck>");
+                    }
+                }
+            }
         }
     }
 }

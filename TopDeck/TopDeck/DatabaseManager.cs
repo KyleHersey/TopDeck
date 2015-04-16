@@ -232,9 +232,6 @@ namespace TopDeck
                     {
                         JObject inner = outer[elements[i]].Value<JObject>();
 
-                        // save the set information
-                        // get the card information
-
                         foreach (var cardInCards in inner["cards"].Children())
                         {
                             JObject cardJObject = JObject.Parse(cardInCards.ToString());
@@ -480,7 +477,6 @@ namespace TopDeck
             string sqlCard = @"select name 
                            from CARD
                            where name like @name
-
                            and hand like @hand
                            and cmc like @cmc
                            and (release_date like @releaseDate or release_date is null)
@@ -491,8 +487,11 @@ namespace TopDeck
                            and (flavor like @flavor or flavor is null)
                            and (artist like @artist or artist is null)
                            and (number like @number or number is null)
-                           and life like @life
-                           and card_text like @cardText";
+                           and life like @life";
+
+            if (!cardText.Equals("")) {
+                sqlCard += "and card_text like @cardText";
+            }
 
             if (!type.Equals(""))
                 sqlCard += "and type like @type";
@@ -522,7 +521,11 @@ namespace TopDeck
             cmd.Parameters.Add(new SQLiteParameter("@artist") { Value = "%" + artist + "%"});
             cmd.Parameters.Add(new SQLiteParameter("@number") { Value = "%" + number + "%"});
             cmd.Parameters.Add(new SQLiteParameter("@life") { Value = "%" + life + "%"});
-            cmd.Parameters.Add(new SQLiteParameter("@cardText") { Value = "%" + cardText + "%"});
+
+            if (!cardText.Equals(""))
+            {
+                cmd.Parameters.Add(new SQLiteParameter("@cardText") { Value = "%" + cardText + "%"});
+            }
 
             if (type.Equals("Creature"))
             {

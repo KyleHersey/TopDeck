@@ -71,31 +71,31 @@ namespace TopDeck
             // if it is not in the list, create the tuple and add to the list
             // ignore multiverse id for now
             bool foundItem = false;
-            if (CurrentDeck.Count > 0 && theList.SelectedItem != null && RightPanel.CurrentMultiverseId() != null)
+            if (CurrentDeck.Count > 0 && theList.SelectedItem != null)
             {
                 foreach (LocalTuple currentTuple in CurrentDeck)
                 {
-                    if (currentTuple.Name.Equals(theList.SelectedItem) && currentTuple.MultiverseId.Equals(RightPanel.CurrentMultiverseId()))
+                    if (RightPanel.CurrentMultiverseId() != null && currentTuple.Name.Equals(theList.SelectedItem) && currentTuple.MultiverseId.Equals(RightPanel.CurrentMultiverseId()))
                     {
                         foundItem = true;
                         currentTuple.Count++;
                     }
+                    else if (RightPanel.CurrentMultiverseId() == null && currentTuple.Name.Equals(theList.SelectedItem) && RightPanel.selectedCard.MultiverseIds.Count > 0 && RightPanel.selectedCard.MultiverseIds[0].Item2.Equals(currentTuple.MultiverseId))
+                    {
+                        foundItem = true;
+                        currentTuple.Count++;
+                        //CurrentDeck.Add(new LocalTuple(1, theList.SelectedItem.ToString(), RightPanel.selectedCard.MultiverseIds[0].Item2));
+                    }
                 }
             }
-            else if (!foundItem && theList.SelectedItem != null && RightPanel.CurrentMultiverseId() != null)
+            
+            if (!foundItem && theList.SelectedItem != null && RightPanel.CurrentMultiverseId() != null)
             {
                 CurrentDeck.Add(new LocalTuple(1, theList.SelectedItem.ToString(), RightPanel.CurrentMultiverseId()));
             }
-            else if (!foundItem && theList.SelectedItem != null)
+            else if (!foundItem && theList.SelectedItem != null && RightPanel.selectedCard.MultiverseIds.Count > 0)
             {
-                if (RightPanel.selectedCard.MultiverseIds.Count > 0)
-                {
                     CurrentDeck.Add(new LocalTuple(1, theList.SelectedItem.ToString(), RightPanel.selectedCard.MultiverseIds[0].Item2));
-                }
-                else
-                {
-                    CurrentDeck.Add(new LocalTuple(1, theList.SelectedItem.ToString(), null));
-                }
             }
         }
     }
