@@ -35,9 +35,14 @@
                         <TextBlock Style="{StaticResource MenuFont}">Save as...</TextBlock>
                     </MenuItem.Header>
                 </MenuItem>
-                <MenuItem>
+                <MenuItem  Click="Update_Click">
                     <MenuItem.Header>
                         <TextBlock Style="{StaticResource MenuFont}">Update</TextBlock>
+                    </MenuItem.Header>
+                </MenuItem>
+                <MenuItem Click="Export_Click">
+                    <MenuItem.Header>
+                        <TextBlock Style="{StaticResource MenuFont}">Export to Cockatrice</TextBlock>
                     </MenuItem.Header>
                 </MenuItem>
             </MenuItem>
