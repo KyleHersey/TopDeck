@@ -20,9 +20,25 @@ namespace TopDeck
     /// </summary>
     public partial class StatsPanel : UserControl
     {
+        public KeyValuePair<string, int>[] ColorSource
+        {
+            get;
+            set;
+        }
+        
         public StatsPanel()
         {
             InitializeComponent();
+
+            ColorSource = new KeyValuePair<string, int>[]{
+                new KeyValuePair<string, int>("White", 1),
+                new KeyValuePair<string, int>("Blue", 2),
+                new KeyValuePair<string, int>("Black", 4),
+                new KeyValuePair<string, int>("Red", 8),
+                new KeyValuePair<string, int>("Green", 16)
+            };
+
+            ColorPie.DataContext = this;
         }
     }
 }
