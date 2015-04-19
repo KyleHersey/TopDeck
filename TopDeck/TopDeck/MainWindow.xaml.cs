@@ -300,6 +300,7 @@ namespace TopDeck
             FiltersTab.FilterListPanel.CurrentDeck = currentDeck;
             DeckTab.CardList.CurrentDeck = currentDeck;
             DeckTab.CardList.setItemsSource();
+            DeckTab.DeckStats.deck = currentDeck;
 
             DeckTab.DeckStats.updateStats();
 
