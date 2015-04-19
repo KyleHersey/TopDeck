@@ -45,6 +45,8 @@ namespace TopDeck
             FiltersTab.FilterListPanel.CurrentDeck = currentDeck;
             DeckTab.CardList.CurrentDeck = currentDeck;
             DeckTab.CardList.setItemsSource();
+            DeckTab.DeckStats.deck = currentDeck;
+            DeckTab.DeckStats.DBMan = db;
 
             NewDeck_Click(null, null);
 
@@ -67,6 +69,8 @@ namespace TopDeck
 
                 FiltersTab.FilterListPanel.CurrentDeck = currentDeck;
                 DeckTab.CardList.CurrentDeck = currentDeck;
+                DeckTab.DeckStats.deck = currentDeck;
+
                 DeckTab.CardList.setItemsSource();
             }
 
@@ -75,6 +79,8 @@ namespace TopDeck
             {
                 Debug.WriteLine("yes");
             }
+
+            DeckTab.DeckStats.updateStats();
         }
 
         public List<LocalTuple> GetCardnamesFromFile(string fileName)
@@ -221,6 +227,8 @@ namespace TopDeck
             FiltersTab.FilterListPanel.CurrentDeck = currentDeck;
             DeckTab.CardList.CurrentDeck = currentDeck;
             DeckTab.CardList.setItemsSource();
+
+            DeckTab.DeckStats.updateStats();
 
         }
 

@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Collections.ObjectModel;
 
 namespace TopDeck
 {
@@ -20,7 +21,19 @@ namespace TopDeck
     /// </summary>
     public partial class StatsPanel : UserControl
     {
-        public KeyValuePair<string, int>[] ColorSource
+        public DatabaseManager DBMan
+        {
+            get;
+            set;
+        }
+
+        public ObservableCollection<LocalTuple> deck
+        {
+            get;
+            set;
+        }
+
+        public ObservableCollection<KeyValuePair<string, int>> ColorSource
         {
             get;
             set;
@@ -30,15 +43,59 @@ namespace TopDeck
         {
             InitializeComponent();
 
-            ColorSource = new KeyValuePair<string, int>[]{
+            ColorSource = new ObservableCollection<KeyValuePair<string, int>>{
                 new KeyValuePair<string, int>("White", 1),
                 new KeyValuePair<string, int>("Blue", 2),
-                new KeyValuePair<string, int>("Black", 4),
+                new KeyValuePair<string, int>("Black", 1),
                 new KeyValuePair<string, int>("Red", 8),
                 new KeyValuePair<string, int>("Green", 16)
             };
 
             ColorPie.DataContext = this;
+        }
+
+        public void updateStats(){
+            updateColorChart();
+            Console.WriteLine("updateStats was called");
+        }
+
+        public void updateColorChart()
+        {
+            while (ColorSource.Count > 0)
+            {
+                ColorSource.RemoveAt(0);
+            }
+
+            //initialize list before going through deck
+            Dictionary<String, int> colorDict = new Dictionary<String, int>();
+            colorDict.Add("White", 0);
+            colorDict.Add("Blue", 0);
+            colorDict.Add("Black", 0);
+            colorDict.Add("Red", 0);
+            colorDict.Add("Green", 0);
+            colorDict.Add("Colorless", 0);
+
+            //add each card from deck into dictionary
+            foreach(LocalTuple tup in deck){
+                Card tempCard = DBMan.GetACardFromMultiverseId(tup.MultiverseId);
+                if(tempCard.Colors.Count == 0){
+                    colorDict["Colorless"]++;
+                }
+                foreach (String color in tempCard.Colors)
+                {
+                    colorDict[color] += tup.Count;
+                }
+            }
+
+            //go through dictionary
+            ObservableCollection<KeyValuePair<String, int>> newColors = new ObservableCollection<KeyValuePair<string, int>>();
+            foreach (String color in colorDict.Keys)
+            {
+                if (colorDict[color] > 0)
+                {
+                    ColorSource.Add(new KeyValuePair<string, int>(color, colorDict[color]));
+                }
+            }
         }
     }
 }
