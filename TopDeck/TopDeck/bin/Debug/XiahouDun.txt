@@ -1,81 +1,80 @@
-1 Xiahou Dun, the One-Eyed
-20 Swamp
-1 Gray Merchant of Asphodel
-1 Damnation
-1 Expedition Map
-1 Phyrexian Arena
-1 Snuff Out
-1 Phyrexian Tower
-1 Dust Bowl
-1 Living Death
-1 All Is Dust
-1 Kokusho, the Evening Star
-1 Mimic Vat
-1 Thespian's Stage
-1 Trading Post
-1 Graveborn Muse
-1 Strip Mine
-1 Fleshbag Marauder
-1 Necromancy
-1 Phyrexian Reclamation
-1 Diabolic Tutor
-1 Vampiric Tutor
-1 Exsanguinate
-1 Demonic Tutor
-1 Helm of Obedience
-1 Reanimate
-1 Venser's Journal
-1 Urborg, Tomb of Yawgmoth
-1 Sol Ring
-1 Leyline of the Void
-1 Bojuka Bog
-1 Grave Titan
-1 Black Market
-1 Night's Whisper
-1 Chainer, Dementia Master
-1 Solemn Simulacrum
-1 Cabal Coffers
-1 Thoughtseize
-1 Diabolic Intent
-1 Sheoldred, Whispering One
-1 Crypt Ghast
-1 Mindslicer
-1 Volrath's Stronghold
-1 Oblivion Stone
-1 Pithing Needle
-1 Karn Liberated
-1 Army of the Damned
-1 Skullclamp
-1 Ancient Tomb
-1 Mana Crypt
-1 Sign in Blood
-1 Shred Memory
-1 Nirkana Revenant
-1 Sangromancer
-1 Nevinyrral's Disk
-1 Coffin Queen
-1 Memory Jar
-1 Bone Shredder
-1 Grave Pact
-1 Dawn of the Dead
-1 Dimir House Guard
-1 Phyrexian Altar
-1 Morality Shift
-1 Songs of the Damned
-1 Rings of Brighthearth
-1 Liliana Vess
-1 Barter in Blood
-1 Deathmark
-1 Ashes to Ashes
-1 Yawgmoth's Will
-1 Jet Medallion
-1 Bloodghast
-1 Deserted Temple
-1 Wasteland Viper
-1 Shriekmaw
-1 Doom Blade
-1 Pristine Talisman
-1 Sensei's Divining Top
-1 Nether Void
-1 Polluted Delta
-1 Marsh Flats
+1 10590
+20 277
+1 373645
+1 122423
+1 193405
+1 19595
+1 10677
+1 19772
+1 4671
+1 193658
+1 50445
+5 207883
+1 366353
+1 253710
+1 44841
+1 1078
+1 174871
+1 3621
+1 12945
+1 29954
+1 3629
+1 210235
+1 60
+1 3047
+1 4680
+1 215079
+1 131005
+1 40
+1 107682
+1 197786
+1 205012
+1 19831
+1 51178
+1 32916
+1 49434
+1 29896
+1 145969
+1 26422
+1 214382
+1 366452
+1 29949
+1 5263
+1 34901
+1 74207
+1 214350
+1 229968
+1 48197
+1 4636
+1 184773
+1 190537
+1 87962
+1 193472
+1 214062
+1 37
+1 4642
+1 8841
+1 12400
+1 5136
+1 35924
+1 87926
+1 23226
+1 35171
+1 2484
+1 140216
+1 140212
+1 48591
+1 121119
+1 1728
+1 5629
+1 4612
+1 192230
+1 30013
+1 366417
+1 146175
+1 190535
+1 233074
+1 50400
+1 1453
+1 39504
+1 191371

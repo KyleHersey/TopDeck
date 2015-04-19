@@ -17,13 +17,25 @@
                         <TextBlock Style="{StaticResource MenuFont}">Open</TextBlock>
                     </MenuItem.Header>
                 </MenuItem>
-                <MenuItem>
+                <MenuItem x:Name="Recents">
                     <MenuItem.Header>
                         <TextBlock Style="{StaticResource MenuFont}">Recent</TextBlock>
                     </MenuItem.Header>
-                    <TextBlock Style="{StaticResource MenuFont}">SampleFile1.dec</TextBlock>
-                    <TextBlock Style="{StaticResource MenuFont}">SampleFile1.dec</TextBlock>
-                    <TextBlock Style="{StaticResource MenuFont}">SampleFile1.dec</TextBlock>
+                    <MenuItem Click="RecentFileOne_Click">
+                        <MenuItem.Header>
+                            <TextBlock x:Name="RecentFileOne" Style="{StaticResource MenuFont}"/>
+                        </MenuItem.Header>
+                    </MenuItem>
+                    <MenuItem Click="RecentFileTwo_Click">
+                        <MenuItem.Header>
+                            <TextBlock x:Name="RecentFileTwo" Style="{StaticResource MenuFont}"/>
+                        </MenuItem.Header>
+                    </MenuItem>
+                    <MenuItem Click="RecentFileThree_Click">
+                        <MenuItem.Header>
+                            <TextBlock x:Name="RecentFileThree" Style="{StaticResource MenuFont}"/>
+                        </MenuItem.Header>
+                    </MenuItem>
                 </MenuItem>
                 <MenuItem Click="SaveDeck_Click" >
                     <MenuItem.Header>

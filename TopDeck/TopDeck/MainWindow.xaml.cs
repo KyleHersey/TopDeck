@@ -28,15 +28,19 @@ namespace TopDeck
         string currentDeckName;
         ObservableCollection<LocalTuple> currentDeck;
         DatabaseManager db;
+        List<string> recentFiles;
 
         public MainWindow()
         {
 
             InitializeComponent();
+            this.Closed += MainWindow_Closed;
 
             currentDeck = new ObservableCollection<LocalTuple>();
 
             db = new DatabaseManager();
+
+            RecentFilesTabSetup();
 
             FiltersTab.setDatabaseManager(db);
             DeckTab.CardList.setDatabaseManager(db);
@@ -48,6 +52,57 @@ namespace TopDeck
 
             NewDeck_Click(null, null);
 
+        }
+
+        void MainWindow_Closed(object sender, EventArgs e)
+        {
+            if (File.Exists("recentFiles.txt"))
+            {
+                File.Delete("recentFiles.txt");
+            }
+            using (StreamWriter file = new StreamWriter("recentFiles.txt"))
+            {
+                foreach (string recentFile in recentFiles)
+                {
+                    file.WriteLine(recentFile);
+                }
+            }
+        }
+
+        public void RecentFilesTabSetup()
+        {
+            recentFiles = new List<string>();
+            using (StreamReader file = new StreamReader("recentFiles.txt"))
+            {
+                while (!file.EndOfStream)
+                {
+                    recentFiles.Add(file.ReadLine());
+                }
+            }
+
+            Recents.Visibility = System.Windows.Visibility.Collapsed;
+            RecentFileOne.Visibility = System.Windows.Visibility.Collapsed;
+            //RecentFileTwo.Visibility = System.Windows.Visibility.Collapsed;
+            //RecentFileThree.Visibility = System.Windows.Visibility.Collapsed;
+
+            List<TextBlock> recentTextBlocks = new List<TextBlock>();
+            recentTextBlocks.Add(RecentFileOne);
+            recentTextBlocks.Add(RecentFileTwo);
+            recentTextBlocks.Add(RecentFileThree);
+
+            char[] delimiters = { '/', '\\' };
+
+            int index = 0;
+            foreach (string recentfile in recentFiles)
+            {
+                string[] fileSections = recentfile.Split(delimiters);
+                recentTextBlocks[index].Text = fileSections[fileSections.Length - 1];
+
+                Recents.Visibility = System.Windows.Visibility.Visible;
+                recentTextBlocks[index].Visibility = System.Windows.Visibility.Visible;
+
+                index++;
+            }
         }
 
         private void OpenDeckFile_Click(object sender, RoutedEventArgs e)
@@ -75,6 +130,8 @@ namespace TopDeck
             {
                 Debug.WriteLine("yes");
             }
+
+            AddToRecentFiles();
         }
 
         public List<LocalTuple> GetCardnamesFromFile(string fileName)
@@ -139,6 +196,8 @@ namespace TopDeck
                 }
             }
 
+            input.Close();
+
             return cardNames;
         }
 
@@ -170,6 +229,20 @@ namespace TopDeck
                         }
                     }
                 }
+            }
+            AddToRecentFiles();
+        }
+
+        private void AddToRecentFiles()
+        {
+            if (!recentFiles.Contains(currentDeckName) && recentFiles.Count < 3)
+            {
+                recentFiles.Add(currentDeckName);
+            }
+            else if (!recentFiles.Contains(currentDeckName) && recentFiles.Count > 3)
+            {
+                recentFiles.RemoveAt(0);
+                recentFiles.Add(currentDeckName);
             }
         }
 
@@ -209,6 +282,7 @@ namespace TopDeck
                     }
                 }
             }
+            AddToRecentFiles();
         }
 
         private void NewDeck_Click(object sender, RoutedEventArgs e)
@@ -270,6 +344,31 @@ namespace TopDeck
                     }
                 }
             }
+        }
+
+        private void RecentFileOne_Click(object sender, RoutedEventArgs e)
+        {
+            OpenRecentFile(0);
+        }
+
+        private void RecentFileTwo_Click(object sender, RoutedEventArgs e)
+        {
+            OpenRecentFile(1);
+        }
+
+        private void RecentFileThree_Click(object sender, RoutedEventArgs e)
+        {
+            OpenRecentFile(2);
+        }
+
+        private void OpenRecentFile(int index)
+        {
+            List<LocalTuple> cardNames = GetCardnamesFromFile(recentFiles[index]);
+            currentDeck = new ObservableCollection<LocalTuple>(cardNames);
+
+            FiltersTab.FilterListPanel.CurrentDeck = currentDeck;
+            DeckTab.CardList.CurrentDeck = currentDeck;
+            DeckTab.CardList.setItemsSource();
         }
     }
 }
