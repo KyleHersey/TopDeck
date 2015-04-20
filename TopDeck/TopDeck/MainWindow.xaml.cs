@@ -137,6 +137,7 @@ namespace TopDeck
 
             AddToRecentFiles();
             DeckTab.DeckStats.updateStats();
+            HideOrShowProxiesButton();
         }
 
         public List<LocalTuple> GetCardnamesFromFile(string fileName)
@@ -302,6 +303,7 @@ namespace TopDeck
             DeckTab.CardList.setItemsSource();
 
             DeckTab.DeckStats.updateStats();
+            HideOrShowProxiesButton();
 
         }
 
@@ -376,6 +378,66 @@ namespace TopDeck
             FiltersTab.FilterListPanel.CurrentDeck = currentDeck;
             DeckTab.CardList.CurrentDeck = currentDeck;
             DeckTab.CardList.setItemsSource();
+            DeckTab.DeckStats.updateStats();
+            HideOrShowProxiesButton();
+        }
+
+        private void PrintProxies_Click(object sender, RoutedEventArgs e)
+        {
+            string fileName = "";
+            SaveFileDialog file = new SaveFileDialog();
+            file.OverwritePrompt = true;
+
+            file.FileName = "*";
+            file.DefaultExt = "html";
+            file.Filter =
+                "html files (*.html)|*.html|All files (*.*)|*.*";
+            bool? userClickedOK = file.ShowDialog();
+            if (userClickedOK == true)
+            {
+                fileName = file.FileName;
+
+                if (File.Exists(fileName))
+                {
+                    File.Delete(fileName);
+                }
+
+                CreateProxyFile(fileName);
+            }
+        }
+
+        private void CreateProxyFile(string fileName)
+        {
+            using (StreamWriter outputFile = new StreamWriter(fileName))
+            {
+                outputFile.WriteLine("<!DOCTYPE html>");
+                outputFile.WriteLine("<html>");
+                outputFile.WriteLine("<body>");
+                outputFile.WriteLine("<style type=\"text/css\">@media print{@page {size: landscape}} img {margin-bottom: -5px; margin-right: -5px}</style>");
+
+                foreach (LocalTuple card in currentDeck)
+                {
+                    for (int i = 0; i < card.Count; i++)
+                    {
+                        outputFile.WriteLine("<img src=\"http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=" + card.MultiverseId + "&type=card\" width=\"222\" height=\"319\"/>");
+                    }
+                }
+                outputFile.WriteLine("</body>");
+                outputFile.WriteLine("</html>");
+            }
+            System.Diagnostics.Process.Start(fileName);
+        }
+
+        private void HideOrShowProxiesButton()
+        {
+            if (currentDeck.Count > 0)
+            {
+                ProxiesButton.Visibility = System.Windows.Visibility.Visible;
+            }
+            else
+            {
+                ProxiesButton.Visibility = System.Windows.Visibility.Collapsed;
+            }
         }
     }
 }

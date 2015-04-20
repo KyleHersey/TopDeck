@@ -6,7 +6,7 @@
     
     <DockPanel Name="MainGrid">
         <Menu DockPanel.Dock="Top">
-            <MenuItem Header="File">
+            <MenuItem Header="Menu">
                 <MenuItem Click="NewDeck_Click">
                     <MenuItem.Header>
                         <TextBlock Style="{StaticResource MenuFont}">New</TextBlock>
@@ -47,14 +47,19 @@
                         <TextBlock Style="{StaticResource MenuFont}">Save as...</TextBlock>
                     </MenuItem.Header>
                 </MenuItem>
-                <MenuItem  Click="Update_Click">
-                    <MenuItem.Header>
-                        <TextBlock Style="{StaticResource MenuFont}">Update</TextBlock>
-                    </MenuItem.Header>
-                </MenuItem>
                 <MenuItem Click="Export_Click">
                     <MenuItem.Header>
                         <TextBlock Style="{StaticResource MenuFont}">Export to Cockatrice</TextBlock>
+                    </MenuItem.Header>
+                </MenuItem>
+                <MenuItem x:Name="ProxiesButton" Click="PrintProxies_Click" >
+                    <MenuItem.Header>
+                        <TextBlock Style="{StaticResource MenuFont}">Generate Proxies</TextBlock>
+                    </MenuItem.Header>
+                </MenuItem>
+                <MenuItem  Click="Update_Click">
+                    <MenuItem.Header>
+                        <TextBlock Style="{StaticResource MenuFont}">Update</TextBlock>
                     </MenuItem.Header>
                 </MenuItem>
             </MenuItem>
