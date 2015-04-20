@@ -10,21 +10,44 @@
             <ColumnDefinition Width="5*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+        
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-        <ListBox ScrollViewer.HorizontalScrollBarVisibility="Hidden" Name="theList" Grid.Column="0" ScrollViewer.VerticalScrollBarVisibility="Visible" Margin="10, 20, 0, 20" SelectionChanged="theList_SelectionChanged">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="{Binding Count}" Grid.Column="0" Background="Transparent" Margin="5, 0, 5, 0"/>
-                        <TextBlock Text="{Binding Name}" Grid.Column="1" Background="Transparent" Margin="5, 0, 5, 0"/>
-                    </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+            <ListBox ScrollViewer.HorizontalScrollBarVisibility="Hidden" Name="theList" Grid.Row="0" ScrollViewer.VerticalScrollBarVisibility="Visible" Margin="10, 20, 0, 20" SelectionChanged="theList_SelectionChanged">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding Count}" Grid.Column="0" Background="Transparent" Margin="5, 0, 5, 0"/>
+                            <TextBlock Text="{Binding Name}" Grid.Column="1" Background="Transparent" Margin="5, 0, 5, 0"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <TextBlock Grid.Row="1">Sideboard</TextBlock>
+            <ListBox ScrollViewer.HorizontalScrollBarVisibility="Hidden" Name="theSideboard" Grid.Row="2" ScrollViewer.VerticalScrollBarVisibility="Visible" Margin="10, 20, 0, 20" SelectionChanged="theSideboard_SelectionChanged">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding Count}" Grid.Column="0" Background="Transparent" Margin="5, 0, 5, 0"/>
+                            <TextBlock Text="{Binding Name}" Grid.Column="1" Background="Transparent" Margin="5, 0, 5, 0"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
 
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
@@ -38,6 +61,9 @@
                 </Button>
                 <Button x:Name="MinusButton" Margin="5" Click="MinusButton_Click">
                     <TextBlock FontSize="20">-</TextBlock>
+                </Button>
+                <Button x:Name="AddSideboardButton" Margin="5" Click="AddSideboardButton_Click">
+                    <TextBlock FontSize="20">Add</TextBlock>
                 </Button>
             </StackPanel>
         </Grid>

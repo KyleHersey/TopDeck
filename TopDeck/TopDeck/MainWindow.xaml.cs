@@ -27,6 +27,7 @@ namespace TopDeck
     {
         string currentDeckName;
         ObservableCollection<LocalTuple> currentDeck;
+        ObservableCollection<LocalTuple> sideboard;
         DatabaseManager db;
         List<string> recentFiles;
 
@@ -37,6 +38,7 @@ namespace TopDeck
             this.Closed += MainWindow_Closed;
 
             currentDeck = new ObservableCollection<LocalTuple>();
+            sideboard = new ObservableCollection<LocalTuple>();
 
             db = new DatabaseManager();
 
@@ -47,8 +49,11 @@ namespace TopDeck
             DeckTab.CardList.RightPanel = DeckTab.CardView;
             DeckTab.CardView.SetList.Visibility = System.Windows.Visibility.Collapsed;
             FiltersTab.FilterListPanel.CurrentDeck = currentDeck;
+            FiltersTab.FilterListPanel.Sideboard = sideboard;
             DeckTab.CardList.CurrentDeck = currentDeck;
             DeckTab.CardList.setItemsSource();
+            DeckTab.CardList.Sideboard = sideboard;
+            DeckTab.CardList.setSideboardItemsSource();
             DeckTab.DeckStats.deck = currentDeck;
             DeckTab.DeckStats.DBMan = db;
 
@@ -123,7 +128,10 @@ namespace TopDeck
                 currentDeck = new ObservableCollection<LocalTuple>(cardNames);
 
                 FiltersTab.FilterListPanel.CurrentDeck = currentDeck;
+                FiltersTab.FilterListPanel.Sideboard = sideboard;
                 DeckTab.CardList.CurrentDeck = currentDeck;
+                DeckTab.CardList.Sideboard = sideboard;
+                DeckTab.CardList.setSideboardItemsSource();
                 DeckTab.DeckStats.deck = currentDeck;
 
                 DeckTab.CardList.setItemsSource();
@@ -299,8 +307,11 @@ namespace TopDeck
             // in here we want to create a new list and set all the things to reference it
             currentDeck = new ObservableCollection<LocalTuple>();
             FiltersTab.FilterListPanel.CurrentDeck = currentDeck;
+            FiltersTab.FilterListPanel.Sideboard = sideboard;
             DeckTab.CardList.CurrentDeck = currentDeck;
             DeckTab.CardList.setItemsSource();
+            DeckTab.CardList.Sideboard = sideboard;
+            DeckTab.CardList.setSideboardItemsSource();
 
             DeckTab.DeckStats.updateStats();
             HideOrShowProxiesButton();
@@ -377,7 +388,10 @@ namespace TopDeck
 
             FiltersTab.FilterListPanel.CurrentDeck = currentDeck;
             DeckTab.CardList.CurrentDeck = currentDeck;
+            FiltersTab.FilterListPanel.Sideboard = sideboard;
             DeckTab.CardList.setItemsSource();
+            DeckTab.CardList.Sideboard = sideboard;
+            DeckTab.CardList.setSideboardItemsSource();
             DeckTab.DeckStats.updateStats();
             HideOrShowProxiesButton();
         }

@@ -28,6 +28,12 @@ namespace TopDeck
             set;
         }
 
+        public ObservableCollection<LocalTuple> Sideboard
+        {
+            get;
+            set;
+        }
+
         public DatabaseManager DBMan
         {
             get;
@@ -44,12 +50,18 @@ namespace TopDeck
         {
             InitializeComponent();
             setItemsSource();
+            setSideboardItemsSource();
 
         }
 
         public void setItemsSource()
         {
             theList.ItemsSource = CurrentDeck;
+        }
+
+        public void setSideboardItemsSource()
+        {
+            theSideboard.ItemsSource = Sideboard;
         }
 
         public void setDatabaseManager(DatabaseManager db)
@@ -77,8 +89,14 @@ namespace TopDeck
             {
                 LocalTuple cardTuple = (LocalTuple)theList.SelectedItem;
                 cardTuple.Count++;
+                theList.Items.Refresh();
             }
-            theList.Items.Refresh();
+            else if (theSideboard.SelectedItem != null)
+            {
+                LocalTuple cardTuple = (LocalTuple)theSideboard.SelectedItem;
+                cardTuple.Count++;
+                theSideboard.Items.Refresh();
+            }
         }
 
         private void MinusButton_Click(object sender, RoutedEventArgs e)
@@ -93,7 +111,37 @@ namespace TopDeck
                     cards.Remove(cardTuple);
                 }
                 theList.Items.Refresh();
+            } 
+            else if (theSideboard.SelectedItem != null)
+            {
+                LocalTuple cardTuple = (LocalTuple)theSideboard.SelectedItem;
+                cardTuple.Count--;
+                if (cardTuple.Count <= 0)
+                {
+                    ObservableCollection<LocalTuple> cards = (ObservableCollection<LocalTuple>)theSideboard.ItemsSource;
+                    cards.Remove(cardTuple);
+                }
+                theSideboard.Items.Refresh();
             }
+        }
+
+        private void theSideboard_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (theSideboard.SelectedItem != null)
+            {
+                LocalTuple tempTuple = (LocalTuple)theSideboard.SelectedItem;
+                Card c = DBMan.GetACardFromMultiverseId(tempTuple.MultiverseId);
+                RightPanel.setCard(c);
+                if (c.MultiverseIds.Count > 0)
+                {
+                    RightPanel.UpdateImage(tempTuple.MultiverseId);
+                }
+            }
+        }
+
+        private void AddSideboardButton_Click(object sender, RoutedEventArgs e)
+        {
+            // TODO
         }
     }
 }

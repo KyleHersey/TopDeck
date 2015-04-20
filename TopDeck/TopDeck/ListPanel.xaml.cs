@@ -39,6 +39,12 @@ namespace TopDeck
             set;
         }
 
+        public ObservableCollection<LocalTuple> Sideboard
+        {
+            get;
+            set;
+        }
+
         public ListPanel()
         {
             InitializeComponent();
@@ -70,10 +76,19 @@ namespace TopDeck
             // if it is in the list, increase the tuple with that count.
             // if it is not in the list, create the tuple and add to the list
             // ignore multiverse id for now
+            AddToCardList(CurrentDeck);
+        }
+
+        private void AddToSideBoard_Click(object sender, RoutedEventArgs e)
+        {
+            AddToCardList(Sideboard);
+        }
+
+        private void AddToCardList(ObservableCollection<LocalTuple> list) {
             bool foundItem = false;
-            if (CurrentDeck.Count > 0 && theList.SelectedItem != null)
+            if (list.Count > 0 && theList.SelectedItem != null)
             {
-                foreach (LocalTuple currentTuple in CurrentDeck)
+                foreach (LocalTuple currentTuple in list)
                 {
                     if (RightPanel.CurrentMultiverseId() != null && currentTuple.Name.Equals(theList.SelectedItem) && currentTuple.MultiverseId.Equals(RightPanel.CurrentMultiverseId()))
                     {
@@ -91,11 +106,11 @@ namespace TopDeck
             
             if (!foundItem && theList.SelectedItem != null && RightPanel.CurrentMultiverseId() != null)
             {
-                CurrentDeck.Add(new LocalTuple(1, theList.SelectedItem.ToString(), RightPanel.CurrentMultiverseId()));
+                list.Add(new LocalTuple(1, theList.SelectedItem.ToString(), RightPanel.CurrentMultiverseId()));
             }
             else if (!foundItem && theList.SelectedItem != null && RightPanel.selectedCard.MultiverseIds.Count > 0)
             {
-                    CurrentDeck.Add(new LocalTuple(1, theList.SelectedItem.ToString(), RightPanel.selectedCard.MultiverseIds[0].Item2));
+                list.Add(new LocalTuple(1, theList.SelectedItem.ToString(), RightPanel.selectedCard.MultiverseIds[0].Item2));
             }
         }
     }
