@@ -89,8 +89,8 @@ namespace TopDeck
 
             Recents.Visibility = System.Windows.Visibility.Collapsed;
             RecentFileOne.Visibility = System.Windows.Visibility.Collapsed;
-            //RecentFileTwo.Visibility = System.Windows.Visibility.Collapsed;
-            //RecentFileThree.Visibility = System.Windows.Visibility.Collapsed;
+            RecentFileTwo.Visibility = System.Windows.Visibility.Collapsed;
+            RecentFileThree.Visibility = System.Windows.Visibility.Collapsed;
 
             List<TextBlock> recentTextBlocks = new List<TextBlock>();
             recentTextBlocks.Add(RecentFileOne);
@@ -119,7 +119,7 @@ namespace TopDeck
             bool? userClickedOK = file.ShowDialog();
             if (userClickedOK == true)
             {
-                currentDeckName = file.SafeFileName;
+                currentDeckName = file.FileName;
 
                 path = file.FileName;
 
@@ -253,10 +253,10 @@ namespace TopDeck
             {
                 recentFiles.Add(currentDeckName);
             }
-            else if (!recentFiles.Contains(currentDeckName) && recentFiles.Count > 3)
+            else if (!recentFiles.Contains(currentDeckName) && recentFiles.Count >= 3)
             {
-                recentFiles.RemoveAt(0);
-                recentFiles.Add(currentDeckName);
+                recentFiles.RemoveAt(2);
+                recentFiles.Insert(0, currentDeckName);
             }
         }
 
@@ -397,6 +397,7 @@ namespace TopDeck
             DeckTab.CardList.Sideboard = sideboard;
             DeckTab.CardList.setSideboardItemsSource();
             DeckTab.DeckStats.updateStats();
+            DeckTab.CardView.Clear();
             HideOrShowProxiesButton();
         }
 
