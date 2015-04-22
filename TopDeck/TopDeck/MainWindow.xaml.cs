@@ -306,18 +306,15 @@ namespace TopDeck
 
             // in here we want to create a new list and set all the things to reference it
             currentDeck = new ObservableCollection<LocalTuple>();
-
             FiltersTab.FilterListPanel.CurrentDeck = currentDeck;
             FiltersTab.FilterListPanel.Sideboard = sideboard;
-
             DeckTab.CardList.CurrentDeck = currentDeck;
             DeckTab.CardList.setItemsSource();
             DeckTab.CardList.Sideboard = sideboard;
             DeckTab.CardList.setSideboardItemsSource();
             DeckTab.DeckStats.deck = currentDeck;
-            DeckTab.DeckStats.updateStats();
 
-            DeckTab.CardView.Clear();
+            DeckTab.DeckStats.updateStats();
             HideOrShowProxiesButton();
 
         }

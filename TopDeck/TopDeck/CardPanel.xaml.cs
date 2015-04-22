@@ -34,14 +34,6 @@ namespace TopDeck
             RulingsButtonBorder.Visibility = System.Windows.Visibility.Hidden;
         }
 
-        public void Clear()
-        {
-            RulesText.Text = "";
-            UpdateImage(null);
-            RulingsListView.ItemsSource = null;
-            RulingsButtonBorder.Visibility = System.Windows.Visibility.Hidden;
-        }
-
         public void setCard(Card c)
         {
             selectedCard = c;
@@ -68,14 +60,7 @@ namespace TopDeck
             img.BeginInit();
             Console.WriteLine("begin init");
             // can try to use GetAMultiverseId in DBManager, but will need to check if null
-            if (id != null)
-            {
-                img.UriSource = new Uri("http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=" + id + "&type=card");
-            }
-            else
-            {
-                img.UriSource = new Uri("Magic_the_gathering-card_back.jpg", UriKind.Relative);
-            }
+            img.UriSource = new Uri("http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=" + id + "&type=card");
             Console.WriteLine("got uri");
             img.EndInit();
             Console.WriteLine("end init");
