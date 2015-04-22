@@ -13,12 +13,13 @@
         
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="2*"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-
-            <ListBox ScrollViewer.HorizontalScrollBarVisibility="Hidden" Name="theList" Grid.Row="0" ScrollViewer.VerticalScrollBarVisibility="Visible" Margin="10, 20, 0, 20" SelectionChanged="theList_SelectionChanged">
+            <TextBlock Grid.Row="0" Margin="12,5,0,5">Deck</TextBlock>
+            <ListBox ScrollViewer.HorizontalScrollBarVisibility="Hidden" Name="theList" Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Visible" Margin="10, 0, 0, 20" SelectionChanged="theList_SelectionChanged">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Grid>
@@ -32,8 +33,8 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <TextBlock Grid.Row="1">Sideboard</TextBlock>
-            <ListBox ScrollViewer.HorizontalScrollBarVisibility="Hidden" Name="theSideboard" Grid.Row="2" ScrollViewer.VerticalScrollBarVisibility="Visible" Margin="10, 20, 0, 20" SelectionChanged="theSideboard_SelectionChanged">
+            <TextBlock Grid.Row="2" Margin="12,0,0,5">Sideboard</TextBlock>
+            <ListBox ScrollViewer.HorizontalScrollBarVisibility="Hidden" Name="theSideboard" Grid.Row="3" ScrollViewer.VerticalScrollBarVisibility="Visible" Margin="10, 0, 0, 20" SelectionChanged="theSideboard_SelectionChanged">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Grid>
@@ -57,13 +58,23 @@
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="1">
                 <Button x:Name="PlusButton"  Margin="5" Click="PlusButton_Click">
+                    <Button.ToolTip>
+                        <TextBlock Style="{StaticResource MenuFont}">Add to deck</TextBlock>
+                    </Button.ToolTip>
                     <TextBlock FontSize="20">+</TextBlock>
                 </Button>
                 <Button x:Name="MinusButton" Margin="5" Click="MinusButton_Click">
+                    <Button.ToolTip>
+                        <TextBlock Style="{StaticResource MenuFont}">Remove from deck</TextBlock>
+                    </Button.ToolTip>
                     <TextBlock FontSize="20">-</TextBlock>
                 </Button>
                 <Button x:Name="AddSideboardButton" Margin="5" Click="AddSideboardButton_Click">
-                    <TextBlock FontSize="20">Add</TextBlock>
+                    <Button.ToolTip>
+                        <TextBlock Style="{StaticResource MenuFont}">Add to sideboard</TextBlock>
+                    </Button.ToolTip>
+                    <!--<TextBlock FontSize="20">Add</TextBlock> -->
+                    <Path Margin="5" Stroke="LightBlue" StrokeThickness="1" Fill="Gray" Data="M 3,0 L 20,0 M 20,0 L 20,16 M 20,16 L 3,16 M 0,8 L 13,8 M 13,8 L 10,13 M 13,8 L 10,3"/>
                 </Button>
             </StackPanel>
         </Grid>

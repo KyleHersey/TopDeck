@@ -71,6 +71,10 @@ namespace TopDeck
 
         private void theList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (theSideboard.SelectedItem != null)
+            {
+                theSideboard.SelectedItem = null;
+            }
             if (theList.SelectedItem != null)
             {
                 LocalTuple tempTuple = (LocalTuple) theList.SelectedItem;
@@ -127,6 +131,10 @@ namespace TopDeck
 
         private void theSideboard_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (theList.SelectedItem != null)
+            {
+                theList.SelectedItem = null;
+            }
             if (theSideboard.SelectedItem != null)
             {
                 LocalTuple tempTuple = (LocalTuple)theSideboard.SelectedItem;
@@ -141,7 +149,27 @@ namespace TopDeck
 
         private void AddSideboardButton_Click(object sender, RoutedEventArgs e)
         {
-            // TODO
+            if (theList.SelectedItem != null)
+            {
+                LocalTuple selectedCard = (LocalTuple) theList.SelectedItem;
+                bool found = false;
+                foreach (LocalTuple currentCard in Sideboard)
+                {
+                    if (currentCard.Name.Equals(selectedCard.Name) && currentCard.MultiverseId.Equals(selectedCard.MultiverseId))
+                    {
+                        found = true;
+                        currentCard.Count++;
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    LocalTuple tupleToAdd = new LocalTuple(1, selectedCard.Name, selectedCard.MultiverseId);
+                    Sideboard.Add(tupleToAdd);
+                }
+                theSideboard.ItemsSource = Sideboard;
+                theSideboard.Items.Refresh();
+            }
         }
     }
 }
