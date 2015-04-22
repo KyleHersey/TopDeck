@@ -8,8 +8,9 @@
              xmlns:chartingprimitives="clr-namespace:System.Windows.Controls.DataVisualization.Charting.Primitives;assembly=System.Windows.Controls.DataVisualization.Toolkit"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-        <charting:Chart x:Name="ColorPie" Height="300" Width="400" BorderThickness="0">
+    <StackPanel>
+        
+        <charting:Chart x:Name="ColorPie" Height="200" Width="300" BorderThickness="0">
             <charting:Chart.PlotAreaStyle >
                 <Style TargetType="Grid">
                     <Setter Property="Background" Value="Transparent"/>
@@ -31,6 +32,13 @@
             </charting:Chart.Series>
         </charting:Chart>
         
+        <charting:Chart x:Name="TypesPie" Height="200" Width="300" BorderThickness="0">
+            <charting:PieSeries BorderThickness="0" ItemsSource="{Binding TypeSource}" DependentValuePath="Value" IndependentValuePath="Key"/>
+        </charting:Chart>
+       
+        <charting:Chart x:Name="CostBar" Height="200" Width="300" BorderThickness="0">
+            <charting:ColumnSeries BorderThickness="0" ItemsSource="{Binding CostSource}"  DependentValuePath="Value" IndependentValuePath="Key"/>
+        </charting:Chart>
         
-    </Grid>
+    </StackPanel>
 </UserControl>
