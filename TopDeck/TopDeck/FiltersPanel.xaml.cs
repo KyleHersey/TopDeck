@@ -83,10 +83,10 @@ namespace TopDeck
                 "",                                         //Multiverse ID
                 LoyaltyFilterField.Input.Text,              //Loyalty
                 "",                                         //Rarity
-                "",                                         //Flavor
-                "",                                         //Artist
+                Flavor.Input.Text,                          //Flavor
+                Artist.Input.Text,                          //Artist
                 "",                                         //Number
-                "",                                         //Power
+                PowerFilterField.Input.Text,                //Power
                 "",                                         //Life
                 "",                                         //Image Name
                 Text.Input.Text,                            //Card Text
