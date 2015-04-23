@@ -396,6 +396,7 @@ namespace TopDeck
             DeckTab.CardList.setItemsSource();
             DeckTab.CardList.Sideboard = sideboard;
             DeckTab.CardList.setSideboardItemsSource();
+            DeckTab.DeckStats.deck = currentDeck;
             DeckTab.DeckStats.updateStats();
             DeckTab.CardView.Clear();
             HideOrShowProxiesButton();
