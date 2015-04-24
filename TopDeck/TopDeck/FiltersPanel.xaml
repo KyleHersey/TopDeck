@@ -64,8 +64,6 @@
 
         <local:FilterRowTextBox x:Name="Legality" FilterText="Legality"/>
         
-        <local:FilterRowCheckBox x:Name="Timeshifted" FilterText="Timeshifted"/>
-        
         <local:FilterRowCheckBox x:Name="Reserved" FilterText="Reserved"/>
         
         <local:FilterRowTextBox x:Name="ReleaseDate" FilterText="Release Date"/>

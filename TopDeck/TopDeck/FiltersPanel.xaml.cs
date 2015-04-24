@@ -85,21 +85,14 @@ namespace TopDeck
                 ToughnessFilterField.Input.Text,            //Toughness
                 "",                                         //Hand
                 ConvertedManaCostFilterField.Input.Text,    //Converted Mana Cost
-                "",                                         //Release Date
-                "",                                         //Border
-                "",                                         //Watermark
                 MultiverseID.Input.Text,                    //Multiverse ID
                 LoyaltyFilterField.Input.Text,              //Loyalty
                 "",                                         //Rarity
                 Flavor.Input.Text,                          //Flavor
                 Artist.Input.Text,                          //Artist
-                "",                                         //Number
                 PowerFilterField.Input.Text,                //Power
-                "",                                         //Life
-                "",                                         //Image Name
                 Text.Input.Text,                            //Card Text
                 null,                                       //Types
-                null,                                       //Timeshifted
                 Reserved.isChecked(),
                 requireMulticolor,                          //Require Multicolored
                 colors,                                     //Colors

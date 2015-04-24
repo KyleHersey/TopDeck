@@ -113,8 +113,25 @@ namespace TopDeck
                 try
                 {
                     String mtgJSONText = File.ReadAllText("AllSets-x.json", Encoding.UTF8);
+
+                    // build our ARTISTS table
+                    string sql = @"create table ARTISTS
+                                   (name TEXT NOT NULL,
+                                    multiverse_id TEXT NOT NULL,
+                                    artist TEXT,
+                                    PRIMARY KEY(name, multiverse_id, artist))";
+                    CreateTable(sql);
+
+                    // build our RARITIES table
+                    sql = @"create table RARITIES
+                            (name TEXT NOT NULL,
+                             multiverse_id TEXT NOT NULL,
+                             rarity TEXT,
+                             PRIMARY KEY(name, multiverse_id, rarity))";
+                    CreateTable(sql);
+
                     // build our RULINGS table
-                    string sql = @"create table RULINGS
+                    sql = @"create table RULINGS
                                    (name TEXT NOT NULL,
                                     date TEXT NOT NULL,
                                     ruling_text TEXT NOT NULL,
@@ -158,7 +175,7 @@ namespace TopDeck
                              PRIMARY KEY (name, type))";
                     CreateTable(sql);
 
-                    // build TYPES table
+                    // build SUPERTYPES table
                     sql = @"create table SUPERTYPES 
                             (name TEXT NOT NULL, 
                              supertype TEXT, 
@@ -178,25 +195,14 @@ namespace TopDeck
                     // build CARD table
                     sql = @"create table CARD 
                                (name TEXT NOT NULL, 
-                                layout TEXT, 
                                 toughness TEXT,
                                 manacost TEXT, 
                                 hand INTEGER, 
-                                cmc REAL, 
-                                timeshifted NUMERIC, 
-                                reserved NUMERIC, 
-                                release_date TEXT, 
-                                source TEXT, 
-                                border TEXT, 
-                                watermark TEXT,
-                                loyalty INTEGER, 
-                                rarity TEXT, 
-                                original_type TEXT, 
+                                cmc REAL,
+                                reserved NUMERIC,
+                                loyalty INTEGER,
                                 flavor TEXT, 
-                                artist TEXT, 
-                                number TEXT, 
-                                power TEXT, 
-                                life INTEGER,
+                                power TEXT,
                                 card_text TEXT, 
                                 type TEXT, 
                                 PRIMARY KEY (name))";
@@ -302,12 +308,14 @@ namespace TopDeck
                                     }
                                 }
 
-                                AddToCard(info); // add border info
+                                AddToCard(info);
                                 cardsMet.Add(cardJObject["name"].ToString());
                             }
                             if (cardJObject["multiverseid"] != null)
                             {
                                 AddMultiverseId(cardJObject["name"].ToString(), inner["name"].ToString(), cardJObject["multiverseid"].ToString());
+                                AddArtist(cardJObject["name"].ToString(), cardJObject["multiverseid"].ToString(), cardJObject["artist"].ToString());
+                                AddRarity(cardJObject["name"].ToString(), cardJObject["multiverseid"].ToString(), cardJObject["rarity"].ToString());
                             }
                         }
                     }
@@ -448,11 +456,13 @@ namespace TopDeck
                                     }
                                 }
 
-                                AddToCard(info); // add border info
+                                AddToCard(info);
                             }
                             if (cardJObject["multiverseid"] != null)
                             {
                                 AddMultiverseId(cardJObject["name"].ToString(), inner["name"].ToString(), cardJObject["multiverseid"].ToString());
+                                AddArtist(cardJObject["name"].ToString(), cardJObject["multiverseid"].ToString(), cardJObject["artist"].ToString());
+                                AddRarity(cardJObject["name"].ToString(), cardJObject["multiverseid"].ToString(), cardJObject["rarity"].ToString());
                             }
                         }
                     }
@@ -465,10 +475,10 @@ namespace TopDeck
         }
 
         public List<string> GetCards(string name, string toughness, string hand, 
-            string cmc, string releaseDate, string border, 
-            string watermark, string multiverseId, string loyalty, string rarity, string flavor,
-            string artist, string number, string power, string life, string imageName, string cardText, 
-            List<string> types, bool? timeShifted, bool reserved, bool requireMultiColor, List<string> colors, List<string> subtypes, List<string> supertypes)
+            string cmc, string multiverseId, string loyalty, string rarity, 
+            string flavor, string artist, string power, string cardText, 
+            List<string> types, bool reserved, bool requireMultiColor, 
+            List<string> colors, List<string> subtypes, List<string> supertypes)
         {
             if (multiverseId != null)
             {
@@ -480,8 +490,7 @@ namespace TopDeck
                     return cardFound;
                 }
             }
-            // id
-            // timeshifted
+
             Debug.WriteLine("in getcards");
 
             string sqlCard = @"select name 
@@ -489,15 +498,8 @@ namespace TopDeck
                            where name like @name
                            and hand like @hand
                            and cmc like @cmc
-                           and (release_date like @releaseDate or release_date is null)
-                           and (border like @border or border is null)
-                           and (watermark like @watermark or watermark is null)
                            and loyalty like @loyalty
-                           and (rarity like @rarity or rarity is null)
-                           and (flavor like @flavor or flavor is null)
-                           and (artist like @artist or artist is null)
-                           and (number like @number or number is null)
-                           and life like @life";
+                           and (flavor like @flavor or flavor is null)";
 
             if (!cardText.Equals("")) {
                 sqlCard += @" and card_text like @cardText";
@@ -507,11 +509,6 @@ namespace TopDeck
             {
                 sqlCard += @" and toughness like @toughness
                              and power like @power";
-            }
-
-            if (timeShifted != null)
-            {
-                sqlCard += @" and timeshifted like @timeshifted";
             }
 
             if (reserved == true)
@@ -524,16 +521,9 @@ namespace TopDeck
             cmd.Parameters.Add(new SQLiteParameter("@name") { Value = "%" + name + "%" });
             cmd.Parameters.Add(new SQLiteParameter("@hand") { Value = "%" + hand + "%"});
             cmd.Parameters.Add(new SQLiteParameter("@cmc") { Value = "%" + cmc + "%" });
-            cmd.Parameters.Add(new SQLiteParameter("@releaseDate") { Value = "%" + releaseDate + "%"});
-            cmd.Parameters.Add(new SQLiteParameter("@border") { Value = "%" + border + "%"});
-            cmd.Parameters.Add(new SQLiteParameter("@watermark") { Value = "%" + watermark  + "%"});
             cmd.Parameters.Add(new SQLiteParameter("@loyalty") { Value = "%" + loyalty + "%"});
-            cmd.Parameters.Add(new SQLiteParameter("@rarity") { Value = "%" + rarity + "%"});
             cmd.Parameters.Add(new SQLiteParameter("@flavor") { Value = "%" + flavor + "%"});
-            cmd.Parameters.Add(new SQLiteParameter("@artist") { Value = "%" + artist + "%"});
-            cmd.Parameters.Add(new SQLiteParameter("@number") { Value = "%" + number + "%"});
-            cmd.Parameters.Add(new SQLiteParameter("@life") { Value = "%" + life + "%"});
-
+            
             if (!cardText.Equals(""))
             {
                 cmd.Parameters.Add(new SQLiteParameter("@cardText") { Value = "%" + cardText + "%"});
@@ -543,11 +533,6 @@ namespace TopDeck
             {
                 cmd.Parameters.Add(new SQLiteParameter("@toughness") { Value = "%" + toughness + "%" });
                 cmd.Parameters.Add(new SQLiteParameter("@power") { Value = "%" + power + "%" });
-            }
-
-            if (timeShifted != null)
-            {
-                cmd.Parameters.Add(new SQLiteParameter("@timeshifted") { Value = "%" + timeShifted + "%" });
             }
 
             SQLiteDataReader reader = cmd.ExecuteReader();
@@ -734,11 +719,7 @@ namespace TopDeck
             if (reader.Read())
             {
                 c = new Card();
-                if (!(reader["artist"] is DBNull))
-                    c.Artist = (string) reader["artist"];
 
-                if (!(reader["border"] is DBNull))
-                    c.Border = (string) reader["border"];
                 c.CMC = (double) reader["cmc"];
 
                 if (!(reader["flavor"] is DBNull))
@@ -746,42 +727,20 @@ namespace TopDeck
 
                 c.Hand = (long)reader["hand"];
 
-                if (!(reader["layout"] is DBNull))
-                    c.Layout = (string)reader["layout"];
-
-                c.Life = (long)reader["life"];
-
                 c.Loyalty = (long)reader["loyalty"];
 
                 c.Name = (string)reader["name"];
-
-                if (!(reader["number"] is DBNull))
-                    c.Number = (string)reader["number"];
                 
                 if (!(reader["power"] is DBNull))
                     c.Power = (string)reader["power"];
 
-                if (!(reader["rarity"] is DBNull))
-                    c.Rarity = (string)reader["rarity"];
-
-                if (!(reader["release_date"] is DBNull))
-                    c.ReleaseDate = (string)reader["release_date"];
-
                 if (!(reader["card_text"] is DBNull))
                     c.Text = (string)reader["card_text"];
-
-                if ((decimal)reader["timeshifted"] == 0)
-                    c.Timeshifted = false;
-                else
-                    c.Timeshifted = true;
 
                 if (!(reader["toughness"] is DBNull))
                     c.Toughness = (string)reader["toughness"];
 
                 c.Type = (string)reader["type"];
-
-                if (!(reader["watermark"] is DBNull))
-                    c.Watermark = (string)reader["watermark"];
             }
 
             // add colors from table
@@ -942,7 +901,7 @@ namespace TopDeck
         private void AddToCard(JSONDTO info)
         {
             // add this card
-            string sql = @"insert into CARD(name, toughness, hand, cmc, timeshifted, reserved, release_date, border, watermark, loyalty, rarity, flavor, artist, number, power, life, card_text, type)  values (@name, @toughness, @hand, @cmc, @timeshifted, @reserved, @release_date, @border, @watermark, @loyalty, @rarity, @flavor, @artist, @number, @power, @life, @card_text, @type)";
+            string sql = @"insert into CARD(name, toughness, hand, cmc, reserved, loyalty, flavor, power, card_text, type, manacost)  values (@name, @toughness, @hand, @cmc, @reserved, @loyalty, @flavor, @power, @card_text, @type, @manacost)";
 
             // this is for passing in params
             var cmd = dbConnection.CreateCommand();
@@ -951,27 +910,39 @@ namespace TopDeck
             cmd.Parameters.Add(new SQLiteParameter("@toughness") { Value = info.toughness });
             cmd.Parameters.Add(new SQLiteParameter("@hand") { Value = info.hand });
             cmd.Parameters.Add(new SQLiteParameter("@cmc") { Value = info.cmc });
-            cmd.Parameters.Add(new SQLiteParameter("@timeshifted") { Value = info.timeshifted });
             cmd.Parameters.Add(new SQLiteParameter("@reserved") { Value = info.reserved });
-            cmd.Parameters.Add(new SQLiteParameter("@release_date") { Value = info.releaseDate });
-            cmd.Parameters.Add(new SQLiteParameter("@border") { Value = info.border });
-            cmd.Parameters.Add(new SQLiteParameter("@watermark") { Value = info.watermark });
             cmd.Parameters.Add(new SQLiteParameter("@loyalty") { Value = info.loyalty });
-            cmd.Parameters.Add(new SQLiteParameter("@rarity") { Value = info.rarity });
             cmd.Parameters.Add(new SQLiteParameter("@flavor") { Value = info.flavor });
-            cmd.Parameters.Add(new SQLiteParameter("@artist") { Value = info.artist });
-            cmd.Parameters.Add(new SQLiteParameter("@number") { Value = info.number });
             cmd.Parameters.Add(new SQLiteParameter("@power") { Value = info.power });
-            cmd.Parameters.Add(new SQLiteParameter("@life") { Value = info.life });
             cmd.Parameters.Add(new SQLiteParameter("@card_text") { Value = info.text });
             cmd.Parameters.Add(new SQLiteParameter("@type") { Value = info.type });
+            cmd.Parameters.Add(new SQLiteParameter("@manacost") { Value = info.manaCost });
 
             cmd.ExecuteNonQuery();
         }
 
-        // rulings
-        // foreign names
-        // legalities
+        private void AddRarity(string name, string multiverseId, string rarity)
+        {
+            string sql = @"insert into RARITIES(name, multiverse_id, rarity) values (@name, @multiverse_id, @rarity)";
+            var cmd = dbConnection.CreateCommand();
+            cmd.CommandText = sql;
+            cmd.Parameters.Add(new SQLiteParameter("@name") { Value = name });
+            cmd.Parameters.Add(new SQLiteParameter("@multiverse_id") { Value = multiverseId });
+            cmd.Parameters.Add(new SQLiteParameter("@rarity") { Value = rarity });
+            cmd.ExecuteNonQuery();
+        }
+
+        private void AddArtist(string name, string multiverseId, string artist)
+        {
+            string sql = @"insert into ARTISTS(name, multiverse_id, artist) values (@name, @multiverse_id, @artist)";
+            var cmd = dbConnection.CreateCommand();
+            cmd.CommandText = sql;
+            cmd.Parameters.Add(new SQLiteParameter("@name") { Value = name });
+            cmd.Parameters.Add(new SQLiteParameter("@multiverse_id") { Value = multiverseId});
+            cmd.Parameters.Add(new SQLiteParameter("@artist") { Value = artist });
+            cmd.ExecuteNonQuery();
+        }
+
         private void AddMultiverseId(string name, string set, string multiverseId)
         {
             string sql = @"insert into MULTIVERSEID_SET(name, setName, multiverse_id) values (@name, @setName, @multiverse_id)";
@@ -1123,9 +1094,6 @@ namespace TopDeck
     [DataContract]
     public class JSONDTO
     {
-        [DataMember(Name = "layout")]
-        public string layout { get; set; }
-
         [DataMember(Name = "name")]
         public string name { get; set; }
 
@@ -1135,20 +1103,11 @@ namespace TopDeck
         [DataMember(Name = "type")]
         public string type { get; set; }
 
-        [DataMember(Name = "rarity")]
-        public string rarity { get; set; }
-
         [DataMember(Name = "text")]
         public string text { get; set; }
 
         [DataMember(Name = "flavor")]
         public string flavor { get; set; }
-
-        [DataMember(Name = "artist")]
-        public string artist { get; set; }
-
-        [DataMember(Name = "number")]
-        public string number { get; set; }
 
         [DataMember(Name = "power")]
         public string power { get; set; }
@@ -1165,37 +1124,14 @@ namespace TopDeck
         [DataMember(Name = "variations")]
         public List<int> variations { get; set; }
 
-        [DataMember(Name = "watermark")]
-        public string watermark { get; set; }
-
-        [DataMember(Name = "border")]
-        public string border { get; set; }
-
-        [DataMember(Name = "timeshifted")]
-        public bool timeshifted { get; set; }
-
         [DataMember(Name = "hand")]
         public int hand { get; set; }
-
-        [DataMember(Name = "life")]
-        public int life { get; set; }
 
         [DataMember(Name = "reserved")]
         public bool reserved { get; set; }
 
-        [DataMember(Name = "releaseDate")]
-        public string releaseDate { get; set; }
-
         [DataMember(Name = "manaCost")]
         public string manaCost { get; set; }
-
-        // release date
-        // source
-        // border
-        // watermark
-        // original type
-        // number
-        // remove image name
     }
 
     [DataContract]
