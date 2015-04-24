@@ -8,9 +8,13 @@
              xmlns:chartingprimitives="clr-namespace:System.Windows.Controls.DataVisualization.Charting.Primitives;assembly=System.Windows.Controls.DataVisualization.Toolkit"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <StackPanel>
-        
-        <charting:Chart x:Name="ColorPie" Height="200" Width="300" BorderThickness="0">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <charting:Chart x:Name="ColorPie" BorderThickness="0" Grid.Row="0">
             <charting:Chart.PlotAreaStyle >
                 <Style TargetType="Grid">
                     <Setter Property="Background" Value="Transparent"/>
@@ -32,13 +36,45 @@
             </charting:Chart.Series>
         </charting:Chart>
         
-        <charting:Chart x:Name="TypesPie" Height="200" Width="300" BorderThickness="0">
+        <charting:Chart x:Name="TypesPie" BorderThickness="0" Grid.Row="1">
+            <charting:Chart.PlotAreaStyle >
+                <Style TargetType="Grid">
+                    <Setter Property="Background" Value="Transparent"/>
+                </Style>
+            </charting:Chart.PlotAreaStyle>
+            <charting:Chart.LegendStyle>
+                <Style TargetType="visualization:Legend">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                </Style>
+            </charting:Chart.LegendStyle>
+            <charting:Chart.ChartAreaStyle>
+                <Style TargetType="chartingprimitives:EdgePanel">
+                    <Setter Property="Background" Value="Transparent"/>
+                </Style>
+            </charting:Chart.ChartAreaStyle>
             <charting:PieSeries BorderThickness="0" ItemsSource="{Binding TypeSource}" DependentValuePath="Value" IndependentValuePath="Key"/>
         </charting:Chart>
        
-        <charting:Chart x:Name="CostBar" Height="200" Width="300" BorderThickness="0">
+        <charting:Chart x:Name="CostBar" BorderThickness="0" Grid.Row="2">
+            <charting:Chart.PlotAreaStyle >
+                <Style TargetType="Grid">
+                    <Setter Property="Background" Value="Transparent"/>
+                </Style>
+            </charting:Chart.PlotAreaStyle>
+            <charting:Chart.LegendStyle>
+                <Style TargetType="visualization:Legend">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                </Style>
+            </charting:Chart.LegendStyle>
+            <charting:Chart.ChartAreaStyle>
+                <Style TargetType="chartingprimitives:EdgePanel">
+                    <Setter Property="Background" Value="Transparent"/>
+                </Style>
+            </charting:Chart.ChartAreaStyle>
             <charting:ColumnSeries BorderThickness="0" ItemsSource="{Binding CostSource}"  DependentValuePath="Value" IndependentValuePath="Key"/>
         </charting:Chart>
         
-    </StackPanel>
+    </Grid>
 </UserControl>

@@ -71,6 +71,14 @@ namespace TopDeck
             {
                 requireMulticolor = true;
             }
+            List<string> types = new List<string>();
+            types.Add("Instant");
+
+            List<string> subtypes = new List<string>();
+            subtypes.Add("Goblin");
+            List<string> supertypes = new List<string>();
+            supertypes.Add("snow");
+            supertypes.Add("legendary");
             // what about colorless?
             MiddlePanel.setItemsSource(DBMan.GetCards(
                 NameFilterField.Input.Text,                 //Name
@@ -80,7 +88,7 @@ namespace TopDeck
                 "",                                         //Release Date
                 "",                                         //Border
                 "",                                         //Watermark
-                "",                                         //Multiverse ID
+                MultiverseID.Input.Text,                    //Multiverse ID
                 LoyaltyFilterField.Input.Text,              //Loyalty
                 "",                                         //Rarity
                 Flavor.Input.Text,                          //Flavor
@@ -90,12 +98,13 @@ namespace TopDeck
                 "",                                         //Life
                 "",                                         //Image Name
                 Text.Input.Text,                            //Card Text
-                "",                                         //Types
+                null,                                       //Types
                 null,                                       //Timeshifted
+                Reserved.isChecked(),
                 requireMulticolor,                          //Require Multicolored
                 colors,                                     //Colors
-                "",                                         //subtype
-                ""));                                       //supertype
+                subtypes,                                   //Subtype
+                null));                                     //Supertype
         }
 
         public void setDatabaseManager(DatabaseManager db)

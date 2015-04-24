@@ -468,8 +468,18 @@ namespace TopDeck
             string cmc, string releaseDate, string border, 
             string watermark, string multiverseId, string loyalty, string rarity, string flavor,
             string artist, string number, string power, string life, string imageName, string cardText, 
-            string type, bool? timeShifted, bool requireMultiColor, List<string> colors, string subtype, string supertype)
+            List<string> types, bool? timeShifted, bool reserved, bool requireMultiColor, List<string> colors, List<string> subtypes, List<string> supertypes)
         {
+            if (multiverseId != null)
+            {
+                string cardWanted = GetAName(multiverseId);
+                if (cardWanted != null)
+                {
+                    List<string> cardFound = new List<string>();
+                    cardFound.Add(cardWanted);
+                    return cardFound;
+                }
+            }
             // id
             // timeshifted
             Debug.WriteLine("in getcards");
@@ -490,21 +500,23 @@ namespace TopDeck
                            and life like @life";
 
             if (!cardText.Equals("")) {
-                sqlCard += "and card_text like @cardText";
+                sqlCard += @" and card_text like @cardText";
             }
 
-            if (!type.Equals(""))
-                sqlCard += "and type like @type";
-
-            if (type.Equals("Creature"))
+            if (types != null && types.Contains("Creature"))
             {
-                sqlCard += @"and toughness like @toughness
+                sqlCard += @" and toughness like @toughness
                              and power like @power";
             }
 
             if (timeShifted != null)
             {
-                sqlCard += "and timeshifted like @timeshifted";
+                sqlCard += @" and timeshifted like @timeshifted";
+            }
+
+            if (reserved == true)
+            {
+                sqlCard += @" and reserved = 1";
             }
 
             var cmd = dbConnection.CreateCommand();
@@ -527,15 +539,10 @@ namespace TopDeck
                 cmd.Parameters.Add(new SQLiteParameter("@cardText") { Value = "%" + cardText + "%"});
             }
 
-            if (type.Equals("Creature"))
+            if (types != null && types.Contains("Creature"))
             {
                 cmd.Parameters.Add(new SQLiteParameter("@toughness") { Value = "%" + toughness + "%" });
                 cmd.Parameters.Add(new SQLiteParameter("@power") { Value = "%" + power + "%" });
-            }
-
-            if (!type.Equals(""))
-            {
-                cmd.Parameters.Add(new SQLiteParameter("@type") { Value = "%" + type + "%" });
             }
 
             if (timeShifted != null)
@@ -636,14 +643,20 @@ namespace TopDeck
 
 
             // search by types, subtypes, supertypes
-            if (!type.Equals(""))
+            if (types != null && types.Count > 0)
             {
                 string sqlType = @"select name
                                    from TYPES
-                                   where type like @type";
+                                   where ";
+                for (int i = 0; i < types.Count; i++)
+                {
+                    if (i != types.Count - 1)
+                        sqlType += "type like \"%" + types[i] + "%\" or ";
+                    else
+                        sqlType += "type like \"%" + types[i] + "%\"";
+                }
                 var cmd3 = dbConnection.CreateCommand();
                 cmd3.CommandText = sqlType;
-                cmd3.Parameters.Add(new SQLiteParameter("@type") { Value = "%" + type + "%" });
                 SQLiteDataReader reader3 = cmd3.ExecuteReader();
 
                 HashSet<string> cardNamesWithTypes = new HashSet<string>();
@@ -654,14 +667,20 @@ namespace TopDeck
                 cardNamesWithoutColors.IntersectWith(cardNamesWithTypes);
             }
 
-            if (!subtype.Equals(""))
+            if (subtypes != null && subtypes.Count > 0)
             {
                 string sqlSubtype = @"select name
                                    from SUBTYPES
-                                   where subtype like @subtype";
+                                   where ";
+                for (int i = 0; i < subtypes.Count; i++)
+                {
+                    if (i != subtypes.Count - 1)
+                        sqlSubtype += "subtype like \"%" + subtypes[i] + "%\" or ";
+                    else
+                        sqlSubtype += "subtype like \"%" + subtypes[i] + "%\"";
+                }
                 var cmd4 = dbConnection.CreateCommand();
                 cmd4.CommandText = sqlSubtype;
-                cmd4.Parameters.Add(new SQLiteParameter("@subtype") { Value = "%" + subtype + "%" });
                 SQLiteDataReader subtypeReader = cmd4.ExecuteReader();
 
                 HashSet<string> cardNamesWithSubtypes = new HashSet<string>();
@@ -672,14 +691,20 @@ namespace TopDeck
                 cardNamesWithoutColors.IntersectWith(cardNamesWithSubtypes);
             }
 
-            if (!supertype.Equals(""))
+            if (supertypes != null && supertypes.Count > 0)
             {
                 string sqlSupertype = @"select name
                                    from SUPERTYPES
-                                   where supertype like @supertype";
+                                   where ";
+                for (int i = 0; i < supertypes.Count; i++)
+                {
+                    if (i != supertypes.Count - 1)
+                        sqlSupertype += "supertype like \"%" + supertypes[i] + "%\" or ";
+                    else
+                        sqlSupertype += "supertype like \"%" + supertypes[i] + "%\"";
+                }
                 var cmd5 = dbConnection.CreateCommand();
                 cmd5.CommandText = sqlSupertype;
-                cmd5.Parameters.Add(new SQLiteParameter("@supertype") { Value = "%" + supertype + "%" });
                 SQLiteDataReader supertypeReader = cmd5.ExecuteReader();
 
                 HashSet<string> cardNamesWithSupertypes = new HashSet<string>();

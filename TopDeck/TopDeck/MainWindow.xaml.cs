@@ -376,6 +376,7 @@ namespace TopDeck
         private void OpenRecentFile(int index)
         {
             List<LocalTuple> cardNames = GetCardnamesFromFile(recentFiles[index]);
+
             DLMan.currentDeck = new ObservableCollection<LocalTuple>(cardNames);
 
             FiltersTab.FilterListPanel.CurrentDeck = DLMan.currentDeck;
