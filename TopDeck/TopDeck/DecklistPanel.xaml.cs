@@ -22,13 +22,7 @@ namespace TopDeck
     public partial class DecklistPanel : UserControl
     {
 
-        public ObservableCollection<LocalTuple> CurrentDeck
-        {
-            get;
-            set;
-        }
-
-        public ObservableCollection<LocalTuple> Sideboard
+        public DecklistManager DLMan
         {
             get;
             set;
@@ -49,19 +43,24 @@ namespace TopDeck
         public DecklistPanel()
         {
             InitializeComponent();
+            //setItemsSource();
+            //setSideboardItemsSource();
+        }
+
+        public void updatePanel()
+        {
             setItemsSource();
             setSideboardItemsSource();
-
         }
 
         public void setItemsSource()
         {
-            theList.ItemsSource = CurrentDeck;
+            theList.ItemsSource = DLMan.currentDeck;
         }
 
         public void setSideboardItemsSource()
         {
-            theSideboard.ItemsSource = Sideboard;
+            theSideboard.ItemsSource = DLMan.sideboard;
         }
 
         public void setDatabaseManager(DatabaseManager db)
@@ -93,14 +92,14 @@ namespace TopDeck
             {
                 LocalTuple cardTuple = (LocalTuple)theList.SelectedItem;
                 cardTuple.Count++;
-                theList.Items.Refresh();
             }
             else if (theSideboard.SelectedItem != null)
             {
                 LocalTuple cardTuple = (LocalTuple)theSideboard.SelectedItem;
                 cardTuple.Count++;
-                theSideboard.Items.Refresh();
             }
+
+            DLMan.update();
         }
 
         private void MinusButton_Click(object sender, RoutedEventArgs e)
@@ -111,10 +110,8 @@ namespace TopDeck
                 cardTuple.Count--;
                 if (cardTuple.Count <= 0)
                 {
-                    ObservableCollection<LocalTuple> cards = (ObservableCollection<LocalTuple>)theList.ItemsSource;
-                    cards.Remove(cardTuple);
+                    DLMan.currentDeck.Remove(cardTuple);
                 }
-                theList.Items.Refresh();
             } 
             else if (theSideboard.SelectedItem != null)
             {
@@ -122,11 +119,11 @@ namespace TopDeck
                 cardTuple.Count--;
                 if (cardTuple.Count <= 0)
                 {
-                    ObservableCollection<LocalTuple> cards = (ObservableCollection<LocalTuple>)theSideboard.ItemsSource;
-                    cards.Remove(cardTuple);
+                    DLMan.sideboard.Remove(cardTuple);
                 }
-                theSideboard.Items.Refresh();
             }
+
+            DLMan.update();
         }
 
         private void theSideboard_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -153,7 +150,7 @@ namespace TopDeck
             {
                 LocalTuple selectedCard = (LocalTuple) theList.SelectedItem;
                 bool found = false;
-                foreach (LocalTuple currentCard in Sideboard)
+                foreach (LocalTuple currentCard in DLMan.sideboard)
                 {
                     if (currentCard.Name.Equals(selectedCard.Name) && currentCard.MultiverseId.Equals(selectedCard.MultiverseId))
                     {
@@ -165,10 +162,10 @@ namespace TopDeck
                 if (!found)
                 {
                     LocalTuple tupleToAdd = new LocalTuple(1, selectedCard.Name, selectedCard.MultiverseId);
-                    Sideboard.Add(tupleToAdd);
+                    DLMan.sideboard.Add(tupleToAdd);
                 }
-                theSideboard.ItemsSource = Sideboard;
-                theSideboard.Items.Refresh();
+
+                DLMan.update();
             }
         }
     }

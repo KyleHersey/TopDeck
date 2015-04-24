@@ -25,9 +25,7 @@ namespace TopDeck
     /// </summary>
     public partial class MainWindow : Window
     {
-        string currentDeckName;
-        ObservableCollection<LocalTuple> currentDeck;
-        ObservableCollection<LocalTuple> sideboard;
+        DecklistManager DLMan;
         DatabaseManager db;
         List<string> recentFiles;
 
@@ -37,8 +35,7 @@ namespace TopDeck
             InitializeComponent();
             this.Closed += MainWindow_Closed;
 
-            currentDeck = new ObservableCollection<LocalTuple>();
-            sideboard = new ObservableCollection<LocalTuple>();
+            DLMan = new DecklistManager(DeckTab.CardList, DeckTab.DeckStats);
 
             db = new DatabaseManager();
 
@@ -46,17 +43,17 @@ namespace TopDeck
 
             FiltersTab.setDatabaseManager(db);
             DeckTab.CardList.setDatabaseManager(db);
-            DeckTab.CardList.RightPanel = DeckTab.CardView;
-            DeckTab.CardView.SetList.Visibility = System.Windows.Visibility.Collapsed;
-            FiltersTab.FilterListPanel.CurrentDeck = currentDeck;
-            FiltersTab.FilterListPanel.Sideboard = sideboard;
-            DeckTab.CardList.CurrentDeck = currentDeck;
-            DeckTab.CardList.setItemsSource();
-            DeckTab.CardList.Sideboard = sideboard;
-            DeckTab.CardList.setSideboardItemsSource();
-            DeckTab.DeckStats.deck = currentDeck;
             DeckTab.DeckStats.DBMan = db;
 
+            DeckTab.CardList.DLMan = DLMan;
+
+            DeckTab.CardList.RightPanel = DeckTab.CardView;
+            DeckTab.CardView.SetList.Visibility = System.Windows.Visibility.Collapsed;
+
+            FiltersTab.FilterListPanel.CurrentDeck = DLMan.currentDeck;
+            FiltersTab.FilterListPanel.Sideboard = DLMan.sideboard;
+
+            DLMan.update();
             NewDeck_Click(null, null);
 
         }
@@ -119,22 +116,18 @@ namespace TopDeck
             bool? userClickedOK = file.ShowDialog();
             if (userClickedOK == true)
             {
-                currentDeckName = file.FileName;
+                DLMan.currentDeckName = file.FileName;
 
                 path = file.FileName;
 
                 List<LocalTuple> cardNames = GetCardnamesFromFile(path);
 
-                currentDeck = new ObservableCollection<LocalTuple>(cardNames);
+                DLMan.currentDeck = new ObservableCollection<LocalTuple>(cardNames);
 
-                FiltersTab.FilterListPanel.CurrentDeck = currentDeck;
-                FiltersTab.FilterListPanel.Sideboard = sideboard;
-                DeckTab.CardList.CurrentDeck = currentDeck;
-                DeckTab.CardList.Sideboard = sideboard;
-                DeckTab.CardList.setSideboardItemsSource();
-                DeckTab.DeckStats.deck = currentDeck;
+                FiltersTab.FilterListPanel.CurrentDeck = DLMan.currentDeck;
+                FiltersTab.FilterListPanel.Sideboard = DLMan.sideboard;
 
-                DeckTab.CardList.setItemsSource();
+                DLMan.update();
             }
 
             Regex checkExtension = new Regex(".*\\.dec");
@@ -217,21 +210,21 @@ namespace TopDeck
 
         private void SaveDeck_Click(object sender, RoutedEventArgs e)
         {
-            if (currentDeckName == null)
+            if (DLMan.currentDeckName == null)
             {
                 SaveAsDeckFile_Click(sender, e);
                 return;
             }
             else
             {
-                if (File.Exists(currentDeckName))
+                if (File.Exists(DLMan.currentDeckName))
                 {
-                    File.Delete(currentDeckName);
+                    File.Delete(DLMan.currentDeckName);
                 }
 
-                using (StreamWriter file = new StreamWriter(currentDeckName))
+                using (StreamWriter file = new StreamWriter(DLMan.currentDeckName))
                 {
-                    foreach (LocalTuple currentCard in currentDeck)
+                    foreach (LocalTuple currentCard in DLMan.currentDeck)
                     {
                         if (currentCard.MultiverseId != null)
                         {
@@ -249,14 +242,14 @@ namespace TopDeck
 
         private void AddToRecentFiles()
         {
-            if (!recentFiles.Contains(currentDeckName) && recentFiles.Count < 3)
+            if (!recentFiles.Contains(DLMan.currentDeckName) && recentFiles.Count < 3)
             {
-                recentFiles.Add(currentDeckName);
+                recentFiles.Add(DLMan.currentDeckName);
             }
-            else if (!recentFiles.Contains(currentDeckName) && recentFiles.Count >= 3)
+            else if (!recentFiles.Contains(DLMan.currentDeckName) && recentFiles.Count >= 3)
             {
                 recentFiles.RemoveAt(2);
-                recentFiles.Insert(0, currentDeckName);
+                recentFiles.Insert(0, DLMan.currentDeckName);
             }
         }
 
@@ -280,10 +273,10 @@ namespace TopDeck
                     File.Delete(fileName);
                 }
 
-                currentDeckName = fileName;
+                DLMan.currentDeckName = fileName;
                 using (StreamWriter outputFile = new StreamWriter(fileName))
                 {
-                    foreach (LocalTuple card in currentDeck)
+                    foreach (LocalTuple card in DLMan.currentDeck)
                     {
                         if (card.MultiverseId != null)
                         {
@@ -302,24 +295,19 @@ namespace TopDeck
         private void NewDeck_Click(object sender, RoutedEventArgs e)
         {
             // don't forget to ask if they want to save?
-            currentDeckName = null;
+            DLMan.currentDeckName = null;
 
             // in here we want to create a new list and set all the things to reference it
-            currentDeck = new ObservableCollection<LocalTuple>();
+            DLMan.currentDeck = new ObservableCollection<LocalTuple>();
+            DLMan.sideboard = new ObservableCollection<LocalTuple>();
 
-            FiltersTab.FilterListPanel.CurrentDeck = currentDeck;
-            FiltersTab.FilterListPanel.Sideboard = sideboard;
+            FiltersTab.FilterListPanel.CurrentDeck = DLMan.currentDeck;
+            FiltersTab.FilterListPanel.Sideboard = DLMan.sideboard;
 
-            DeckTab.CardList.CurrentDeck = currentDeck;
-            DeckTab.CardList.setItemsSource();
-            DeckTab.CardList.Sideboard = sideboard;
-            DeckTab.CardList.setSideboardItemsSource();
-            DeckTab.DeckStats.deck = currentDeck;
-            DeckTab.DeckStats.updateStats();
-
+            DLMan.update();
             DeckTab.CardView.Clear();
-            HideOrShowProxiesButton();
 
+            HideOrShowProxiesButton();
         }
 
         private void Update_Click(object sender, RoutedEventArgs e)
@@ -330,7 +318,7 @@ namespace TopDeck
         private void Export_Click(object senter, RoutedEventArgs e)
         {
             // files have .cod extension
-            if (currentDeck.Count > 0)
+            if (DLMan.currentDeck.Count > 0)
             {
                 string fileName = "";
                 SaveFileDialog file = new SaveFileDialog();
@@ -357,7 +345,7 @@ namespace TopDeck
                         outputFile.WriteLine("    <comments></comments>");
                         outputFile.WriteLine("    <zone name=\"main\">");
                         //        <card number="1" price="0" name="Leyline of the Void"/>
-                        foreach (LocalTuple card in currentDeck)
+                        foreach (LocalTuple card in DLMan.currentDeck)
                         {
                             outputFile.WriteLine("        <card number=\"" + card.Count + "\" price=\"0\" name=\"" + card.Name + "\"/>");
                         }
@@ -388,15 +376,13 @@ namespace TopDeck
         private void OpenRecentFile(int index)
         {
             List<LocalTuple> cardNames = GetCardnamesFromFile(recentFiles[index]);
-            currentDeck = new ObservableCollection<LocalTuple>(cardNames);
+            DLMan.currentDeck = new ObservableCollection<LocalTuple>(cardNames);
 
-            FiltersTab.FilterListPanel.CurrentDeck = currentDeck;
-            DeckTab.CardList.CurrentDeck = currentDeck;
-            FiltersTab.FilterListPanel.Sideboard = sideboard;
-            DeckTab.CardList.setItemsSource();
-            DeckTab.CardList.Sideboard = sideboard;
-            DeckTab.CardList.setSideboardItemsSource();
-            DeckTab.DeckStats.updateStats();
+            FiltersTab.FilterListPanel.CurrentDeck = DLMan.currentDeck;
+            FiltersTab.FilterListPanel.Sideboard = DLMan.sideboard;
+
+            DLMan.update();
+
             DeckTab.CardView.Clear();
             HideOrShowProxiesButton();
         }
@@ -434,7 +420,7 @@ namespace TopDeck
                 outputFile.WriteLine("<body>");
                 outputFile.WriteLine("<style type=\"text/css\">@media print{@page {size: landscape}} img {margin-bottom: -5px; margin-right: -5px}</style>");
 
-                foreach (LocalTuple card in currentDeck)
+                foreach (LocalTuple card in DLMan.currentDeck)
                 {
                     for (int i = 0; i < card.Count; i++)
                     {
@@ -449,7 +435,7 @@ namespace TopDeck
 
         private void HideOrShowProxiesButton()
         {
-            if (currentDeck.Count > 0)
+            if (DLMan.currentDeck.Count > 0)
             {
                 ProxiesButton.Visibility = System.Windows.Visibility.Visible;
             }
