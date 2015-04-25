@@ -15,6 +15,35 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <charting:Chart x:Name="ColorPie" BorderThickness="0" Grid.Row="0">
+            <charting:Chart.Palette>
+                <visualization:ResourceDictionaryCollection>
+                    <ResourceDictionary>
+                        <Style x:Key="DataPointStyle" TargetType="Control">
+                            <Setter Property="Background" Value="Red"/>
+                        </Style>
+                    </ResourceDictionary>
+                    <ResourceDictionary>
+                        <Style x:Key="DataPointStyle" TargetType="Control">
+                            <Setter Property="Background" Value="Green"/>
+                        </Style>
+                    </ResourceDictionary>
+                    <ResourceDictionary>
+                        <Style x:Key="DataPointStyle" TargetType="Control">
+                            <Setter Property="Background" Value="Blue"/>
+                        </Style>
+                    </ResourceDictionary>
+                    <ResourceDictionary>
+                        <Style x:Key="DataPointStyle" TargetType="Control">
+                            <Setter Property="Background" Value="White"/>
+                        </Style>
+                    </ResourceDictionary>
+                    <ResourceDictionary>
+                        <Style x:Key="DataPointStyle" TargetType="Control">
+                            <Setter Property="Background" Value="Black"/>
+                        </Style>
+                    </ResourceDictionary>
+                </visualization:ResourceDictionaryCollection>
+            </charting:Chart.Palette>
             <charting:Chart.PlotAreaStyle >
                 <Style TargetType="Grid">
                     <Setter Property="Background" Value="Transparent"/>
@@ -37,6 +66,50 @@
         </charting:Chart>
         
         <charting:Chart x:Name="TypesPie" BorderThickness="0" Grid.Row="1">
+            <charting:Chart.Palette>
+                <visualization:ResourceDictionaryCollection>
+                    <ResourceDictionary>
+                        <Style x:Key="DataPointStyle" TargetType="Control">
+                            <Setter Property="Background" Value="SlateGray"/>
+                        </Style>
+                    </ResourceDictionary>
+                    <ResourceDictionary>
+                        <Style x:Key="DataPointStyle" TargetType="Control">
+                            <Setter Property="Background" Value="DodgerBlue"/>
+                        </Style>
+                    </ResourceDictionary>
+                    <ResourceDictionary>
+                        <Style x:Key="DataPointStyle" TargetType="Control">
+                            <Setter Property="Background" Value="AliceBlue"/>
+                        </Style>
+                    </ResourceDictionary>
+                    <ResourceDictionary>
+                        <Style x:Key="DataPointStyle" TargetType="Control">
+                            <Setter Property="Background" Value="SteelBlue"/>
+                        </Style>
+                    </ResourceDictionary>
+                    <ResourceDictionary>
+                        <Style x:Key="DataPointStyle" TargetType="Control">
+                            <Setter Property="Background" Value="LightSkyBlue"/>
+                        </Style>
+                    </ResourceDictionary>
+                    <ResourceDictionary>
+                        <Style x:Key="DataPointStyle" TargetType="Control">
+                            <Setter Property="Background" Value="LightBlue"/>
+                        </Style>
+                    </ResourceDictionary>
+                    <ResourceDictionary>
+                        <Style x:Key="DataPointStyle" TargetType="Control">
+                            <Setter Property="Background" Value="SkyBlue"/>
+                        </Style>
+                    </ResourceDictionary>
+                    <ResourceDictionary>
+                        <Style x:Key="DataPointStyle" TargetType="Control">
+                            <Setter Property="Background" Value="DeepSkyBlue"/>
+                        </Style>
+                    </ResourceDictionary>
+                </visualization:ResourceDictionaryCollection>
+            </charting:Chart.Palette>
             <charting:Chart.PlotAreaStyle >
                 <Style TargetType="Grid">
                     <Setter Property="Background" Value="Transparent"/>
@@ -57,6 +130,15 @@
         </charting:Chart>
        
         <charting:Chart x:Name="CostBar" BorderThickness="0" Grid.Row="2">
+            <charting:Chart.Palette>
+                <visualization:ResourceDictionaryCollection>
+                    <ResourceDictionary>
+                        <Style x:Key="DataPointStyle" TargetType="Control">
+                            <Setter Property="Background" Value="Teal"/>
+                        </Style>
+                    </ResourceDictionary>
+                </visualization:ResourceDictionaryCollection>
+            </charting:Chart.Palette>
             <charting:Chart.PlotAreaStyle >
                 <Style TargetType="Grid">
                     <Setter Property="Background" Value="Transparent"/>
