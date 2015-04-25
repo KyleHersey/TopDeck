@@ -568,6 +568,7 @@ namespace TopDeck
 
                 while (reader2.Read())
                     tempCardsWithColors.Add((string) reader2["name"]);
+                reader2.Close();
 
                 if (i == 0)
                 {
@@ -649,6 +650,8 @@ namespace TopDeck
                 while (reader3.Read())
                     cardNamesWithTypes.Add((string)reader3["name"]);
 
+                reader3.Close();
+
                 cardNamesWithoutColors.IntersectWith(cardNamesWithTypes);
             }
 
@@ -672,6 +675,8 @@ namespace TopDeck
 
                 while (subtypeReader.Read())
                     cardNamesWithSubtypes.Add((string)subtypeReader["name"]);
+
+                subtypeReader.Close();
 
                 cardNamesWithoutColors.IntersectWith(cardNamesWithSubtypes);
             }
@@ -697,6 +702,8 @@ namespace TopDeck
                 while (supertypeReader.Read())
                     cardNamesWithSupertypes.Add((string)supertypeReader["name"]);
 
+                supertypeReader.Close();
+
                 cardNamesWithoutColors.IntersectWith(cardNamesWithSupertypes);
             }
 
@@ -707,22 +714,41 @@ namespace TopDeck
                                    where ";
                 for (int i = 0; i < rarities.Count; i++)
                 {
-                    if (i != supertypes.Count - 1)
+                    if (i != rarities.Count - 1)
                         sqlRarity += "rarity like \"%" + rarities[i] + "%\" or ";
                     else
                         sqlRarity += "rarity like \"%" + rarities[i] + "%\"";
                 }
                 var cmd5 = dbConnection.CreateCommand();
                 cmd5.CommandText = sqlRarity;
-                SQLiteDataReader supertypeReader = cmd5.ExecuteReader();
+                SQLiteDataReader rarityReader = cmd5.ExecuteReader();
 
                 HashSet<string> cardNamesWithRarities = new HashSet<string>();
 
-                while (supertypeReader.Read())
-                    cardNamesWithRarities.Add((string)supertypeReader["name"]);
+                while (rarityReader.Read())
+                    cardNamesWithRarities.Add((string)rarityReader["name"]);
+
+                rarityReader.Close();
 
                 cardNamesWithoutColors.IntersectWith(cardNamesWithRarities);
             }
+
+            string sqlArtist = @"select name
+                                 from ARTISTS
+                                 where artist like @artist";
+            cmd = dbConnection.CreateCommand();
+            cmd.CommandText = sqlArtist;
+            cmd.Parameters.Add(new SQLiteParameter("@artist") { Value = "%" + artist + "%" });
+
+            reader = cmd.ExecuteReader();
+
+            HashSet<string> cardNamesWithArtists = new HashSet<string>();
+            while (reader.Read())
+                cardNamesWithArtists.Add((string)reader["name"]);
+
+            reader.Close();
+
+            cardNamesWithoutColors.IntersectWith(cardNamesWithArtists);
 
             return cardNamesWithoutColors.ToList(); 
         }
@@ -749,10 +775,6 @@ namespace TopDeck
                 if (!(reader["flavor"] is DBNull))
                     c.Flavor = (string)reader["flavor"];
 
-                c.Hand = (long)reader["hand"];
-
-                c.Loyalty = (long)reader["loyalty"];
-
                 c.Name = (string)reader["name"];
                 
                 if (!(reader["power"] is DBNull))
@@ -763,8 +785,6 @@ namespace TopDeck
 
                 if (!(reader["toughness"] is DBNull))
                     c.Toughness = (string)reader["toughness"];
-
-                c.Type = (string)reader["type"];
             }
 
             // add colors from table
@@ -868,7 +888,6 @@ namespace TopDeck
             }
             c.Rulings = rulings;
 
-            //c.type
             // legalities?
             return c;
         }

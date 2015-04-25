@@ -72,13 +72,9 @@ namespace TopDeck
                 requireMulticolor = true;
             }
             List<string> types = new List<string>();
-            types.Add("Instant");
-
             List<string> subtypes = new List<string>();
-            subtypes.Add("Goblin");
             List<string> supertypes = new List<string>();
-            supertypes.Add("snow");
-            supertypes.Add("legendary");
+            List<string> rarities = new List<string>();
             // what about colorless?
             MiddlePanel.setItemsSource(DBMan.GetCards(
                 NameFilterField.Input.Text,                 //Name
@@ -87,17 +83,17 @@ namespace TopDeck
                 ConvertedManaCostFilterField.Input.Text,    //Converted Mana Cost
                 MultiverseID.Input.Text,                    //Multiverse ID
                 LoyaltyFilterField.Input.Text,              //Loyalty
-                "",                                         //Rarity
+                rarities,                                   //Rarity
                 Flavor.Input.Text,                          //Flavor
                 Artist.Input.Text,                          //Artist
                 PowerFilterField.Input.Text,                //Power
                 Text.Input.Text,                            //Card Text
-                null,                                       //Types
+                types,                                      //Types
                 Reserved.isChecked(),
                 requireMulticolor,                          //Require Multicolored
                 colors,                                     //Colors
                 subtypes,                                   //Subtype
-                null));                                     //Supertype
+                supertypes));                               //Supertype
         }
 
         public void setDatabaseManager(DatabaseManager db)
