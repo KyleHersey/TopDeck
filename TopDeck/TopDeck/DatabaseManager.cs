@@ -210,23 +210,7 @@ namespace TopDeck
 
                     JToken outer = JToken.Parse(mtgJSONText);
 
-                    var o = JObject.Parse(mtgJSONText);
-
-                    List<String> elements = new List<String>();
-                    foreach (JToken child in o.Children())
-                    {
-                        var property = child as JProperty;
-
-                        if (property != null)
-                        {
-                            // gets the set names
-                            elements.Add(property.Name);
-                        }
-                        else
-                        {
-                            Debug.WriteLine("null");
-                        }
-                    }
+                    List<String> elements = GetSetNames(mtgJSONText);
 
                     Debug.WriteLine("Number of sets " + elements.Count);
 
@@ -243,72 +227,7 @@ namespace TopDeck
                             JObject cardJObject = JObject.Parse(cardInCards.ToString());
                             if (!cardsMet.Contains(cardJObject["name"].ToString()))
                             {
-                                byte[] byteArray = Encoding.UTF8.GetBytes(cardInCards.ToString());
-                                MemoryStream stream1 = new MemoryStream(byteArray);
-
-                                var info = (JSONDTO)ser.ReadObject(stream1);
-
-                                if (cardJObject["colors"] != null)
-                                    foreach (var c in cardJObject["colors"].Children())
-                                        AddColors(info.name, c.ToString());
-
-                                if (cardJObject["subtypes"] != null)
-                                    foreach (var c in cardJObject["subtypes"].Children())
-                                        AddSubtypes(info.name, c.ToString());
-
-                                if (cardJObject["types"] != null)
-                                    foreach (var c in cardJObject["types"].Children())
-                                        AddTypes(info.name, c.ToString());
-
-                                if (cardJObject["supertypes"] != null)
-                                    foreach (var c in cardJObject["supertypes"].Children())
-                                        AddSupertypes(info.name, c.ToString());
-
-                                // add the rulings
-                                if (cardJObject["rulings"] != null)
-                                {
-                                    foreach (var c in cardJObject["rulings"].Children())
-                                    {
-                                        string date = (string)c["date"];
-                                        string text = (string)c["text"];
-                                        AddRuling(info.name, date, text);
-                                    }
-                                }
-
-                                if (cardJObject["legalities"] != null)
-                                {
-                                    var c = cardJObject["legalities"].Value<JObject>();
-                                    string modern = "", legacy = "", vintage = "", freeform = "", prismatic = "", tribal = "", singleton = "", commander = "";
-                                    if (c["Modern"] != null)
-                                        modern = (string)c["Modern"];
-                                    if (c["Legacy"] != null)
-                                        legacy = (string)c["Legacy"];
-                                    if (c["Vintage"] != null)
-                                        vintage = (string)c["Vintage"];
-                                    if (c["Freeform"] != null)
-                                        freeform = (string)c["Freeform"];
-                                    if (c["Prismatic"] != null)
-                                        prismatic = (string)c["Prismatic"];
-                                    if (c["Tribal Wars Legacy"] != null)
-                                        tribal = (string)c["Tribal Wars Legacy"];
-                                    if (c["Singleton 100"] != null)
-                                        singleton = (string)c["Singleton 100"];
-                                    if (c["Commander"] != null)
-                                        commander = (string)c["Commander"];
-                                    AddLegality(info.name, modern, legacy, vintage, freeform, prismatic, tribal, singleton, commander);
-                                } 
-
-                                if (cardJObject["foreignNames"] != null)
-                                {
-                                    foreach (var c in cardJObject["foreignNames"].Children())
-                                    {
-                                        string language = (string)c["language"];
-                                        string text = (string)c["name"];
-                                        AddLanguage(info.name, language, text);
-                                    }
-                                }
-
-                                AddToCard(info);
+                                AssembleDB(cardInCards, ser, cardJObject);
                                 cardsMet.Add(cardJObject["name"].ToString());
                             }
                             if (cardJObject["multiverseid"] != null)
@@ -351,23 +270,7 @@ namespace TopDeck
 
                 JToken outer = JToken.Parse(mtgJSONText);
 
-                var o = JObject.Parse(mtgJSONText);
-
-                List<String> elements = new List<String>();
-                foreach (JToken child in o.Children())
-                {
-                    var property = child as JProperty;
-
-                    if (property != null)
-                    {
-                        // gets the set names
-                        elements.Add(property.Name);
-                    }
-                    else
-                    {
-                        Debug.WriteLine("null");
-                    }
-                }
+                List<String> elements = GetSetNames(mtgJSONText);
 
                 using (StreamReader file = new StreamReader("lastSet.txt"))
                 {
@@ -391,72 +294,7 @@ namespace TopDeck
                             cmd.Parameters.Add(new SQLiteParameter("@name") { Value = cardJObject["name"].ToString() });
                             var reader = cmd.ExecuteReader();
                             if (!reader.Read()) {
-                                byte[] byteArray = Encoding.UTF8.GetBytes(cardInCards.ToString());
-                                MemoryStream stream1 = new MemoryStream(byteArray);
-
-                                var info = (JSONDTO)ser.ReadObject(stream1);
-
-                                if (cardJObject["colors"] != null)
-                                    foreach (var c in cardJObject["colors"].Children())
-                                        AddColors(info.name, c.ToString());
-
-                                if (cardJObject["subtypes"] != null)
-                                    foreach (var c in cardJObject["subtypes"].Children())
-                                        AddSubtypes(info.name, c.ToString());
-
-                                if (cardJObject["types"] != null)
-                                    foreach (var c in cardJObject["types"].Children())
-                                        AddTypes(info.name, c.ToString());
-
-                                if (cardJObject["supertypes"] != null)
-                                    foreach (var c in cardJObject["supertypes"].Children())
-                                        AddSupertypes(info.name, c.ToString());
-
-                                // add the rulings
-                                if (cardJObject["rulings"] != null)
-                                {
-                                    foreach (var c in cardJObject["rulings"].Children())
-                                    {
-                                        string date = (string)c["date"];
-                                        string text = (string)c["text"];
-                                        AddRuling(info.name, date, text);
-                                    }
-                                }
-
-                                if (cardJObject["legalities"] != null)
-                                {
-                                    var c = cardJObject["legalities"].Value<JObject>();
-                                    string modern = "", legacy = "", vintage = "", freeform = "", prismatic = "", tribal = "", singleton = "", commander = "";
-                                    if (c["Modern"] != null)
-                                        modern = (string)c["Modern"];
-                                    if (c["Legacy"] != null)
-                                        legacy = (string)c["Legacy"];
-                                    if (c["Vintage"] != null)
-                                        vintage = (string)c["Vintage"];
-                                    if (c["Freeform"] != null)
-                                        freeform = (string)c["Freeform"];
-                                    if (c["Prismatic"] != null)
-                                        prismatic = (string)c["Prismatic"];
-                                    if (c["Tribal Wars Legacy"] != null)
-                                        tribal = (string)c["Tribal Wars Legacy"];
-                                    if (c["Singleton 100"] != null)
-                                        singleton = (string)c["Singleton 100"];
-                                    if (c["Commander"] != null)
-                                        commander = (string)c["Commander"];
-                                    AddLegality(info.name, modern, legacy, vintage, freeform, prismatic, tribal, singleton, commander);
-                                } 
-
-                                if (cardJObject["foreignNames"] != null)
-                                {
-                                    foreach (var c in cardJObject["foreignNames"].Children())
-                                    {
-                                        string language = (string)c["language"];
-                                        string text = (string)c["name"];
-                                        AddLanguage(info.name, language, text);
-                                    }
-                                }
-
-                                AddToCard(info);
+                                AssembleDB(cardInCards, ser, cardJObject);
                             }
                             if (cardJObject["multiverseid"] != null)
                             {
@@ -474,10 +312,102 @@ namespace TopDeck
             }
         }
 
+        private void AssembleDB(JToken cardInCards, DataContractJsonSerializer ser, JObject cardJObject)
+        {
+            byte[] byteArray = Encoding.UTF8.GetBytes(cardInCards.ToString());
+            MemoryStream stream1 = new MemoryStream(byteArray);
+
+            var info = (JSONDTO)ser.ReadObject(stream1);
+
+            if (cardJObject["colors"] != null)
+                foreach (var c in cardJObject["colors"].Children())
+                    AddColors(info.name, c.ToString());
+
+            if (cardJObject["subtypes"] != null)
+                foreach (var c in cardJObject["subtypes"].Children())
+                    AddSubtypes(info.name, c.ToString());
+
+            if (cardJObject["types"] != null)
+                foreach (var c in cardJObject["types"].Children())
+                    AddTypes(info.name, c.ToString());
+
+            if (cardJObject["supertypes"] != null)
+                foreach (var c in cardJObject["supertypes"].Children())
+                    AddSupertypes(info.name, c.ToString());
+
+            // add the rulings
+            if (cardJObject["rulings"] != null)
+            {
+                foreach (var c in cardJObject["rulings"].Children())
+                {
+                    string date = (string)c["date"];
+                    string text = (string)c["text"];
+                    AddRuling(info.name, date, text);
+                }
+            }
+
+            if (cardJObject["legalities"] != null)
+            {
+                var c = cardJObject["legalities"].Value<JObject>();
+                string modern = "", legacy = "", vintage = "", freeform = "", prismatic = "", tribal = "", singleton = "", commander = "";
+                if (c["Modern"] != null)
+                    modern = (string)c["Modern"];
+                if (c["Legacy"] != null)
+                    legacy = (string)c["Legacy"];
+                if (c["Vintage"] != null)
+                    vintage = (string)c["Vintage"];
+                if (c["Freeform"] != null)
+                    freeform = (string)c["Freeform"];
+                if (c["Prismatic"] != null)
+                    prismatic = (string)c["Prismatic"];
+                if (c["Tribal Wars Legacy"] != null)
+                    tribal = (string)c["Tribal Wars Legacy"];
+                if (c["Singleton 100"] != null)
+                    singleton = (string)c["Singleton 100"];
+                if (c["Commander"] != null)
+                    commander = (string)c["Commander"];
+                AddLegality(info.name, modern, legacy, vintage, freeform, prismatic, tribal, singleton, commander);
+            }
+
+            if (cardJObject["foreignNames"] != null)
+            {
+                foreach (var c in cardJObject["foreignNames"].Children())
+                {
+                    string language = (string)c["language"];
+                    string text = (string)c["name"];
+                    AddLanguage(info.name, language, text);
+                }
+            }
+
+            AddToCard(info);
+        }
+
+        private List<string> GetSetNames(string mtgJSONText)
+        {
+            var o = JObject.Parse(mtgJSONText);
+
+            List<String> elements = new List<String>();
+            foreach (JToken child in o.Children())
+            {
+                var property = child as JProperty;
+
+                if (property != null)
+                {
+                    // gets the set names
+                    elements.Add(property.Name);
+                }
+                else
+                {
+                    Debug.WriteLine("null");
+                }
+            }
+            return elements;
+        }
+
         public List<string> GetCards(string name, string toughness, string hand, 
-            string cmc, string multiverseId, string loyalty, string rarity, 
+            string cmc, string multiverseId, string loyalty, List<string> rarities, 
             string flavor, string artist, string power, string cardText, 
-            List<string> types, bool reserved, bool requireMultiColor, 
+            List<string> types, bool reserved, bool requireMultiColor, bool excludeUnselected,
             List<string> colors, List<string> subtypes, List<string> supertypes)
         {
             if (multiverseId != null)
@@ -543,15 +473,18 @@ namespace TopDeck
 
             reader.Close();
 
+            // REQUIRE MULTICOLOR
+
+
             // what about the original color of the card? fix
-            /*List<string> allColors = new List<string>();
+            List<string> allColors = new List<string>();
             allColors.Add("red");
             allColors.Add("blue");
             allColors.Add("black");
             allColors.Add("green");
             allColors.Add("white");
 
-            List<string> unwantedColors = allColors.Except(colors).ToList<string>(); */
+            List<string> unwantedColors = allColors.Except(colors).ToList<string>();
 
             HashSet<string> cardNamesWithColors = null;
             for (int i = 0; i < colors.Count; i++) {
@@ -568,6 +501,7 @@ namespace TopDeck
 
                 while (reader2.Read())
                     tempCardsWithColors.Add((string) reader2["name"]);
+                reader2.Close();
 
                 if (i == 0)
                 {
@@ -580,7 +514,7 @@ namespace TopDeck
                 }
             }
 
-            /*if (cardNamesWithColors != null && cardNamesWithColors.Count > 0 && requireMultiColor)
+            if (cardNamesWithColors != null && cardNamesWithColors.Count > 0 && excludeUnselected)
             {
                 for (int i = 0; i < unwantedColors.Count; i++)
                 {
@@ -597,12 +531,12 @@ namespace TopDeck
 
                     while (reader2.Read())
                         tempCardsWithColors.Add((string)reader2["name"]);
-                    List<string> cardNamesWithColorsList = cardNamesWithColors.Except(cardNamesWithColors).ToList<string>();
+                    List<string> cardNamesWithColorsList = cardNamesWithColors.Except(tempCardsWithColors).ToList<string>();
                     cardNamesWithColors = new HashSet<string>(cardNamesWithColorsList);
                 }
                 cardNamesWithoutColors.IntersectWith(cardNamesWithColors);
             }
-            else*/ if (cardNamesWithColors != null && cardNamesWithColors.Count > 0)
+            else if (cardNamesWithColors != null && cardNamesWithColors.Count > 0)
             {
                 cardNamesWithoutColors.IntersectWith(cardNamesWithColors);
             }
@@ -649,6 +583,8 @@ namespace TopDeck
                 while (reader3.Read())
                     cardNamesWithTypes.Add((string)reader3["name"]);
 
+                reader3.Close();
+
                 cardNamesWithoutColors.IntersectWith(cardNamesWithTypes);
             }
 
@@ -672,6 +608,8 @@ namespace TopDeck
 
                 while (subtypeReader.Read())
                     cardNamesWithSubtypes.Add((string)subtypeReader["name"]);
+
+                subtypeReader.Close();
 
                 cardNamesWithoutColors.IntersectWith(cardNamesWithSubtypes);
             }
@@ -697,8 +635,53 @@ namespace TopDeck
                 while (supertypeReader.Read())
                     cardNamesWithSupertypes.Add((string)supertypeReader["name"]);
 
+                supertypeReader.Close();
+
                 cardNamesWithoutColors.IntersectWith(cardNamesWithSupertypes);
             }
+
+            if (rarities != null && rarities.Count > 0)
+            {
+                string sqlRarity = @"select name
+                                   from RARITIES
+                                   where ";
+                for (int i = 0; i < rarities.Count; i++)
+                {
+                    if (i != rarities.Count - 1)
+                        sqlRarity += "rarity like \"%" + rarities[i] + "%\" or ";
+                    else
+                        sqlRarity += "rarity like \"%" + rarities[i] + "%\"";
+                }
+                var cmd5 = dbConnection.CreateCommand();
+                cmd5.CommandText = sqlRarity;
+                SQLiteDataReader rarityReader = cmd5.ExecuteReader();
+
+                HashSet<string> cardNamesWithRarities = new HashSet<string>();
+
+                while (rarityReader.Read())
+                    cardNamesWithRarities.Add((string)rarityReader["name"]);
+
+                rarityReader.Close();
+
+                cardNamesWithoutColors.IntersectWith(cardNamesWithRarities);
+            }
+
+            string sqlArtist = @"select name
+                                 from ARTISTS
+                                 where artist like @artist";
+            cmd = dbConnection.CreateCommand();
+            cmd.CommandText = sqlArtist;
+            cmd.Parameters.Add(new SQLiteParameter("@artist") { Value = "%" + artist + "%" });
+
+            reader = cmd.ExecuteReader();
+
+            HashSet<string> cardNamesWithArtists = new HashSet<string>();
+            while (reader.Read())
+                cardNamesWithArtists.Add((string)reader["name"]);
+
+            reader.Close();
+
+            cardNamesWithoutColors.IntersectWith(cardNamesWithArtists);
 
             return cardNamesWithoutColors.ToList(); 
         }
@@ -725,10 +708,6 @@ namespace TopDeck
                 if (!(reader["flavor"] is DBNull))
                     c.Flavor = (string)reader["flavor"];
 
-                c.Hand = (long)reader["hand"];
-
-                c.Loyalty = (long)reader["loyalty"];
-
                 c.Name = (string)reader["name"];
                 
                 if (!(reader["power"] is DBNull))
@@ -739,8 +718,6 @@ namespace TopDeck
 
                 if (!(reader["toughness"] is DBNull))
                     c.Toughness = (string)reader["toughness"];
-
-                c.Type = (string)reader["type"];
             }
 
             // add colors from table
@@ -814,7 +791,6 @@ namespace TopDeck
                 c.Types.Add((string)reader["type"]);
             }
 
-            // return multiverse_id and set as dictionary, set is key, multiverse_id is value
             List<Tuple<string, string>> multiverseIds = new List<Tuple<string, string>>();
             sql = @"select setName, multiverse_id
                     from MULTIVERSEID_SET
@@ -844,7 +820,6 @@ namespace TopDeck
             }
             c.Rulings = rulings;
 
-            //c.type
             // legalities?
             return c;
         }
