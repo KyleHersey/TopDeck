@@ -33,17 +33,12 @@ namespace TopDeck
             set;
         }
 
-        public ObservableCollection<LocalTuple> CurrentDeck
+        public DecklistManager DLMan
         {
             get;
             set;
         }
 
-        public ObservableCollection<LocalTuple> Sideboard
-        {
-            get;
-            set;
-        }
 
         public ListPanel()
         {
@@ -67,7 +62,9 @@ namespace TopDeck
                 Card c = DBMan.GetCard(theList.SelectedItem.ToString());
                 RightPanel.setCard(c);
                 if (c.MultiverseIds.Count > 0)
-                    RightPanel.UpdateImage(c.MultiverseIds[0].Item2);
+                {
+                    Task.Run(() => RightPanel.UpdateImage(c.MultiverseIds[0].Item2));
+                }
             }
         }
 
@@ -76,12 +73,14 @@ namespace TopDeck
             // if it is in the list, increase the tuple with that count.
             // if it is not in the list, create the tuple and add to the list
             // ignore multiverse id for now
-            AddToCardList(CurrentDeck);
+            AddToCardList(DLMan.currentDeck);
+            DLMan.update();
         }
 
         private void AddToSideBoard_Click(object sender, RoutedEventArgs e)
         {
-            AddToCardList(Sideboard);
+            AddToCardList(DLMan.sideboard);
+            DLMan.update();
         }
 
         private void AddToCardList(ObservableCollection<LocalTuple> list) {

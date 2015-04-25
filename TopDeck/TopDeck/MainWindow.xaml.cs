@@ -46,12 +46,14 @@ namespace TopDeck
             DeckTab.DeckStats.DBMan = db;
 
             DeckTab.CardList.DLMan = DLMan;
+            DeckTab.DeckStats.DLMan = DLMan;
+            FiltersTab.FilterListPanel.DLMan = DLMan;
 
             DeckTab.CardList.RightPanel = DeckTab.CardView;
             DeckTab.CardView.SetList.Visibility = System.Windows.Visibility.Collapsed;
 
-            FiltersTab.FilterListPanel.CurrentDeck = DLMan.currentDeck;
-            FiltersTab.FilterListPanel.Sideboard = DLMan.sideboard;
+            //FiltersTab.FilterListPanel.CurrentDeck = DLMan.currentDeck;
+            //FiltersTab.FilterListPanel.Sideboard = DLMan.sideboard;
 
             DLMan.update();
             NewDeck_Click(null, null);
@@ -124,8 +126,8 @@ namespace TopDeck
 
                 DLMan.currentDeck = new ObservableCollection<LocalTuple>(cardNames);
 
-                FiltersTab.FilterListPanel.CurrentDeck = DLMan.currentDeck;
-                FiltersTab.FilterListPanel.Sideboard = DLMan.sideboard;
+                //FiltersTab.FilterListPanel.CurrentDeck = DLMan.currentDeck;
+                //FiltersTab.FilterListPanel.Sideboard = DLMan.sideboard;
 
                 DLMan.update();
             }
@@ -301,8 +303,8 @@ namespace TopDeck
             DLMan.currentDeck = new ObservableCollection<LocalTuple>();
             DLMan.sideboard = new ObservableCollection<LocalTuple>();
 
-            FiltersTab.FilterListPanel.CurrentDeck = DLMan.currentDeck;
-            FiltersTab.FilterListPanel.Sideboard = DLMan.sideboard;
+           //FiltersTab.FilterListPanel.CurrentDeck = DLMan.currentDeck;
+            //FiltersTab.FilterListPanel.Sideboard = DLMan.sideboard;
 
             DLMan.update();
             DeckTab.CardView.Clear();
@@ -379,8 +381,8 @@ namespace TopDeck
 
             DLMan.currentDeck = new ObservableCollection<LocalTuple>(cardNames);
 
-            FiltersTab.FilterListPanel.CurrentDeck = DLMan.currentDeck;
-            FiltersTab.FilterListPanel.Sideboard = DLMan.sideboard;
+            //FiltersTab.FilterListPanel.CurrentDeck = DLMan.currentDeck;
+            //FiltersTab.FilterListPanel.Sideboard = DLMan.sideboard;
 
             DLMan.update();
 

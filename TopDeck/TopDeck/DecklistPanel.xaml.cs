@@ -88,18 +88,17 @@ namespace TopDeck
 
         private void PlusButton_Click(object sender, RoutedEventArgs e)
         {
+
             if (theList.SelectedItem != null)
             {
                 LocalTuple cardTuple = (LocalTuple)theList.SelectedItem;
-                cardTuple.Count++;
+                DLMan.addCard(cardTuple.Name);
             }
             else if (theSideboard.SelectedItem != null)
             {
                 LocalTuple cardTuple = (LocalTuple)theSideboard.SelectedItem;
                 cardTuple.Count++;
             }
-
-            DLMan.update();
         }
 
         private void MinusButton_Click(object sender, RoutedEventArgs e)

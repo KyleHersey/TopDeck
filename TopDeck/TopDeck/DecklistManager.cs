@@ -47,13 +47,29 @@ namespace TopDeck
         }
 
         public void update(){
-            decklistPanel.setItemsSource();
+            decklistPanel.setItemsSource(); 
             decklistPanel.setSideboardItemsSource();
             decklistPanel.theList.Items.Refresh();
             decklistPanel.theSideboard.Items.Refresh();
 
-            statsPanel.deck = currentDeck;
             statsPanel.updateStats();
+        }
+
+        public void removeCard(String name){
+            statsPanel.removeCard(name);
+        }
+
+        public void addCard(String name)
+        {
+            foreach (LocalTuple card in currentDeck)
+            {
+                if (card.Name.Equals(name))
+                {
+                    card.Count++;
+                }
+            }
+            decklistPanel.theList.Items.Refresh();
+            statsPanel.addCard(name);
         }
     }
 }

@@ -34,10 +34,10 @@ namespace TopDeck
             RulingsButtonBorder.Visibility = System.Windows.Visibility.Hidden;
         }
 
-        public void Clear()
+        public async void Clear()
         {
             RulesText.Text = "";
-            UpdateImage(null);
+            Task.Run(() => UpdateImage(null));
             RulingsListView.ItemsSource = null;
             RulingsButtonBorder.Visibility = System.Windows.Visibility.Hidden;
         }

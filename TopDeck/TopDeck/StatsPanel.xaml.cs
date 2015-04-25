@@ -27,7 +27,7 @@ namespace TopDeck
             set;
         }
 
-        public ObservableCollection<LocalTuple> deck
+        public DecklistManager DLMan
         {
             get;
             set;
@@ -64,6 +64,28 @@ namespace TopDeck
             CostBar.DataContext = this;
         }
 
+        public void removeCard(String name) { }
+
+        public void addCard(String name)
+        {
+
+            Card card = DBMan.GetCard(name);
+
+            //update colors
+            foreach (String color in card.Colors)
+            {
+                for (int i = 0; i < ColorSource.Count; i++)
+                {
+                    if (ColorSource[i].Key.Equals(color))
+                    {
+                        KeyValuePair<String, int> newKV = new KeyValuePair<string, int>(ColorSource[i].Key, ColorSource[i].Value + 1);
+                        ColorSource.RemoveAt(i);
+                        ColorSource.Insert(i, newKV);
+                    }
+                }
+            }
+        }
+
         public void updateStats(){
             updateColorChart();
             updateTypesChart();
@@ -80,17 +102,17 @@ namespace TopDeck
 
             Dictionary<int, int> costDict = new Dictionary<int, int>();
 
-            foreach (LocalTuple tup in deck)
+            foreach (LocalTuple tup in DLMan.currentDeck)
             {
                 Card card = DBMan.GetACardFromMultiverseId(tup.MultiverseId);
                 int intCost = Convert.ToInt32(card.CMC);
                 if (costDict.Keys.Contains(intCost))
                 {
-                    costDict[intCost]++;
+                    costDict[intCost] += tup.Count;
                 }
                 else
                 {
-                    costDict.Add(intCost, 1);
+                    costDict.Add(intCost, tup.Count);
                 }
             }
 
@@ -111,18 +133,18 @@ namespace TopDeck
 
             Dictionary<String, int> typeDict = new Dictionary<string, int>();
 
-            foreach (LocalTuple tup in deck)
+            foreach (LocalTuple tup in DLMan.currentDeck)
             {
                 Card card = DBMan.GetACardFromMultiverseId(tup.MultiverseId);
                 foreach (String type in card.Types)
                 {
                     if (typeDict.Keys.Contains(type))
                     {
-                        typeDict[type]++;
+                        typeDict[type] += tup.Count;
                     }
                     else
                     {
-                        typeDict.Add(type, 1);
+                        typeDict.Add(type, tup.Count);
                     }
                 }
             }
@@ -142,32 +164,37 @@ namespace TopDeck
 
             //initialize list before going through deck
             Dictionary<String, int> colorDict = new Dictionary<String, int>();
-            colorDict.Add("White", 0);
-            colorDict.Add("Blue", 0);
-            colorDict.Add("Black", 0);
-            colorDict.Add("Red", 0);
-            colorDict.Add("Green", 0);
-            colorDict.Add("Colorless", 0);
 
             //add each card from deck into dictionary
-            foreach(LocalTuple tup in deck){
-                Card tempCard = DBMan.GetACardFromMultiverseId(tup.MultiverseId);
-                if(tempCard.Colors.Count == 0){
-                    colorDict["Colorless"]++;
+            foreach(LocalTuple tup in DLMan.currentDeck){
+                Card card = DBMan.GetACardFromMultiverseId(tup.MultiverseId);
+                if(card.Colors.Count == 0){
+                    if (colorDict.Keys.Contains("Colorless"))
+                    {
+                        colorDict["Colorless"] += tup.Count;
+                    }
+                    else
+                    {
+                        colorDict.Add("Colorless", tup.Count);
+                    }              
                 }
-                foreach (String color in tempCard.Colors)
+                foreach (String color in card.Colors)
                 {
-                    colorDict[color] += tup.Count;
+                    if (colorDict.Keys.Contains(color))
+                    {
+                        colorDict[color] += tup.Count;
+                    }
+                    else
+                    {
+                        colorDict.Add(color, tup.Count);
+                    }
                 }
             }
 
             //go through dictionary
             foreach (String color in colorDict.Keys)
             {
-                if (colorDict[color] > 0)
-                {
                     ColorSource.Add(new KeyValuePair<string, int>(color, colorDict[color]));
-                }
             }
         }
     }
