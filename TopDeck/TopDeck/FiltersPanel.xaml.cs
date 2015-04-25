@@ -44,6 +44,7 @@ namespace TopDeck
         {
             List<string> colors = new List<string>();
             bool requireMulticolor = false;
+            bool excludeUnselected = false;
             Debug.WriteLine("clicked");
             if (RedColor.isChecked() == true)
             {
@@ -71,6 +72,10 @@ namespace TopDeck
             {
                 requireMulticolor = true;
             }
+            if (ExcludeUnselected.isChecked() == true)
+            {
+                excludeUnselected = true;
+            }
             List<string> types = new List<string>();
             List<string> subtypes = new List<string>();
             List<string> supertypes = new List<string>();
@@ -91,6 +96,7 @@ namespace TopDeck
                 types,                                      //Types
                 Reserved.isChecked(),
                 requireMulticolor,                          //Require Multicolored
+                excludeUnselected,                          //Exclude Unselected
                 colors,                                     //Colors
                 subtypes,                                   //Subtype
                 supertypes));                               //Supertype

@@ -407,7 +407,7 @@ namespace TopDeck
         public List<string> GetCards(string name, string toughness, string hand, 
             string cmc, string multiverseId, string loyalty, List<string> rarities, 
             string flavor, string artist, string power, string cardText, 
-            List<string> types, bool reserved, bool requireMultiColor, 
+            List<string> types, bool reserved, bool requireMultiColor, bool excludeUnselected,
             List<string> colors, List<string> subtypes, List<string> supertypes)
         {
             if (multiverseId != null)
@@ -473,15 +473,18 @@ namespace TopDeck
 
             reader.Close();
 
+            // REQUIRE MULTICOLOR
+
+
             // what about the original color of the card? fix
-            /*List<string> allColors = new List<string>();
+            List<string> allColors = new List<string>();
             allColors.Add("red");
             allColors.Add("blue");
             allColors.Add("black");
             allColors.Add("green");
             allColors.Add("white");
 
-            List<string> unwantedColors = allColors.Except(colors).ToList<string>(); */
+            List<string> unwantedColors = allColors.Except(colors).ToList<string>();
 
             HashSet<string> cardNamesWithColors = null;
             for (int i = 0; i < colors.Count; i++) {
@@ -511,7 +514,7 @@ namespace TopDeck
                 }
             }
 
-            /*if (cardNamesWithColors != null && cardNamesWithColors.Count > 0 && requireMultiColor)
+            if (cardNamesWithColors != null && cardNamesWithColors.Count > 0 && excludeUnselected)
             {
                 for (int i = 0; i < unwantedColors.Count; i++)
                 {
@@ -528,12 +531,12 @@ namespace TopDeck
 
                     while (reader2.Read())
                         tempCardsWithColors.Add((string)reader2["name"]);
-                    List<string> cardNamesWithColorsList = cardNamesWithColors.Except(cardNamesWithColors).ToList<string>();
+                    List<string> cardNamesWithColorsList = cardNamesWithColors.Except(tempCardsWithColors).ToList<string>();
                     cardNamesWithColors = new HashSet<string>(cardNamesWithColorsList);
                 }
                 cardNamesWithoutColors.IntersectWith(cardNamesWithColors);
             }
-            else*/ if (cardNamesWithColors != null && cardNamesWithColors.Count > 0)
+            else if (cardNamesWithColors != null && cardNamesWithColors.Count > 0)
             {
                 cardNamesWithoutColors.IntersectWith(cardNamesWithColors);
             }
