@@ -475,7 +475,7 @@ namespace TopDeck
         }
 
         public List<string> GetCards(string name, string toughness, string hand, 
-            string cmc, string multiverseId, string loyalty, string rarity, 
+            string cmc, string multiverseId, string loyalty, List<string> rarities, 
             string flavor, string artist, string power, string cardText, 
             List<string> types, bool reserved, bool requireMultiColor, 
             List<string> colors, List<string> subtypes, List<string> supertypes)
@@ -698,6 +698,30 @@ namespace TopDeck
                     cardNamesWithSupertypes.Add((string)supertypeReader["name"]);
 
                 cardNamesWithoutColors.IntersectWith(cardNamesWithSupertypes);
+            }
+
+            if (rarities != null && rarities.Count > 0)
+            {
+                string sqlRarity = @"select name
+                                   from RARITIES
+                                   where ";
+                for (int i = 0; i < rarities.Count; i++)
+                {
+                    if (i != supertypes.Count - 1)
+                        sqlRarity += "rarity like \"%" + rarities[i] + "%\" or ";
+                    else
+                        sqlRarity += "rarity like \"%" + rarities[i] + "%\"";
+                }
+                var cmd5 = dbConnection.CreateCommand();
+                cmd5.CommandText = sqlRarity;
+                SQLiteDataReader supertypeReader = cmd5.ExecuteReader();
+
+                HashSet<string> cardNamesWithRarities = new HashSet<string>();
+
+                while (supertypeReader.Read())
+                    cardNamesWithRarities.Add((string)supertypeReader["name"]);
+
+                cardNamesWithoutColors.IntersectWith(cardNamesWithRarities);
             }
 
             return cardNamesWithoutColors.ToList(); 
