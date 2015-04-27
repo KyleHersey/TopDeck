@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Collections.ObjectModel;
+using System.Threading;
 
 namespace TopDeck
 {
@@ -63,7 +64,7 @@ namespace TopDeck
                 RightPanel.setCard(c);
                 if (c.MultiverseIds.Count > 0)
                 {
-                    Task.Run(() => RightPanel.UpdateImage(c.MultiverseIds[0].Item2));
+                    RightPanel.UpdateImage(c.MultiverseIds[0].Item2);
                 }
             }
         }

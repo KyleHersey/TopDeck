@@ -34,10 +34,10 @@ namespace TopDeck
             RulingsButtonBorder.Visibility = System.Windows.Visibility.Hidden;
         }
 
-        public async void Clear()
+        public void Clear()
         {
             RulesText.Text = "";
-            Task.Run(() => UpdateImage(null));
+            UpdateImage(null);
             RulingsListView.ItemsSource = null;
             RulingsButtonBorder.Visibility = System.Windows.Visibility.Hidden;
         }
@@ -61,8 +61,6 @@ namespace TopDeck
 
         public void UpdateImage(string id)
         {
-
-            
             BitmapImage img = new BitmapImage();
             Console.WriteLine("new bmp");
             img.BeginInit();
@@ -76,9 +74,11 @@ namespace TopDeck
             {
                 img.UriSource = new Uri("Magic_the_gathering-card_back.jpg", UriKind.Relative);
             }
+            Console.WriteLine(img.ToString());
             Console.WriteLine("got uri");
             img.EndInit();
             Console.WriteLine("end init");
+
             CardImage.Source = img;
             Console.WriteLine("set image");
             

@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Collections.ObjectModel;
+using System.Reflection;
 
 namespace TopDeck
 {
@@ -57,7 +58,6 @@ namespace TopDeck
 
             DLMan.update();
             NewDeck_Click(null, null);
-
         }
 
         void MainWindow_Closed(object sender, EventArgs e)
@@ -74,6 +74,8 @@ namespace TopDeck
                 }
             }
         }
+
+
 
         public void RecentFilesTabSetup()
         {
