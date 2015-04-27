@@ -1,3 +1,3 @@
+C:\Users\Emerald\Documents\docbolas.dec
+C:\Users\Emerald\Documents\InfectAggro.dec
 C:\Users\Kyle\Documents\GitHub\TopDeck\TopDeck\TopDeck\bin\Debug\XiahouDun.txt
-C:\Users\Kyle\Documents\GitHub\TopDeck\TopDeck\TopDeck\bin\Debug\Bolas.txt
-C:\Users\Kyle\Documents\GitHub\TopDeck\TopDeck\TopDeck\bin\Debug\InfectAggro.dec
