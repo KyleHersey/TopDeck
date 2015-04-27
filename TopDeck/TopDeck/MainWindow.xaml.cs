@@ -355,6 +355,13 @@ namespace TopDeck
                         }
                         outputFile.WriteLine("    </zone>");
                         outputFile.WriteLine("    <zone name=\"side\">");
+                        if (DLMan.sideboard.Count > 0)
+                        {
+                            foreach (LocalTuple card in DLMan.sideboard)
+                            {
+                                outputFile.WriteLine("        <card number=\"" + card.Count + "\" price=\"0\" name=\"" + card.Name + "\"/>");
+                            }
+                        }
                         outputFile.WriteLine("    </zone>");
                         outputFile.WriteLine("</cockatrice_deck>");
                     }
