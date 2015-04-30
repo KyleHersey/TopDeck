@@ -37,7 +37,6 @@ namespace TopDeck
         public FiltersPanel()
         {
             InitializeComponent();
-
         }
 
         private void FilterQuery(object sender, RoutedEventArgs e)
@@ -76,10 +75,62 @@ namespace TopDeck
             {
                 excludeUnselected = true;
             }
+
             List<string> types = new List<string>();
-            List<string> subtypes = new List<string>();
-            List<string> supertypes = new List<string>();
+            if (ArtifactCheckbox.isChecked())
+            {
+                types.Add("Artifact");
+            }
+            if (CreatureCheckbox.isChecked())
+            {
+                types.Add("Creature");
+            }
+            if (EnchantmentCheckbox.isChecked())
+            {
+                types.Add("Enchantment");
+            }
+            if (InstantCheckbox.isChecked())
+            {
+                types.Add("Instant");
+            }
+            if (SorceryCheckbox.isChecked())
+            {
+                types.Add("Sorcery");
+            }
+            if (LandCheckbox.isChecked())
+            {
+                types.Add("Land");
+            }
+            if (PlaneswalkerCheckbox.isChecked())
+            {
+                types.Add("Planeswalker");
+            }
+
+            List<string> subtypes = SubtypeTextbox.Input.Text.Split(' ').ToList<string>();
+            if (subtypes[0].Equals("")) { subtypes.RemoveAt(0); }
+
+            List<string> supertypes = Supertypes.Input.Text.Split(' ').ToList<string>();
+            if (supertypes[0].Equals("")) { supertypes.RemoveAt(0); }
+
             List<string> rarities = new List<string>();
+            if (Common.isChecked())
+            {
+                rarities.Add("Common");
+            }
+            if (Uncommon.isChecked())
+            {
+                rarities.Add("Uncommon");
+            }
+            if (Rare.isChecked())
+            {
+                rarities.Add("Rare");
+            }
+            if(MythicRare.isChecked())
+            {
+                rarities.Add("Mythic");
+            }
+
+
             // what about colorless?
             MiddlePanel.setItemsSource(DBMan.GetCards(
                 NameFilterField.Input.Text,                 //Name
