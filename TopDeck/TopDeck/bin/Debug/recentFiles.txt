@@ -1,3 +1,3 @@
 C:\Users\Emerald\Documents\XiahouDun.txt
-C:\Users\Emerald\Documents\docbolas.dec
+C:\Users\Kyle\Documents\GitHub\TopDeck\TopDeck\TopDeck\bin\Debug\LegacywSideboard.txt
 C:\Users\Emerald\Documents\InfectAggro.dec

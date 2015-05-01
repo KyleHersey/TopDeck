@@ -94,10 +94,8 @@
         <local:FilterRowTextBox x:Name="Printing" FilterText="Printing" Grid.Row="12"/>
 
         <local:FilterRowTextBox x:Name="Legality" FilterText="Legality" Grid.Row="13"/>
-        
-        <local:FilterRowCheckBox x:Name="Reserved" FilterText="Reserved" Grid.Row="14"/>
-        
-        <local:FilterRowTextBox x:Name="ReleaseDate" FilterText="Release Date" Grid.Row="15"/>
+
+        <local:FilterRowCheckBox x:Name="Reserved" FilterText="Reserved"/>
 
     </Grid>
 </UserControl>
