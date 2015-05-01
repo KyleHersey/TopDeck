@@ -43,8 +43,6 @@ namespace TopDeck
         public DecklistPanel()
         {
             InitializeComponent();
-            //setItemsSource();
-            //setSideboardItemsSource();
         }
 
         public void updatePanel()

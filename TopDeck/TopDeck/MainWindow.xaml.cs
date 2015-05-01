@@ -125,11 +125,10 @@ namespace TopDeck
                 path = file.FileName;
 
                 List<LocalTuple> cardNames = GetCardnamesFromFile(path);
-
                 DLMan.currentDeck = new ObservableCollection<LocalTuple>(cardNames);
 
-                //FiltersTab.FilterListPanel.CurrentDeck = DLMan.currentDeck;
-                //FiltersTab.FilterListPanel.Sideboard = DLMan.sideboard;
+                List<LocalTuple> sideboardCardNames = GetSideboardFromFile(path);
+                DLMan.sideboard = new ObservableCollection<LocalTuple>(sideboardCardNames);
 
                 DLMan.update();
             }
@@ -145,6 +144,82 @@ namespace TopDeck
             HideOrShowProxiesButton();
         }
 
+        public List<LocalTuple> GetSideboardFromFile(string fileName)
+        {
+            List<LocalTuple> cardNames = new List<LocalTuple>();
+            StreamReader input = new StreamReader(fileName);
+
+            while (input.EndOfStream == false)
+            {
+                String tempString = input.ReadLine();
+                string[] words = tempString.Split(' ');
+
+                if (!words[0].Equals("SB:"))
+                {
+                    continue;
+                }
+
+                Console.WriteLine(words[2]);
+
+                int multiverseID = -1;
+                bool mvIDquery = false;
+
+                if (words.Length == 3)   //if there's a possibility we have a multiverse id...
+                {
+                    try
+                    {
+                        Debug.WriteLine(words[2]);
+                        multiverseID = Convert.ToInt32(words[1]);   //got multiverseID
+                    }
+                    catch
+                    {
+                        try
+                        {
+                            if (db.GetHighestMultiverseId(words[2]) != null)
+                            {
+                                //queried for multiverseID
+                                multiverseID = Convert.ToInt32(db.GetHighestMultiverseId(words[2]));    //only first word of a cardname
+                                mvIDquery = true;
+                            }
+                        }
+                        catch
+                        {
+                            multiverseID = -1;
+                        }
+                    }}
+
+
+                    if (multiverseID != -1) //if we got a multiverseID
+                    {
+                        if (mvIDquery)  //if words[2] is a name
+                        {
+                            cardNames.Add(new LocalTuple(Convert.ToInt32(words[1]), words[2], multiverseID.ToString()));
+                        }
+                        else            //if words[2] is a number
+                        {
+                            cardNames.Add(new LocalTuple(Convert.ToInt32(words[1]), db.GetAName(words[2].ToString()), Convert.ToString(words[1])));
+                        }
+                    }
+                    else //if we didn't, assume #, cardname
+                    {
+                        int num = Convert.ToInt32(words[1]);
+                        string name = words[2];
+                        for (int i = 3; i < words.Length; i++)
+                        {
+                            name += " ";
+                            name += words[i];
+                        }
+
+                        cardNames.Add(new LocalTuple(num, name, db.GetHighestMultiverseId(name)));
+                    }
+                
+            }
+
+            input.Close();
+
+                return cardNames;
+        }
+
         public List<LocalTuple> GetCardnamesFromFile(string fileName)
         {
             List<LocalTuple> cardNames = new List<LocalTuple>();
@@ -154,7 +229,12 @@ namespace TopDeck
             {
                 String tempString = input.ReadLine();
                 string[] words = tempString.Split(' ');
-                // int[] nums = new int[words.Length];           used in previous parsing method
+
+                if (words[0].Equals("SB:"))
+                {
+                    continue;
+                }
+
                 int multiverseID = -1;
                 bool mvIDquery = false;
 
@@ -433,6 +513,13 @@ namespace TopDeck
                 outputFile.WriteLine("<style type=\"text/css\">@media print{@page {size: landscape}} img {margin-bottom: -5px; margin-right: -5px}</style>");
 
                 foreach (LocalTuple card in DLMan.currentDeck)
+                {
+                    for (int i = 0; i < card.Count; i++)
+                    {
+                        outputFile.WriteLine("<img src=\"http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=" + card.MultiverseId + "&type=card\" width=\"222\" height=\"319\"/>");
+                    }
+                }
+                foreach (LocalTuple card in DLMan.sideboard)
                 {
                     for (int i = 0; i < card.Count; i++)
                     {
