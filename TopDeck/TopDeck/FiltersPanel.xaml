@@ -6,67 +6,98 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <StackPanel>
-        <Button x:Name="SearchButton" Content="Search" Click="FilterQuery"/>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
         
-        <local:FilterRowTextBox x:Name="NameFilterField" FilterText="Name"/>
+        <!-- move this button -->
+        <Button x:Name="SearchButton" Margin="10, 5, 10, 5" Content="Search" Click="FilterQuery" Grid.Row="0"/>
         
-        <local:FilterRowTextBox x:Name="MultiverseID" FilterText="Multiverse ID"/>
+        <local:FilterRowTextBox x:Name="NameFilterField" FilterText="Name" Grid.Row="1"/>
         
-        <StackPanel Name="ColorSpecifiers">
-            <StackPanel Name="ColorFilters" Orientation="Horizontal">
+        <local:FilterRowTextBox x:Name="MultiverseID" FilterText="Multiverse ID" Grid.Row="2"/>
+        
+        <Grid Name="ColorSpecifiers" Grid.Row="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <WrapPanel Name="ColorFilters" Orientation="Horizontal" Grid.Row="0">
                 <local:FilterRowCheckBox x:Name="WhiteColor" FilterText="White"/>
                 <local:FilterRowCheckBox x:Name="BlueColor" FilterText="Blue"/>
                 <local:FilterRowCheckBox x:Name="BlackColor" FilterText="Black"/>
                 <local:FilterRowCheckBox x:Name="RedColor" FilterText="Red"/>
                 <local:FilterRowCheckBox x:Name="GreenColor" FilterText="Green"/>
                 <local:FilterRowCheckBox x:Name="ColorlessColor" FilterText="Colorless"/>
-            </StackPanel>
-            <local:FilterRowCheckBox x:Name="RequireMulticolored" FilterText="Require Multicolored"/>
-            <local:FilterRowCheckBox x:Name="ExcludeUnselected" FilterText="Exclude Unselected"/>
-        </StackPanel>
+            </WrapPanel>
+            <local:FilterRowCheckBox x:Name="RequireMulticolored" FilterText="Require Multicolored" Grid.Row="1"/>
+            <local:FilterRowCheckBox x:Name="ExcludeUnselected" FilterText="Exclude Unselected" Grid.Row="2"/>
+        </Grid>
 
-        <local:FilterRowTextBox x:Name="ConvertedManaCostFilterField" FilterText="Converted Mana Cost"/>
+        <local:FilterRowTextBox x:Name="ConvertedManaCostFilterField" FilterText="Converted Mana Cost" Grid.Row="4"/>
         
-        <local:FilterRowTextBox x:Name="Supertypes" FilterText="Supertype"/>
+        <local:FilterRowTextBox x:Name="Supertypes" FilterText="Supertype" Grid.Row="5"/>
         
-        <StackPanel>
-            <StackPanel Name="Types" Orientation="Horizontal">
+        <Grid Grid.Row="6">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <WrapPanel Name="Types" Orientation="Horizontal" Grid.Row="0">
                 <local:FilterRowCheckBox x:Name="ArtifactCheckbox" FilterText="Artifact"/>
                 <local:FilterRowCheckBox x:Name="CreatureCheckbox" FilterText="Creature"/>
                 <local:FilterRowCheckBox x:Name="EnchantmentCheckbox" FilterText="Enchantment"/>
                 <local:FilterRowCheckBox x:Name="InstantCheckbox" FilterText="Instant"/>
                 <local:FilterRowCheckBox x:Name="SorceryCheckbox" FilterText="Sorcery"/>
                 <local:FilterRowCheckBox x:Name="LandCheckbox" FilterText="Land"/>
-                <local:FilterRowCheckBox x:Name="PlaneswalkerCheckbox" FilterText="Planeswalker"/>
-            </StackPanel>
-            <local:FilterRowTextBox x:Name="PowerFilterField" FilterText="Power"/>
-            <local:FilterRowTextBox x:Name="ToughnessFilterField" FilterText="Toughness"/>
-            <local:FilterRowTextBox x:Name="LoyaltyFilterField" FilterText="Loyalty"/>
-        </StackPanel>
+                <local:FilterRowCheckBox x:Name="PlaneswalkerCheckbox" FilterText="Planeswalker" Margin="0,15,0,0"/>
+            </WrapPanel>
+            <local:FilterRowTextBox x:Name="PowerFilterField" FilterText="Power" Grid.Row="1"/>
+            <local:FilterRowTextBox x:Name="ToughnessFilterField" FilterText="Toughness" Grid.Row="2"/>
+            <local:FilterRowTextBox x:Name="LoyaltyFilterField" FilterText="Loyalty" Grid.Row="3"/>
+        </Grid>
 
-        <local:FilterRowTextBox x:Name="SubtypeTextbox" FilterText="Subtypes"/>
+        <local:FilterRowTextBox x:Name="SubtypeTextbox" FilterText="Subtypes" Grid.Row="7"/>
         
-        <local:FilterRowTextBox x:Name="Text" FilterText="Text"/>
+        <local:FilterRowTextBox x:Name="Text" FilterText="Text" Grid.Row="8"/>
         
-        <StackPanel Name="Rarities" Orientation="Horizontal">
+        <WrapPanel Name="Rarities" Orientation="Horizontal" Grid.Row="9">
             <local:FilterRowCheckBox x:Name="Common" FilterText="Common"/>
             <local:FilterRowCheckBox x:Name="Uncommon" FilterText="Uncommon"/>
             <local:FilterRowCheckBox x:Name="Rare" FilterText="Rare"/>
             <local:FilterRowCheckBox x:Name="MythicRare" FilterText="Mythic Rare"/>
-        </StackPanel>
+        </WrapPanel>
         
-        <local:FilterRowTextBox x:Name="Artist" FilterText="Artist"/>
+        <local:FilterRowTextBox x:Name="Artist" FilterText="Artist" Grid.Row="10"/>
         
-        <local:FilterRowTextBox x:Name="Flavor" FilterText="Flavor"/>
+        <local:FilterRowTextBox x:Name="Flavor" FilterText="Flavor" Grid.Row="11"/>
         
-        <local:FilterRowTextBox x:Name="Printing" FilterText="Printing"/>
+        <local:FilterRowTextBox x:Name="Printing" FilterText="Printing" Grid.Row="12"/>
 
-        <local:FilterRowTextBox x:Name="Legality" FilterText="Legality"/>
+        <local:FilterRowTextBox x:Name="Legality" FilterText="Legality" Grid.Row="13"/>
         
-        <local:FilterRowCheckBox x:Name="Reserved" FilterText="Reserved"/>
+        <local:FilterRowCheckBox x:Name="Reserved" FilterText="Reserved" Grid.Row="14"/>
         
-        <local:FilterRowTextBox x:Name="ReleaseDate" FilterText="Release Date"/>
+        <local:FilterRowTextBox x:Name="ReleaseDate" FilterText="Release Date" Grid.Row="15"/>
 
-    </StackPanel>
+    </Grid>
 </UserControl>

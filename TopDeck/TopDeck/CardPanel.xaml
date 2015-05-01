@@ -27,15 +27,17 @@
             </Button>
         </Border>
         <Popup x:Name="RulingPopup" IsOpen="False" StaysOpen="False" PlacementTarget="{Binding ElementName=RulingsButton}">
-            <StackPanel>
-                <ListView x:Name="RulingsListView" Style="{StaticResource RulingsListBox}" ScrollViewer.CanContentScroll="False" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
-                    <!--<ListBox.ItemTemplate>
+            <DockPanel>
+                <ListBox x:Name="RulingsListView" Style="{StaticResource RulingsListBox}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock TextWrapping="Wrap"/>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock TextWrapping="WrapWithOverflow"/>
+                            </StackPanel>
                         </DataTemplate>
-                    </ListBox.ItemTemplate> -->
-                </ListView>
-            </StackPanel>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </DockPanel>
         </Popup>
         <TextBlock x:Name="RulesText" Grid.Row="1" Margin="10, 5, 10, 5" TextWrapping="Wrap"/>
     </StackPanel>    
