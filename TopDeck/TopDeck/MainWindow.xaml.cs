@@ -169,7 +169,7 @@ namespace TopDeck
                     try
                     {
                         Debug.WriteLine(words[2]);
-                        multiverseID = Convert.ToInt32(words[1]);   //got multiverseID
+                        multiverseID = Convert.ToInt32(words[2]);   //got multiverseID
                     }
                     catch
                     {
@@ -186,33 +186,32 @@ namespace TopDeck
                         {
                             multiverseID = -1;
                         }
-                    }}
-
-
-                    if (multiverseID != -1) //if we got a multiverseID
-                    {
-                        if (mvIDquery)  //if words[2] is a name
-                        {
-                            cardNames.Add(new LocalTuple(Convert.ToInt32(words[1]), words[2], multiverseID.ToString()));
-                        }
-                        else            //if words[2] is a number
-                        {
-                            cardNames.Add(new LocalTuple(Convert.ToInt32(words[1]), db.GetAName(words[2].ToString()), Convert.ToString(words[1])));
-                        }
                     }
-                    else //if we didn't, assume #, cardname
-                    {
-                        int num = Convert.ToInt32(words[1]);
-                        string name = words[2];
-                        for (int i = 3; i < words.Length; i++)
-                        {
-                            name += " ";
-                            name += words[i];
-                        }
+                }
 
-                        cardNames.Add(new LocalTuple(num, name, db.GetHighestMultiverseId(name)));
+                if (multiverseID != -1) //if we got a multiverseID
+                {
+                    if (mvIDquery)  //if words[2] is a name
+                    {
+                        cardNames.Add(new LocalTuple(Convert.ToInt32(words[1]), words[2], multiverseID.ToString()));
                     }
-                
+                    else            //if words[2] is a number
+                    {
+                        cardNames.Add(new LocalTuple(Convert.ToInt32(words[1]), db.GetAName(words[2].ToString()), Convert.ToString(words[1])));
+                    }
+                }
+                else //if we didn't, assume #, cardname
+                {
+                    int num = Convert.ToInt32(words[1]);
+                    string name = words[2];
+                    for (int i = 3; i < words.Length; i++)
+                    {
+                        name += " ";
+                        name += words[i];
+                    }
+
+                    cardNames.Add(new LocalTuple(num, name, db.GetHighestMultiverseId(name)));
+                }
             }
 
             input.Close();
