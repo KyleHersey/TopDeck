@@ -64,19 +64,74 @@ namespace TopDeck
             CostBar.DataContext = this;
         }
 
-        public void removeCard(String name) { }
-
-        public void addCard(String name)
-        {
-
+        public void removeCard(String name) {
             Card card = DBMan.GetCard(name);
 
             //update colors
-            foreach (String color in card.Colors)
+            if (card.Colors.Count == 0)
             {
                 for (int i = 0; i < ColorSource.Count; i++)
                 {
-                    if (ColorSource[i].Key.Equals(color))
+                    if (ColorSource[i].Key.Equals("Colorless"))
+                    {
+                        KeyValuePair<String, int> newKV = new KeyValuePair<string, int>(ColorSource[i].Key, ColorSource[i].Value - 1);
+                        ColorSource.RemoveAt(i);
+                        ColorSource.Insert(i, newKV);
+                    }
+                }
+            }
+            else
+            {
+                foreach (String color in card.Colors)
+                {
+                    for (int i = 0; i < ColorSource.Count; i++)
+                    {
+                        if (ColorSource[i].Key.Equals(color))
+                        {
+                            KeyValuePair<String, int> newKV = new KeyValuePair<string, int>(ColorSource[i].Key, ColorSource[i].Value - 1);
+                            ColorSource.RemoveAt(i);
+                            ColorSource.Insert(i, newKV);
+                        }
+                    }
+                }
+            }
+
+            //update types
+            foreach (string type in card.Types)
+            {
+                for (int i = 0; i < TypeSource.Count; i++)
+                {
+                    if (TypeSource[i].Key.Equals(type))
+                    {
+                        KeyValuePair<string, int> newKV = new KeyValuePair<string, int>(TypeSource[i].Key, TypeSource[i].Value - 1);
+                        TypeSource.RemoveAt(i);
+                        TypeSource.Insert(i, newKV);
+                    }
+                }
+            }
+
+            //update CMC
+            for (int i = 0; i < CostSource.Count; i++)
+            {
+                if (CostSource[i].Key == Convert.ToInt32(card.CMC))
+                {
+                    KeyValuePair<int, int> newKV = new KeyValuePair<int, int>(CostSource[i].Key, CostSource[i].Value - 1);
+                    CostSource.RemoveAt(i);
+                    CostSource.Insert(i, newKV);
+                }
+            }
+        }
+
+        public void addCard(String name)
+        {
+            Card card = DBMan.GetCard(name);
+
+            //update colors
+            if (card.Colors.Count == 0)
+            {
+                for (int i = 0; i < ColorSource.Count; i++)
+                {
+                    if (ColorSource[i].Key.Equals("Colorless"))
                     {
                         KeyValuePair<String, int> newKV = new KeyValuePair<string, int>(ColorSource[i].Key, ColorSource[i].Value + 1);
                         ColorSource.RemoveAt(i);
@@ -84,7 +139,48 @@ namespace TopDeck
                     }
                 }
             }
+            else
+            {
+                foreach (String color in card.Colors)
+                {
+                    for (int i = 0; i < ColorSource.Count; i++)
+                    {
+                        if (ColorSource[i].Key.Equals(color))
+                        {
+                            KeyValuePair<String, int> newKV = new KeyValuePair<string, int>(ColorSource[i].Key, ColorSource[i].Value + 1);
+                            ColorSource.RemoveAt(i);
+                            ColorSource.Insert(i, newKV);
+                        }
+                    }
+                }
+            }
+
+            //update types
+            foreach (string type in card.Types)
+            {
+                for (int i = 0; i < TypeSource.Count; i++)
+                {
+                    if (TypeSource[i].Key.Equals(type))
+                    {
+                        KeyValuePair<string, int> newKV = new KeyValuePair<string, int>(TypeSource[i].Key, TypeSource[i].Value + 1);
+                        TypeSource.RemoveAt(i);
+                        TypeSource.Insert(i, newKV);
+                    }
+                }
+            }
+
+            //update CMC
+            for (int i = 0; i < CostSource.Count; i++)
+            {
+                if (CostSource[i].Key == Convert.ToInt32(card.CMC))
+                {
+                    KeyValuePair<int, int> newKV = new KeyValuePair<int, int>(CostSource[i].Key, CostSource[i].Value + 1);
+                    CostSource.RemoveAt(i);
+                    CostSource.Insert(i, newKV);
+                }
+            }
         }
+        
 
         public void updateStats(){
             updateColorChart();

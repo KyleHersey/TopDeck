@@ -71,5 +71,17 @@ namespace TopDeck
             decklistPanel.theList.Items.Refresh();
             statsPanel.addCard(name);
         }
+
+        public void addCardToSideboard(String name)
+        {
+            foreach (LocalTuple card in sideboard)
+            {
+                if (card.Name.Equals(name))
+                {
+                    card.Count++;
+                }
+            }
+            decklistPanel.theSideboard.Items.Refresh();
+        }
     }
 }

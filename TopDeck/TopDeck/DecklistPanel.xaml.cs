@@ -95,7 +95,7 @@ namespace TopDeck
             else if (theSideboard.SelectedItem != null)
             {
                 LocalTuple cardTuple = (LocalTuple)theSideboard.SelectedItem;
-                cardTuple.Count++;
+                DLMan.addCardToSideboard(cardTuple.Name);
             }
         }
 
@@ -105,22 +105,23 @@ namespace TopDeck
             {
                 LocalTuple cardTuple = (LocalTuple)theList.SelectedItem;
                 cardTuple.Count--;
+                theList.Items.Refresh();
                 if (cardTuple.Count <= 0)
                 {
                     DLMan.currentDeck.Remove(cardTuple);
                 }
+                DLMan.removeCard(cardTuple.Name);
             } 
             else if (theSideboard.SelectedItem != null)
             {
                 LocalTuple cardTuple = (LocalTuple)theSideboard.SelectedItem;
                 cardTuple.Count--;
+                theSideboard.Items.Refresh();
                 if (cardTuple.Count <= 0)
                 {
                     DLMan.sideboard.Remove(cardTuple);
                 }
             }
-
-            DLMan.update();
         }
 
         private void theSideboard_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -161,9 +162,8 @@ namespace TopDeck
                     LocalTuple tupleToAdd = new LocalTuple(1, selectedCard.Name, selectedCard.MultiverseId);
                     DLMan.sideboard.Add(tupleToAdd);
                 }
-
-                DLMan.update();
             }
+            theSideboard.Items.Refresh();
         }
     }
 }
