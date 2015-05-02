@@ -29,13 +29,6 @@
         <Popup x:Name="RulingPopup" IsOpen="False" StaysOpen="False" PlacementTarget="{Binding ElementName=RulingsButton}">
             <DockPanel>
                 <ListBox x:Name="RulingsListView" Style="{StaticResource RulingsListBox}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Vertical">
-                                <TextBlock TextWrapping="WrapWithOverflow"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
                 </ListBox>
             </DockPanel>
         </Popup>
