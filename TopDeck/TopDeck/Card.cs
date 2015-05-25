@@ -8,17 +8,6 @@ namespace TopDeck
 {
     public class Card
     {
-        public Card(JSONDTO c)
-        {
-            Name = c.name;                  //name
-            CMC = c.cmc;                    //converted mana cost
-            Text = c.text;                  //card text
-            Flavor = c.flavor;              //flavor text
-            Power = c.power;                //power (if a creature)
-            Toughness = c.toughness;        //toughness ( if a creature)
-            MultiverseId = c.multiverseid;  //multiverse ID
-        }
-
         public Card()
         {
 

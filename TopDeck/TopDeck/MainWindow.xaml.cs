@@ -21,9 +21,6 @@ using System.Reflection;
 
 namespace TopDeck
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         DecklistManager DLMan;
