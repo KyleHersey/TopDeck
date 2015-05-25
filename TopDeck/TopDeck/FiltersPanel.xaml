@@ -24,8 +24,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        
-        <!-- move this button -->
+
         <Button x:Name="SearchButton" Margin="10, 5, 10, 5" Content="Search" Click="FilterQuery" Grid.Row="0"/>
         
         <local:FilterRowTextBox x:Name="NameFilterField" FilterText="Name" Grid.Row="1"/>

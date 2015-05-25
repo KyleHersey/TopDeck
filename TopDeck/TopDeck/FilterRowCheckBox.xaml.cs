@@ -16,11 +16,6 @@ using System.ComponentModel;
 
 namespace TopDeck
 {
-    /// <summary>
-    /// Interaction logic for FilterRowCheckBox.xaml
-    /// </summary>
-    /// 
-
     public partial class FilterRowCheckBox : UserControl, INotifyPropertyChanged
     {
         public bool isChecked()

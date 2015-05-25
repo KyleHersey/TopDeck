@@ -15,9 +15,6 @@ using System.Windows.Shapes;
 
 namespace TopDeck
 {
-    /// <summary>
-    /// Interaction logic for FilterRowTextBox.xaml
-    /// </summary>
     public partial class FilterRowTextBox : UserControl
     {
 

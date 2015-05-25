@@ -15,9 +15,6 @@ using System.Windows.Shapes;
 
 namespace TopDeck
 {
-    /// <summary>
-    /// Interaction logic for ListCardsView.xaml
-    /// </summary>
     public partial class ListCardsView : UserControl
     {
         public DatabaseManager DBMan

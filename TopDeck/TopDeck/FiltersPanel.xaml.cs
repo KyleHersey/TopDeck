@@ -16,9 +16,6 @@ using System.Diagnostics;
 
 namespace TopDeck
 {
-    /// <summary>
-    /// Interaction logic for FiltersPanel.xaml
-    /// </summary>
     public partial class FiltersPanel : UserControl
     {
 
@@ -39,6 +36,8 @@ namespace TopDeck
             InitializeComponent();
         }
 
+        // called when "search" is clicked
+        // accumulates all of the filters to send to the DBMan
         private void FilterQuery(object sender, RoutedEventArgs e)
         {
             List<string> colors = new List<string>();
@@ -47,9 +46,7 @@ namespace TopDeck
             Debug.WriteLine("clicked");
             if (RedColor.isChecked() == true)
             {
-                Debug.WriteLine("stuff");
                 colors.Add("red");
-                //MiddlePanel.theList.ItemsSource
             }
             if (BlueColor.isChecked() == true)
             {
@@ -130,12 +127,10 @@ namespace TopDeck
                 rarities.Add("Mythic");
             }
 
-
-            // what about colorless?
             MiddlePanel.setItemsSource(DBMan.GetCards(
                 NameFilterField.Input.Text,                 //Name
                 ToughnessFilterField.Input.Text,            //Toughness
-                "",                                         //Hand
+                "",                                         //Hand - not implemented
                 ConvertedManaCostFilterField.Input.Text,    //Converted Mana Cost
                 MultiverseID.Input.Text,                    //Multiverse ID
                 LoyaltyFilterField.Input.Text,              //Loyalty

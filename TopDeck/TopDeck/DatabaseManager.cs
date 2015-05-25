@@ -23,20 +23,17 @@ namespace TopDeck
         int hashedJSONFile;
         string mainJSONFileName = "AllSets-x.json";
 
-        
-
         public DatabaseManager() {
 
             // first, check if our mtgjson file exists
             CheckForJSON();
 
-            // check if the file exists
-
-            // if not, we want to grab the file and create the db
+            // check if DB exists
             createDBFile();
             
         }
 
+        // check that we have the json file
         public void CheckForJSON()
         {
             if (!File.Exists(mainJSONFileName))
@@ -48,15 +45,20 @@ namespace TopDeck
                 }
                 Debug.WriteLine("Finished!");
             }
+
+            // has the json file to compare with later downloads
             hashedJSONFile = HashJSON(mainJSONFileName);
         }
 
+        // hashes a json file
         public int HashJSON(string fileName)
         {
             string file = File.ReadAllText(fileName);
             return file.GetHashCode();
         }
 
+        // download a new file - if it is different from our old one,
+        // updated the DB
         public bool DownloadNewFile() {
             using (WebClient myClient = new WebClient()) {
                 Debug.WriteLine("Downloading new file");
@@ -83,6 +85,7 @@ namespace TopDeck
             return false;
         }
 
+        // create the database, if needed
         public void createDBFile()
         {
             if (File.Exists("SetsDB.sqlite")) {
@@ -106,10 +109,8 @@ namespace TopDeck
                 // the string sets up the file we will be using
                 dbConnection = new SQLiteConnection("Data Source=SetsDB.sqlite;Version=3;");
 
-                // open the database, need to close later
                 dbConnection.Open();
 
-                // don't forget to check if they match.
                 try
                 {
                     String mtgJSONText = File.ReadAllText("AllSets-x.json", Encoding.UTF8);
@@ -214,7 +215,7 @@ namespace TopDeck
 
                     Debug.WriteLine("Number of sets " + elements.Count);
 
-                    // this is a list of all of the cards we have met previously
+                    // this is a list of all of the cards we have seen previously
                     List<String> cardsMet = new List<String>();
 
                     var ser = new DataContractJsonSerializer(typeof(JSONDTO));
@@ -238,6 +239,8 @@ namespace TopDeck
                             }
                         }
                     }
+
+                    // save the last set name we saw, for updating
                     using (StreamWriter file = new StreamWriter("lastSet.txt"))
                     {
                         file.WriteLine(elements[elements.Count - 1]);
@@ -246,13 +249,11 @@ namespace TopDeck
                 catch
                 {
                     Debug.WriteLine("Unable to open AllCards-x.json file.");
-                    Debug.WriteLine("Deleting database file");
-                    //File.Delete("SetsDB.sqlite");
-
                 }
             }
         }
 
+        // updates the database
         public void UpdateDB()
         {
             if (File.Exists("SetsDB.sqlite"))
@@ -275,6 +276,8 @@ namespace TopDeck
                 using (StreamReader file = new StreamReader("lastSet.txt"))
                 {
                     string lastSet = file.ReadLine();
+
+                    // if we havn't seen the last set before, add that set to database
                     if (!lastSet.Equals(elements[elements.Count - 1])) {
                         JObject inner = outer[elements[elements.Count - 1]].Value<JObject>();
                         
@@ -312,6 +315,7 @@ namespace TopDeck
             }
         }
 
+        // add each card to the database and its other information
         private void AssembleDB(JToken cardInCards, DataContractJsonSerializer ser, JObject cardJObject)
         {
             byte[] byteArray = Encoding.UTF8.GetBytes(cardInCards.ToString());
@@ -379,9 +383,11 @@ namespace TopDeck
                 }
             }
 
+            // add this card to the CARD table
             AddToCard(info);
         }
 
+        // gets all of the sets in this file
         private List<string> GetSetNames(string mtgJSONText)
         {
             var o = JObject.Parse(mtgJSONText);
@@ -393,7 +399,6 @@ namespace TopDeck
 
                 if (property != null)
                 {
-                    // gets the set names
                     elements.Add(property.Name);
                 }
                 else
@@ -404,6 +409,7 @@ namespace TopDeck
             return elements;
         }
 
+        // use filters to get a list of cards from the DB
         public List<string> GetCards(string name, string toughness, string hand, 
             string cmc, string multiverseId, string loyalty, List<string> rarities, 
             string flavor, string artist, string power, string cardText, 
@@ -435,6 +441,7 @@ namespace TopDeck
                 sqlCard += @" and card_text like @cardText";
             }
 
+            // use toughness and power only if the type of this card should be "creature"
             if (types != null && types.Contains("Creature"))
             {
                 sqlCard += @" and toughness like @toughness
@@ -473,10 +480,7 @@ namespace TopDeck
 
             reader.Close();
 
-            // REQUIRE MULTICOLOR
-
-
-            // what about the original color of the card? fix
+            // have a list of all colors so that we can remove cards with the wrong colors0
             List<string> allColors = new List<string>();
             allColors.Add("red");
             allColors.Add("blue");
@@ -484,8 +488,10 @@ namespace TopDeck
             allColors.Add("green");
             allColors.Add("white");
 
+            // remove all of the colors we don't want
             List<string> unwantedColors = allColors.Except(colors).ToList<string>();
 
+            // finds the cards with the wanted colors
             HashSet<string> cardNamesWithColors = null;
             for (int i = 0; i < colors.Count; i++) {
                 string sqlColor = @"select name
@@ -507,6 +513,8 @@ namespace TopDeck
                 {
                     cardNamesWithColors = tempCardsWithColors;
                 } else if (cardNamesWithColors != null) {
+                    // if we require multicolor, only have the cards that overlap in colors
+                    // else, just have all of the cards
                     if (requireMultiColor)
                         cardNamesWithColors.IntersectWith(tempCardsWithColors);
                     else
@@ -514,6 +522,7 @@ namespace TopDeck
                 }
             }
 
+            // if we want to remove all cards that aren't our requested colors
             if (cardNamesWithColors != null && cardNamesWithColors.Count > 0 && excludeUnselected)
             {
                 for (int i = 0; i < unwantedColors.Count; i++)
@@ -541,8 +550,7 @@ namespace TopDeck
                 cardNamesWithoutColors.IntersectWith(cardNamesWithColors);
             }
 
-            // foreign names?
-            // should be able to turn on or off searching by foreign names
+            // TODO
             /*if (foreignName != "")
             {
                 string sqlForeignName = @"select name
@@ -558,7 +566,6 @@ namespace TopDeck
                     cardNamesWithoutColors.Add((string)foreignNameReader["name"])
 
             } */
-            // also printings?
 
 
             // search by types, subtypes, supertypes
@@ -686,6 +693,7 @@ namespace TopDeck
             return cardNamesWithoutColors.ToList(); 
         }
 
+        // gets a card object by name
         public Card GetCard(string name)
         {
             Card c = null;
@@ -737,8 +745,7 @@ namespace TopDeck
                 c.Colors.Add((string)reader["color"]);
             }
 
-            // add foreign names
-            // HOW DO WE WANT TO REPRESENT FOREIGN NAMES AND OTHER OBJECTS
+            // foriegn names - TODO
 
             // add subtypes from subtypes table
             sql = @"select subtype
@@ -791,6 +798,7 @@ namespace TopDeck
                 c.Types.Add((string)reader["type"]);
             }
 
+            // store all multiverse Ids
             List<Tuple<string, string>> multiverseIds = new List<Tuple<string, string>>();
             sql = @"select setName, multiverse_id
                     from MULTIVERSEID_SET
@@ -820,10 +828,11 @@ namespace TopDeck
             }
             c.Rulings = rulings;
 
-            // legalities?
+            // legalities - TODO
             return c;
         }
 
+        // get a card object from multiverse id
         public Card GetACardFromMultiverseId(string multiverseId)
         {
             string cardName = GetAName(multiverseId);
@@ -852,6 +861,7 @@ namespace TopDeck
             return null;
         }
 
+        // get the earliest multiverse id
         public string GetHighestMultiverseId(string name)
         {
             string sql = @"select multiverse_id

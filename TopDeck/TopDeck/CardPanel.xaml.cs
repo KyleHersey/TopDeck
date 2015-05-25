@@ -16,9 +16,6 @@ using System.Windows.Shapes;
 
 namespace TopDeck
 {
-    /// <summary>
-    /// Interaction logic for CardPanel.xaml
-    /// </summary>
     public partial class CardPanel : UserControl
     {
 
@@ -32,6 +29,8 @@ namespace TopDeck
         public CardPanel()
         {
             InitializeComponent();
+
+            // hide rulings button unless the card has it
             RulingsButtonBorder.Visibility = System.Windows.Visibility.Hidden;
         }
 
@@ -50,6 +49,7 @@ namespace TopDeck
             selectedCard = c;
             RulesText.Text = c.Text;
 
+            // display rulings button if card has rulings
             if (c.Rulings != null && c.Rulings.Count > 0)
             {
                 RulingsListView.ItemsSource = c.Rulings;
@@ -69,7 +69,7 @@ namespace TopDeck
             Console.WriteLine("new bmp");
             img.BeginInit();
             Console.WriteLine("begin init");
-            // can try to use GetAMultiverseId in DBManager, but will need to check if null
+
             if (id != null)
             {
                 img.UriSource = new Uri("http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=" + id + "&type=card");

@@ -16,9 +16,6 @@ using System.Collections.ObjectModel;
 
 namespace TopDeck
 {
-    /// <summary>
-    /// Interaction logic for StatsPanel.xaml
-    /// </summary>
     public partial class StatsPanel : UserControl
     {
         public DatabaseManager DBMan

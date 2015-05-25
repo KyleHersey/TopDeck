@@ -15,9 +15,6 @@ using System.Windows.Shapes;
 
 namespace TopDeck
 {
-    /// <summary>
-    /// Interaction logic for DeckView.xaml
-    /// </summary>
     public partial class DeckView : UserControl
     {
         public DeckView()

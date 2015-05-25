@@ -39,10 +39,12 @@ namespace TopDeck
 
             RecentFilesTabSetup();
 
+            // assign the database manager to relevant classes
             FiltersTab.setDatabaseManager(db);
             DeckTab.CardList.setDatabaseManager(db);
             DeckTab.DeckStats.DBMan = db;
 
+            // assign deck list manager to relevant classes
             DeckTab.CardList.DLMan = DLMan;
             DeckTab.DeckStats.DLMan = DLMan;
             FiltersTab.FilterListPanel.DLMan = DLMan;
@@ -50,13 +52,13 @@ namespace TopDeck
             DeckTab.CardList.RightPanel = DeckTab.CardView;
             DeckTab.CardView.SetList.Visibility = System.Windows.Visibility.Collapsed;
 
-            //FiltersTab.FilterListPanel.CurrentDeck = DLMan.currentDeck;
-            //FiltersTab.FilterListPanel.Sideboard = DLMan.sideboard;
-
             DLMan.update();
+
+            // start out the application with a new deck
             NewDeck_Click(null, null);
         }
 
+        // on close, updated the recent files for the next run
         void MainWindow_Closed(object sender, EventArgs e)
         {
             if (File.Exists("recentFiles.txt"))
@@ -72,8 +74,7 @@ namespace TopDeck
             }
         }
 
-
-
+        // populate the recents buttons
         public void RecentFilesTabSetup()
         {
             recentFiles = new List<string>();
@@ -85,6 +86,8 @@ namespace TopDeck
                 }
             }
 
+            // hide the ability to pick recents until we know that we
+            // have recent files to select
             Recents.Visibility = System.Windows.Visibility.Collapsed;
             RecentFileOne.Visibility = System.Windows.Visibility.Collapsed;
             RecentFileTwo.Visibility = System.Windows.Visibility.Collapsed;
@@ -97,6 +100,7 @@ namespace TopDeck
 
             char[] delimiters = { '/', '\\' };
 
+            // populate each recent file button
             int index = 0;
             foreach (string recentfile in recentFiles)
             {
@@ -110,11 +114,13 @@ namespace TopDeck
             }
         }
 
+        // populate deck with cards from previously saved deck
         private void OpenDeckFile_Click(object sender, RoutedEventArgs e)
         {
             string path = "";
             OpenFileDialog file = new OpenFileDialog();
             bool? userClickedOK = file.ShowDialog();
+
             if (userClickedOK == true)
             {
                 DLMan.currentDeckName = file.FileName;
@@ -130,17 +136,12 @@ namespace TopDeck
                 DLMan.update();
             }
 
-            Regex checkExtension = new Regex(".*\\.dec");
-            if (checkExtension.IsMatch(path))
-            {
-                Debug.WriteLine("yes");
-            }
-
             AddToRecentFiles();
             DeckTab.DeckStats.updateStats();
             HideOrShowProxiesButton();
         }
 
+        // get cards in the sideboard from the file
         public List<LocalTuple> GetSideboardFromFile(string fileName)
         {
             List<LocalTuple> cardNames = new List<LocalTuple>();
@@ -216,6 +217,7 @@ namespace TopDeck
                 return cardNames;
         }
 
+        // get the list of card names form the file
         public List<LocalTuple> GetCardnamesFromFile(string fileName)
         {
             List<LocalTuple> cardNames = new List<LocalTuple>();
@@ -288,6 +290,8 @@ namespace TopDeck
             return cardNames;
         }
 
+        // save the deck if it has been previously saved
+        // if it has not, bring up the save as dialog
         private void SaveDeck_Click(object sender, RoutedEventArgs e)
         {
             if (DLMan.currentDeckName == null)
@@ -320,8 +324,10 @@ namespace TopDeck
             AddToRecentFiles();
         }
 
+        // add card to recents list
         private void AddToRecentFiles()
         {
+            // if we have more than 3 recent files, remove the oldest one
             if (!recentFiles.Contains(DLMan.currentDeckName) && recentFiles.Count < 3)
             {
                 recentFiles.Add(DLMan.currentDeckName);
@@ -333,6 +339,7 @@ namespace TopDeck
             }
         }
 
+        // save the deck under a different name
         private void SaveAsDeckFile_Click(object sender, RoutedEventArgs e)
         {
             string fileName = "";
@@ -372,17 +379,13 @@ namespace TopDeck
             AddToRecentFiles();
         }
 
+        // clear all fields to create a new deck
         private void NewDeck_Click(object sender, RoutedEventArgs e)
         {
-            // don't forget to ask if they want to save?
             DLMan.currentDeckName = null;
 
-            // in here we want to create a new list and set all the things to reference it
             DLMan.currentDeck = new ObservableCollection<LocalTuple>();
             DLMan.sideboard = new ObservableCollection<LocalTuple>();
-
-           //FiltersTab.FilterListPanel.CurrentDeck = DLMan.currentDeck;
-            //FiltersTab.FilterListPanel.Sideboard = DLMan.sideboard;
 
             DLMan.update();
             DeckTab.CardView.Clear();
@@ -390,16 +393,19 @@ namespace TopDeck
             HideOrShowProxiesButton();
         }
 
+        // updates the database
         private void Update_Click(object sender, RoutedEventArgs e)
         {
             db.UpdateDB();
         }
 
+        // exports the deck to cockatrice
         private void Export_Click(object senter, RoutedEventArgs e)
         {
             // files have .cod extension
             if (DLMan.currentDeck.Count > 0)
             {
+                // show a dialog to allow user to select file name and path
                 string fileName = "";
                 SaveFileDialog file = new SaveFileDialog();
                 file.OverwritePrompt = true;
@@ -424,7 +430,7 @@ namespace TopDeck
                         outputFile.WriteLine("    <deckname></deckname>");
                         outputFile.WriteLine("    <comments></comments>");
                         outputFile.WriteLine("    <zone name=\"main\">");
-                        //        <card number="1" price="0" name="Leyline of the Void"/>
+
                         foreach (LocalTuple card in DLMan.currentDeck)
                         {
                             outputFile.WriteLine("        <card number=\"" + card.Count + "\" price=\"0\" name=\"" + card.Name + "\"/>");
@@ -460,14 +466,12 @@ namespace TopDeck
             OpenRecentFile(2);
         }
 
+        // open one of the recent files and update UI
         private void OpenRecentFile(int index)
         {
             List<LocalTuple> cardNames = GetCardnamesFromFile(recentFiles[index]);
 
             DLMan.currentDeck = new ObservableCollection<LocalTuple>(cardNames);
-
-            //FiltersTab.FilterListPanel.CurrentDeck = DLMan.currentDeck;
-            //FiltersTab.FilterListPanel.Sideboard = DLMan.sideboard;
 
             DLMan.update();
 
@@ -475,8 +479,10 @@ namespace TopDeck
             HideOrShowProxiesButton();
         }
 
+        // export proxies to html file and open that file in browser
         private void PrintProxies_Click(object sender, RoutedEventArgs e)
         {
+            // show dialog to allow user to select name and path
             string fileName = "";
             SaveFileDialog file = new SaveFileDialog();
             file.OverwritePrompt = true;
@@ -486,6 +492,7 @@ namespace TopDeck
             file.Filter =
                 "html files (*.html)|*.html|All files (*.*)|*.*";
             bool? userClickedOK = file.ShowDialog();
+
             if (userClickedOK == true)
             {
                 fileName = file.FileName;
@@ -499,6 +506,7 @@ namespace TopDeck
             }
         }
 
+        // creates html file of images
         private void CreateProxyFile(string fileName)
         {
             using (StreamWriter outputFile = new StreamWriter(fileName))
@@ -525,9 +533,12 @@ namespace TopDeck
                 outputFile.WriteLine("</body>");
                 outputFile.WriteLine("</html>");
             }
+
+            // open the html file in the browser
             System.Diagnostics.Process.Start(fileName);
         }
 
+        // if no cards are in the deck, don't allow user to generate proxies
         private void HideOrShowProxiesButton()
         {
             if (DLMan.currentDeck.Count > 0)

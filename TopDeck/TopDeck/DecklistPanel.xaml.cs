@@ -16,9 +16,6 @@ using System.Collections.ObjectModel;
 
 namespace TopDeck
 {
-    /// <summary>
-    /// Interaction logic for DecklistPanel.xaml
-    /// </summary>
     public partial class DecklistPanel : UserControl
     {
 
@@ -72,6 +69,8 @@ namespace TopDeck
         //update the CardPanel to show the selected card
         private void theList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            // display the correct card based on whether they want to see one from the sideboard
+            // or from the main deck
             if (theSideboard.SelectedItem != null)
             {
                 theSideboard.SelectedItem = null;
@@ -81,6 +80,8 @@ namespace TopDeck
                 LocalTuple tempTuple = (LocalTuple) theList.SelectedItem;
                 Card c = DBMan.GetACardFromMultiverseId(tempTuple.MultiverseId);
                 RightPanel.setCard(c);
+
+                // display non-default image if the card has images associated with it
                 if (c.MultiverseIds.Count > 0)
                 {
                     RightPanel.UpdateImage(tempTuple.MultiverseId);

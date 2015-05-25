@@ -964,7 +964,6 @@
             <Setter Property="Width" Value="0"/>
         </Style>
         
-        <!-- HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE -->
         <ControlTemplate x:Key="LegendControlTemplateColors" TargetType="{x:Type visualization:Legend}">
         	<Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="2">
         		<Grid>
@@ -994,7 +993,6 @@
                 </Grid>
             </Border>
         </ControlTemplate>
-        <!-- HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE -->
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>

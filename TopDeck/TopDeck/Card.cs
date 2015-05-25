@@ -8,11 +8,6 @@ namespace TopDeck
 {
     public class Card
     {
-        public Card()
-        {
-
-        }
-
         public string Name { get; set; }
         public double CMC { get; set; }
         public List<string> Colors { get; set; }
