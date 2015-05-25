@@ -22,6 +22,7 @@ namespace TopDeck
     public partial class CardPanel : UserControl
     {
 
+        //card shown in the card panel
         public Card selectedCard
         {
             get;
@@ -34,14 +35,16 @@ namespace TopDeck
             RulingsButtonBorder.Visibility = System.Windows.Visibility.Hidden;
         }
 
+        //stop displaying card
         public void Clear()
         {
-            RulesText.Text = "";
-            UpdateImage(null);
-            RulingsListView.ItemsSource = null;
+            RulesText.Text = "";                    //no rules text
+            UpdateImage(null);                      //image to default image
+            RulingsListView.ItemsSource = null;     //no rulings
             RulingsButtonBorder.Visibility = System.Windows.Visibility.Hidden;
         }
 
+        //display card
         public void setCard(Card c)
         {
             selectedCard = c;
@@ -59,6 +62,7 @@ namespace TopDeck
             SetList.ItemsSource = c.MultiverseIds;
         }
 
+        //set the image by multiverse ID
         public void UpdateImage(string id)
         {
             BitmapImage img = new BitmapImage();
@@ -84,6 +88,7 @@ namespace TopDeck
             
         }
 
+        //get multiverse ID by the selected set
         public string CurrentMultiverseId()
         {
             if (SetList.SelectedItem != null)
@@ -94,11 +99,13 @@ namespace TopDeck
             return null;
         }
 
+        //show ruling popup
         private void RulingsClick(object sender, RoutedEventArgs e)
         {
             RulingPopup.IsOpen = true;
         }
 
+        //update the image when the user clicks a set name
         private void SetList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (SetList.SelectedItem != null)

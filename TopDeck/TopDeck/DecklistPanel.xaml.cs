@@ -45,17 +45,20 @@ namespace TopDeck
             InitializeComponent();
         }
 
+        //update panel to show changes to the list
         public void updatePanel()
         {
             setItemsSource();
             setSideboardItemsSource();
         }
 
+        //set the list of card names
         public void setItemsSource()
         {
             theList.ItemsSource = DLMan.currentDeck;
         }
 
+        //set the sideboard list of card names
         public void setSideboardItemsSource()
         {
             theSideboard.ItemsSource = DLMan.sideboard;
@@ -66,6 +69,7 @@ namespace TopDeck
             DBMan = db;
         }
 
+        //update the CardPanel to show the selected card
         private void theList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (theSideboard.SelectedItem != null)
@@ -84,6 +88,7 @@ namespace TopDeck
             }
         }
 
+        //increment the selected card
         private void PlusButton_Click(object sender, RoutedEventArgs e)
         {
 
@@ -99,6 +104,7 @@ namespace TopDeck
             }
         }
 
+        //decrement the selected card. remove if zero
         private void MinusButton_Click(object sender, RoutedEventArgs e)
         {
             if (theList.SelectedItem != null)
@@ -124,6 +130,7 @@ namespace TopDeck
             }
         }
 
+        //update CardPanel to show selected card
         private void theSideboard_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (theList.SelectedItem != null)
@@ -142,6 +149,7 @@ namespace TopDeck
             }
         }
 
+        //increment/add card in sideboard
         private void AddSideboardButton_Click(object sender, RoutedEventArgs e)
         {
             if (theList.SelectedItem != null)
