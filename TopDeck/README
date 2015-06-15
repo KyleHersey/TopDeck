@@ -1,0 +1,12 @@
+To load TopDeck while in Visual Studio, please open the .sln file in this 
+folder.
+
+If you encounter any errors while attempting to run relating to 
+"missing keys", please go to Solution Explorer (Window on top right)
+ -> Properties -> Signing, and uncheck the "Sign the ClickOnce manifests".
+
+Please run in Debug mode.
+
+If you still have errors, please feel free to email us.
+
+Thanks and enjoy!

@@ -433,19 +433,10 @@ namespace TopDeck
                            from CARD
                            where name like @name
                            and hand like @hand
-                           and cmc like @cmc
-                           and loyalty like @loyalty
                            and (flavor like @flavor or flavor is null)";
 
             if (!cardText.Equals("")) {
                 sqlCard += @" and card_text like @cardText";
-            }
-
-            // use toughness and power only if the type of this card should be "creature"
-            if (types != null && types.Contains("Creature"))
-            {
-                sqlCard += @" and toughness like @toughness
-                             and power like @power";
             }
 
             if (reserved == true)
@@ -457,19 +448,11 @@ namespace TopDeck
             cmd.CommandText = sqlCard;
             cmd.Parameters.Add(new SQLiteParameter("@name") { Value = "%" + name + "%" });
             cmd.Parameters.Add(new SQLiteParameter("@hand") { Value = "%" + hand + "%"});
-            cmd.Parameters.Add(new SQLiteParameter("@cmc") { Value = "%" + cmc + "%" });
-            cmd.Parameters.Add(new SQLiteParameter("@loyalty") { Value = "%" + loyalty + "%"});
             cmd.Parameters.Add(new SQLiteParameter("@flavor") { Value = "%" + flavor + "%"});
             
             if (!cardText.Equals(""))
             {
                 cmd.Parameters.Add(new SQLiteParameter("@cardText") { Value = "%" + cardText + "%"});
-            }
-
-            if (types != null && types.Contains("Creature"))
-            {
-                cmd.Parameters.Add(new SQLiteParameter("@toughness") { Value = "%" + toughness + "%" });
-                cmd.Parameters.Add(new SQLiteParameter("@power") { Value = "%" + power + "%" });
             }
 
             SQLiteDataReader reader = cmd.ExecuteReader();
@@ -690,7 +673,120 @@ namespace TopDeck
 
             cardNamesWithoutColors.IntersectWith(cardNamesWithArtists);
 
+            // power toughness loyalty converted manacost
+            if (!power.Equals(""))
+            {
+                List<string> withOps = ParseOperators("power", power);
+                if (withOps != null)
+                {
+                    cardNamesWithoutColors.IntersectWith(withOps);
+                }
+            }
+
+            if (!toughness.Equals(""))
+            {
+                List<string> withOps = ParseOperators("toughness", toughness);
+                if (withOps != null)
+                {
+                    cardNamesWithoutColors.IntersectWith(withOps);
+                }
+            }
+
+            if (!loyalty.Equals(""))
+            {
+                List<string> withOps = ParseOperators("loyalty", loyalty);
+                if (withOps != null)
+                {
+                    cardNamesWithoutColors.IntersectWith(withOps);
+                }
+            }
+
+            if (!cmc.Equals(""))
+            {
+                List<string> withOps = ParseOperators("cmc", cmc);
+                if (withOps != null)
+                {
+                    cardNamesWithoutColors.IntersectWith(withOps);
+                }
+            }
+
             return cardNamesWithoutColors.ToList(); 
+        }
+
+        public List<string> ParseOperators(string fieldType, string query)
+        {
+            List<string> cardsFound = new List<string>();
+            string searchBy = "";
+            string ops = "";
+            query = query.Trim();
+            if (query[0] == '<' || query[0] == '>')
+            {
+                if (query[1] == '=' && Regex.IsMatch(query.Substring(2), @"^\d+$"))
+                {
+                    searchBy = query.Substring(2);
+                    ops = query.Substring(0, 2);
+                }
+                else if (Regex.IsMatch(query.Substring(1), @"^\d+$"))
+                {
+                    searchBy = query.Substring(1);
+                    ops = query.Substring(0, 1);
+                } 
+                else 
+                {
+                    return null;
+                }
+            }
+            else if (Regex.IsMatch(query, @"^\d+$"))
+            {
+                cardsFound.AddRange(GetMatches(fieldType, Int32.Parse(query)));
+                return cardsFound;
+            }
+            else
+            {
+                return null;
+            }
+
+
+            if (ops[0] == '<')
+            {
+                for (int i = 0; i < Int32.Parse(searchBy); i++)
+                {
+                    cardsFound.AddRange(GetMatches(fieldType, i));
+                }
+            }
+            else if (ops[0] == '>')
+            {
+                for (int i = Int32.Parse(searchBy) + 1; i < 16; i++)
+                {
+                    cardsFound.AddRange(GetMatches(fieldType, i));
+                }
+            }
+
+            if (ops.Length > 1 && ops[1] == '=')
+            {
+                cardsFound.AddRange(GetMatches(fieldType, Int32.Parse(searchBy)));
+            }
+
+            return cardsFound;
+        }
+
+        public List<String> GetMatches(string fieldType, int fieldValue)
+        {
+            List<string> cardsFound = new List<string>();
+            string sql = @"select name
+                                    from CARD
+                                    where " + fieldType + " = @fieldtype";
+
+            var cmd = dbConnection.CreateCommand();
+            cmd.CommandText = sql;
+            cmd.Parameters.Add(new SQLiteParameter("@fieldtype") { Value = fieldValue });
+
+            SQLiteDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+                cardsFound.Add((string)reader["name"]);
+
+            return cardsFound;
         }
 
         // gets a card object by name
