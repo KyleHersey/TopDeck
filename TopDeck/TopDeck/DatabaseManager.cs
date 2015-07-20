@@ -414,7 +414,7 @@ namespace TopDeck
             string cmc, string multiverseId, string loyalty, List<string> rarities, 
             string flavor, string artist, string power, string cardText, 
             List<string> types, bool reserved, bool requireMultiColor, bool excludeUnselected,
-            List<string> colors, List<string> subtypes, List<string> supertypes)
+            string legality, List<string> setNames, List<string> colors, List<string> subtypes, List<string> supertypes)
         {
             if (multiverseId != null)
             {
@@ -673,7 +673,6 @@ namespace TopDeck
 
             cardNamesWithoutColors.IntersectWith(cardNamesWithArtists);
 
-            // power toughness loyalty converted manacost
             if (!power.Equals(""))
             {
                 List<string> withOps = ParseOperators("power", power);
@@ -708,6 +707,63 @@ namespace TopDeck
                 {
                     cardNamesWithoutColors.IntersectWith(withOps);
                 }
+            }
+
+            if (setNames.Count > 0)
+            {
+                HashSet<string> allCardNamesFromSets = new HashSet<string>();
+                for (int i = 0; i < setNames.Count; i++)
+                {
+                    string sqlSetName = @"select name
+                                          from MULTIVERSEID_SET
+                                          where setName like @set";
+                    cmd = dbConnection.CreateCommand();
+                    cmd.CommandText = sqlSetName;
+                    cmd.Parameters.Add(new SQLiteParameter("@set") { Value = "%" + setNames[i] + "%" });
+
+                    reader = cmd.ExecuteReader();
+
+                    HashSet<string> cardNamesFromSet = new HashSet<string>();
+                    while (reader.Read())
+                    {
+                       cardNamesFromSet.Add((string)reader["name"]);
+                    }
+
+                    reader.Close();
+
+                    allCardNamesFromSets.UnionWith(cardNamesFromSet);
+                }
+
+                cardNamesWithoutColors.IntersectWith(allCardNamesFromSets);
+            }
+
+            // if card is not in legalities table, it is banned
+            // if card is restricted, it is legal
+
+            // first check for restricted or legal
+            if (!legality.Equals(""))
+            {
+                string sqlLegality = @"select name, legality_for_format
+                                 from LEGALITIES
+                                 where name like @name
+                                 and format like @legality";
+                cmd = dbConnection.CreateCommand();
+                cmd.CommandText = sqlLegality;
+                cmd.Parameters.Add(new SQLiteParameter("@name") { Value = "%" + name + "%" });
+                cmd.Parameters.Add(new SQLiteParameter("@legality") { Value = "%" + legality + "%" });
+
+                reader = cmd.ExecuteReader();
+
+                HashSet<string> cardNamesWithLegality = new HashSet<string>();
+                while (reader.Read())
+                {
+                    if (((string)reader["legality_for_format"]).Equals("Legal") || ((string)reader["legality_for_format"]).Equals("Restricted"))
+                        cardNamesWithLegality.Add((string)reader["name"]);
+                }
+
+                reader.Close();
+
+                cardNamesWithoutColors.IntersectWith(cardNamesWithLegality);
             }
 
             return cardNamesWithoutColors.ToList(); 

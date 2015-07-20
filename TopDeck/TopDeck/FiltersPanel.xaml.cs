@@ -43,6 +43,7 @@ namespace TopDeck
             List<string> colors = new List<string>();
             bool requireMulticolor = false;
             bool excludeUnselected = false;
+            string legality = "";
             Debug.WriteLine("clicked");
             if (RedColor.isChecked() == true)
             {
@@ -127,6 +128,44 @@ namespace TopDeck
                 rarities.Add("Mythic");
             }
 
+            switch (Legality.SelectedIndex)
+            {
+                case 0:
+                    legality = "";
+                    break;
+                case 1:
+                    legality = "modern";
+                    break;
+                case 2:
+                    legality = "legacy";
+                    break;
+                case 3:
+                    legality = "vintage";
+                    break;
+                case 4:
+                    legality = "freeform";
+                    break;
+                case 5:
+                    legality = "prismatic";
+                    break;
+                case 6:
+                    legality = "tribal";
+                    break;
+                case 7:
+                    legality = "singleton";
+                    break;
+                case 8:
+                    legality = "commander";
+                    break;
+                default: break;
+            }
+
+            List<string> setNames = Sets.Input.Text.Split(',').ToList<string>();
+            for (int i = 0; i < setNames.Count; i++)
+            {
+                setNames[i] = setNames[i].Trim();
+            }
+
             MiddlePanel.setItemsSource(DBMan.GetCards(
                 NameFilterField.Input.Text,                 //Name
                 ToughnessFilterField.Input.Text,            //Toughness
@@ -143,6 +182,8 @@ namespace TopDeck
                 Reserved.isChecked(),
                 requireMulticolor,                          //Require Multicolored
                 excludeUnselected,                          //Exclude Unselected
+                legality,                                   //Legality
+                setNames,
                 colors,                                     //Colors
                 subtypes,                                   //Subtype
                 supertypes));                               //Supertype

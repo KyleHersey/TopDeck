@@ -89,9 +89,19 @@
         
         <local:FilterRowTextBox x:Name="Flavor" FilterText="Flavor" Grid.Row="11"/>
         
-        <local:FilterRowTextBox x:Name="Printing" FilterText="Printing" Grid.Row="12"/>
+        <local:FilterRowTextBox x:Name="Sets" FilterText="Sets" Grid.Row="12"/>
 
-        <local:FilterRowTextBox x:Name="Legality" FilterText="Legality" Grid.Row="13"/>
+        <ComboBox x:Name="Legality" Grid.Row="13" Margin="10, 5, 10, 5">
+            <ComboBoxItem>None</ComboBoxItem>
+            <ComboBoxItem>Modern</ComboBoxItem>
+            <ComboBoxItem>Legacy</ComboBoxItem>
+            <ComboBoxItem>Vintage</ComboBoxItem>
+            <ComboBoxItem>Freeform</ComboBoxItem>
+            <ComboBoxItem>Prismatic</ComboBoxItem>
+            <ComboBoxItem>Tribal</ComboBoxItem>
+            <ComboBoxItem>Singleton</ComboBoxItem>
+            <ComboBoxItem>Commander</ComboBoxItem>
+        </ComboBox>
 
         <local:FilterRowCheckBox x:Name="Reserved" FilterText="Reserved" Grid.Row="14"/>
 
