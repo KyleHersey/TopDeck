@@ -78,12 +78,19 @@ namespace TopDeck
         public void RecentFilesTabSetup()
         {
             recentFiles = new List<string>();
-            using (StreamReader file = new StreamReader("recentFiles.txt"))
+            if (File.Exists("recentFiles.txt"))
             {
-                while (!file.EndOfStream)
+                using (StreamReader file = new StreamReader("recentFiles.txt"))
                 {
-                    recentFiles.Add(file.ReadLine());
+                    while (!file.EndOfStream)
+                    {
+                        recentFiles.Add(file.ReadLine());
+                    }
                 }
+            }
+            else
+            {
+                File.Create("recentFiles.txt");
             }
 
             // hide the ability to pick recents until we know that we
