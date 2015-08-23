@@ -59,6 +59,7 @@ namespace TopDeck
             decklistPanel.setSideboardItemsSource();
             decklistPanel.theList.Items.Refresh();
             decklistPanel.theSideboard.Items.Refresh();
+            decklistPanel.UpdateCardCounts();
 
             statsPanel.updateStats();
         }
@@ -69,24 +70,24 @@ namespace TopDeck
         }
 
         //tell the stats panel to add a card from the deck
-        public void addCard(String name)
+        public void addCard(LocalTuple selectedCard)
         {
             foreach (LocalTuple card in currentDeck)
             {
-                if (card.Name.Equals(name))
+                if (card.Name.Equals(selectedCard.Name) && card.MultiverseId.Equals(selectedCard.MultiverseId))
                 {
                     card.Count++;
                 }
             }
             decklistPanel.theList.Items.Refresh();
-            statsPanel.addCard(name);
+            statsPanel.addCard(selectedCard.Name);
         }
 
-        public void addCardToSideboard(String name)
+        public void addCardToSideboard(LocalTuple selectedCard)
         {
             foreach (LocalTuple card in sideboard)
             {
-                if (card.Name.Equals(name))
+                if (card.Name.Equals(selectedCard.Name) && card.MultiverseId.Equals(selectedCard.MultiverseId))
                 {
                     card.Count++;
                 }

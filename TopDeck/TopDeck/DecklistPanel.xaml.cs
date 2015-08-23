@@ -49,6 +49,50 @@ namespace TopDeck
             setSideboardItemsSource();
         }
 
+        // passing in 0 causes the count of the deck to be returned.
+        // passing in 1 causes the count of the sideboard to be returned.
+        public String TotalCardCount(int listToUpdate)
+        {
+            if (listToUpdate == 0)
+            {
+                if (DLMan.sideboard == null)
+                {
+                    return "0 Card(s)";
+                }
+
+                return CountCards(DLMan.currentDeck) + " Card(s)";
+            }
+            else if (listToUpdate == 1)
+            {
+                if (DLMan.sideboard == null)
+                {
+                    return "0 Card(s)";
+                }
+
+                return CountCards(DLMan.sideboard) + " Card(s)";
+            }
+
+            return "0 Card(s)";
+        }
+
+        public int CountCards(ObservableCollection<LocalTuple> listToCount)
+        {
+            int count = 0;
+            List<LocalTuple> currentList = listToCount.ToList<LocalTuple>();
+            foreach (LocalTuple currentTuple in currentList)
+            {
+                count += currentTuple.Count;
+            }
+
+            return count;
+        }
+
+        public void UpdateCardCounts()
+        {
+            DeckTotalCards.Text = TotalCardCount(0);
+            SideboardTotalCards.Text = TotalCardCount(1);
+        }
+
         //set the list of card names
         public void setItemsSource()
         {
@@ -96,12 +140,16 @@ namespace TopDeck
             if (theList.SelectedItem != null)
             {
                 LocalTuple cardTuple = (LocalTuple)theList.SelectedItem;
-                DLMan.addCard(cardTuple.Name);
+                DLMan.addCard(cardTuple);
+
+                DeckTotalCards.Text = TotalCardCount(0);
             }
             else if (theSideboard.SelectedItem != null)
             {
                 LocalTuple cardTuple = (LocalTuple)theSideboard.SelectedItem;
-                DLMan.addCardToSideboard(cardTuple.Name);
+                DLMan.addCardToSideboard(cardTuple);
+
+                SideboardTotalCards.Text = TotalCardCount(1);
             }
         }
 
@@ -118,6 +166,8 @@ namespace TopDeck
                     DLMan.currentDeck.Remove(cardTuple);
                 }
                 DLMan.removeCard(cardTuple.Name);
+
+                DeckTotalCards.Text = TotalCardCount(0);
             } 
             else if (theSideboard.SelectedItem != null)
             {
@@ -128,6 +178,9 @@ namespace TopDeck
                 {
                     DLMan.sideboard.Remove(cardTuple);
                 }
+
+
+                SideboardTotalCards.Text = TotalCardCount(1);
             }
         }
 
@@ -173,6 +226,7 @@ namespace TopDeck
                 }
             }
             theSideboard.Items.Refresh();
+            SideboardTotalCards.Text = TotalCardCount(1);
         }
     }
 }
