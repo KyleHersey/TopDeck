@@ -13,8 +13,8 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <local:FiltersPanel x:Name="FilterFiltersPanel" Grid.Column="0" BorderThickness="0, 0, 1, 0" BorderBrush="#2f4f4f"/>
-        <local:ListPanel x:Name="FilterListPanel" Grid.Column="1" BorderThickness="1, 0, 1, 0" BorderBrush="#2f4f4f"/>
-        <local:CardPanel x:Name="CardPanel" Grid.Column="2" BorderThickness="1, 0, 0, 0" BorderBrush="#2f4f4f"/>
+        <local:FiltersPanel x:Name="FilterFiltersPanel" Grid.Column="0" BorderThickness="0, 0, 1, 0" BorderBrush="{StaticResource panelBrush}"/>
+        <local:ListPanel x:Name="FilterListPanel" Grid.Column="1" BorderThickness="1, 0, 1, 0" BorderBrush="{StaticResource panelBrush}"/>
+        <local:CardPanel x:Name="CardPanel" Grid.Column="2" BorderThickness="1, 0, 0, 0" BorderBrush="{StaticResource panelBrush}"/>
     </Grid>
 </UserControl>

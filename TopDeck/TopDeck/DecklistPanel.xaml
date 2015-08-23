@@ -18,7 +18,14 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" Margin="12,5,0,5">Deck</TextBlock>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="0" Margin="12,5,0,5" Grid.Column="0">Deck</TextBlock>
+                <TextBlock Grid.Column="1" Margin="0,5,0,5" HorizontalAlignment="Right" Text="0 Card(s)" x:Name="DeckTotalCards"/>
+            </Grid>
             <ListBox ScrollViewer.HorizontalScrollBarVisibility="Hidden" Name="theList" Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Visible" Margin="10, 0, 0, 20" SelectionChanged="theList_SelectionChanged">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
@@ -33,7 +40,14 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <TextBlock Grid.Row="2" Margin="12,0,0,5">Sideboard</TextBlock>
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="2" Margin="12,0,0,5" Grid.Column="0">Sideboard</TextBlock>
+                <TextBlock x:Name="SideboardTotalCards" Grid.Column="1" Margin="0,0,0,5" HorizontalAlignment="Right" Text="0 Card(s)"/>
+            </Grid>
             <ListBox ScrollViewer.HorizontalScrollBarVisibility="Hidden" Name="theSideboard" Grid.Row="3" ScrollViewer.VerticalScrollBarVisibility="Visible" Margin="10, 0, 0, 20" SelectionChanged="theSideboard_SelectionChanged">
                 <ListBox.ItemTemplate>
                     <DataTemplate>

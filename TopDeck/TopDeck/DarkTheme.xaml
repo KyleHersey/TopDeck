@@ -254,6 +254,9 @@
         </Style.Triggers>
     </Style>
 
+    <SolidColorBrush Color="#2f4f4f" x:Key="panelBrush"/>
+    <SolidColorBrush Color="LightBlue" x:Key="buttonBrush"/>
+
     <Style TargetType="TextBox">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="LightBlue"/>

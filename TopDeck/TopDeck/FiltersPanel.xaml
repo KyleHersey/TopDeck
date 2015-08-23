@@ -27,17 +27,18 @@
 
         <Button x:Name="SearchButton" Margin="10, 5, 10, 5" Content="Search" Click="FilterQuery" Grid.Row="0"/>
         
-        <local:FilterRowTextBox x:Name="NameFilterField" FilterText="Name" Grid.Row="1"/>
+        <local:FilterRowTextBox x:Name="NameFilterField" FilterText="Name" Grid.Row="1" KeyUp="NameFilterField_KeyUp" />
+
+        <local:FilterRowTextBox x:Name="MultiverseID" FilterText="Multiverse ID" Grid.Row="2" KeyUp="NameFilterField_KeyUp"/>
         
-        <local:FilterRowTextBox x:Name="MultiverseID" FilterText="Multiverse ID" Grid.Row="2"/>
-        
+        <!-- TODO make this update dynamically -->
         <Grid Name="ColorSpecifiers" Grid.Row="3">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <WrapPanel Name="ColorFilters" Orientation="Horizontal" Grid.Row="0">
+            <WrapPanel Name="ColorFilters" Orientation="Horizontal" Grid.Row="0" >
                 <local:FilterRowCheckBox x:Name="WhiteColor" FilterText="White"/>
                 <local:FilterRowCheckBox x:Name="BlueColor" FilterText="Blue"/>
                 <local:FilterRowCheckBox x:Name="BlackColor" FilterText="Black"/>
@@ -49,10 +50,11 @@
             <local:FilterRowCheckBox x:Name="ExcludeUnselected" FilterText="Exclude Unselected" Grid.Row="2"/>
         </Grid>
 
-        <local:FilterRowTextBox x:Name="ConvertedManaCostFilterField" FilterText="Converted Mana Cost" Grid.Row="4"/>
+        <local:FilterRowTextBox x:Name="ConvertedManaCostFilterField" FilterText="Converted Mana Cost" Grid.Row="4" KeyUp="NameFilterField_KeyUp"/>
+
+        <local:FilterRowTextBox x:Name="Supertypes" FilterText="Supertype" Grid.Row="5" KeyUp="NameFilterField_KeyUp"/>
         
-        <local:FilterRowTextBox x:Name="Supertypes" FilterText="Supertype" Grid.Row="5"/>
-        
+        <!-- TODO make this update dynamically -->
         <Grid Grid.Row="6">
             <Grid.RowDefinitions>
                 <RowDefinition Height="2*"/>
@@ -69,28 +71,30 @@
                 <local:FilterRowCheckBox x:Name="LandCheckbox" FilterText="Land"/>
                 <local:FilterRowCheckBox x:Name="PlaneswalkerCheckbox" FilterText="Planeswalker" Margin="0,15,0,0"/>
             </WrapPanel>
-            <local:FilterRowTextBox x:Name="PowerFilterField" FilterText="Power" Grid.Row="1"/>
-            <local:FilterRowTextBox x:Name="ToughnessFilterField" FilterText="Toughness" Grid.Row="2"/>
-            <local:FilterRowTextBox x:Name="LoyaltyFilterField" FilterText="Loyalty" Grid.Row="3"/>
+            <local:FilterRowTextBox x:Name="PowerFilterField" FilterText="Power" Grid.Row="1" KeyUp="NameFilterField_KeyUp"/>
+            <local:FilterRowTextBox x:Name="ToughnessFilterField" FilterText="Toughness" Grid.Row="2" KeyUp="NameFilterField_KeyUp"/>
+            <local:FilterRowTextBox x:Name="LoyaltyFilterField" FilterText="Loyalty" Grid.Row="3" KeyUp="NameFilterField_KeyUp"/>
         </Grid>
 
-        <local:FilterRowTextBox x:Name="SubtypeTextbox" FilterText="Subtypes" Grid.Row="7"/>
+        <local:FilterRowTextBox x:Name="SubtypeTextbox" FilterText="Subtypes" Grid.Row="7" KeyUp="NameFilterField_KeyUp"/>
+
+        <local:FilterRowTextBox x:Name="Text" FilterText="Text" Grid.Row="8" KeyUp="NameFilterField_KeyUp"/>
         
-        <local:FilterRowTextBox x:Name="Text" FilterText="Text" Grid.Row="8"/>
-        
+        <!-- TODO make this update dynamically -->
         <WrapPanel Name="Rarities" Orientation="Horizontal" Grid.Row="9">
             <local:FilterRowCheckBox x:Name="Common" FilterText="Common"/>
             <local:FilterRowCheckBox x:Name="Uncommon" FilterText="Uncommon"/>
             <local:FilterRowCheckBox x:Name="Rare" FilterText="Rare"/>
             <local:FilterRowCheckBox x:Name="MythicRare" FilterText="Mythic Rare"/>
         </WrapPanel>
-        
-        <local:FilterRowTextBox x:Name="Artist" FilterText="Artist" Grid.Row="10"/>
-        
-        <local:FilterRowTextBox x:Name="Flavor" FilterText="Flavor" Grid.Row="11"/>
-        
-        <local:FilterRowTextBox x:Name="Sets" FilterText="Sets" Grid.Row="12"/>
 
+        <local:FilterRowTextBox x:Name="Artist" FilterText="Artist" Grid.Row="10" KeyUp="NameFilterField_KeyUp"/>
+
+        <local:FilterRowTextBox x:Name="Flavor" FilterText="Flavor" Grid.Row="11" KeyUp="NameFilterField_KeyUp"/>
+
+        <local:FilterRowTextBox x:Name="Sets" FilterText="Sets" Grid.Row="12" KeyUp="NameFilterField_KeyUp"/>
+
+        <!-- TODO make this update dynamically -->
         <ComboBox x:Name="Legality" Grid.Row="13" Margin="10, 5, 10, 5">
             <ComboBoxItem>None</ComboBoxItem>
             <ComboBoxItem>Modern</ComboBoxItem>
@@ -103,6 +107,7 @@
             <ComboBoxItem>Commander</ComboBoxItem>
         </ComboBox>
 
+        <!-- TODO make this update dynamically -->
         <local:FilterRowCheckBox x:Name="Reserved" FilterText="Reserved" Grid.Row="14"/>
 
     </Grid>

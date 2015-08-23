@@ -193,5 +193,15 @@ namespace TopDeck
         {
             DBMan = db;
         }
+
+        private void NameFilterField_KeyUp(object sender, KeyEventArgs e)
+        {
+            FilterQuery(null, null);
+        }
+
+        private void NameFilterField_KeyUp(object sender, MouseButtonEventArgs e)
+        {
+            FilterQuery(null, null);
+        }
     }
 }
