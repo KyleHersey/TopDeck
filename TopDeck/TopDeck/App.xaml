@@ -9,7 +9,7 @@
         <ResourceDictionary>
             <SolidColorBrush Color="#d0157820" x:Key="muddyBrush"/>
             <ResourceDictionary.MergedDictionaries>
-                <!--<ResourceDictionary Source="DarkTheme.xaml"/>-->
+                <ResourceDictionary Source="DarkTheme.xaml"/>
                 <ResourceDictionary Source="LightTheme.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

@@ -62,6 +62,21 @@
                         <TextBlock Style="{StaticResource MenuFont}">Update</TextBlock>
                     </MenuItem.Header>
                 </MenuItem>
+                <MenuItem>
+                    <MenuItem.Header>
+                        <TextBlock Style="{StaticResource MenuFont}">Theme</TextBlock>
+                    </MenuItem.Header>
+                    <MenuItem Click="LightTheme_Click">
+                        <MenuItem.Header>
+                            <TextBlock Style="{StaticResource MenuFont}">Light</TextBlock>
+                        </MenuItem.Header>
+                    </MenuItem>
+                    <MenuItem Click="DarkTheme_Click">
+                        <MenuItem.Header>
+                            <TextBlock Style="{StaticResource MenuFont}">Dark</TextBlock>
+                        </MenuItem.Header>
+                    </MenuItem>
+                </MenuItem>
             </MenuItem>
         </Menu>
         <TabControl>

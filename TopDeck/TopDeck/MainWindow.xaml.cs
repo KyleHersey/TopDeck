@@ -18,6 +18,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Collections.ObjectModel;
 using System.Reflection;
+using System.Windows.Markup;
 
 namespace TopDeck
 {
@@ -26,6 +27,7 @@ namespace TopDeck
         DecklistManager DLMan;
         DatabaseManager db;
         List<string> recentFiles;
+        string theme;
 
         public MainWindow()
         {
@@ -52,6 +54,25 @@ namespace TopDeck
             DeckTab.CardList.RightPanel = DeckTab.CardView;
             DeckTab.CardView.SetList.Visibility = System.Windows.Visibility.Collapsed;
 
+            if (File.Exists("theme.txt"))
+            {
+                using (StreamReader file = new StreamReader("theme.txt"))
+                {
+                    if (!file.EndOfStream && file.ReadLine().Equals("LightTheme.xaml"))
+                    {
+                        ChangeTheme(0);
+                    }
+                    else
+                    {
+                        ChangeTheme(1);
+                    }
+                }
+            }
+            else
+            {
+                ChangeTheme(1);
+            }
+
             DLMan.update();
 
             // start out the application with a new deck
@@ -71,6 +92,16 @@ namespace TopDeck
                 {
                     file.WriteLine(recentFile);
                 }
+            }
+
+            if (File.Exists("theme.txt"))
+            {
+                File.Delete("theme.txt");
+            }
+
+            using (StreamWriter file = new StreamWriter("theme.txt"))
+            {
+                file.WriteLine(theme);
             }
         }
 
@@ -556,6 +587,40 @@ namespace TopDeck
             {
                 ProxiesButton.Visibility = System.Windows.Visibility.Collapsed;
             }
+        }
+
+        private void LightTheme_Click(object sender, RoutedEventArgs e)
+        {
+            ChangeTheme(0);
+        }
+
+        private void DarkTheme_Click(object sender, RoutedEventArgs e)
+        {
+            ChangeTheme(1);
+        }
+
+        private void ChangeTheme(int themeChoice)
+        {
+            ResourceDictionary dict;
+            var assembly = Assembly.GetEntryAssembly() ?? Assembly.GetCallingAssembly();
+            var path = System.IO.Path.GetDirectoryName(assembly.Location);
+            path = path.Replace("bin\\Debug", "");
+            path = path.Replace("bin\\Release", "");
+
+            if (themeChoice == 0)
+            {
+                dict = (ResourceDictionary)XamlReader.Load(new FileStream(System.IO.Path.Combine(path, "LightTheme.xaml"), FileMode.Open));
+                theme = "LightTheme.xaml";
+            }
+            else
+            {
+                dict = (ResourceDictionary)XamlReader.Load(new FileStream(System.IO.Path.Combine(path, "DarkTheme.xaml"), FileMode.Open));
+                theme = "DarkTheme.xaml";
+            }
+
+            Application.Current.Resources.MergedDictionaries.Clear();
+            Application.Current.Resources.MergedDictionaries.Add(dict);
+
         }
     }
 }
