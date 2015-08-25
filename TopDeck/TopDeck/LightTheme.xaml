@@ -275,7 +275,7 @@
         <Setter Property="Foreground" Value="LightBlue"/>
     </Style>
 
-    <Style TargetType="{x:Type TabControl}" x:Name="TabCon">
+    <Style TargetType="{x:Type TabControl}">
         <Setter Property="Background" Value="White"/>
         <Setter Property="Foreground" Value="Black"/>
         <Setter Property="BorderThickness" Value="0"/>
@@ -316,8 +316,8 @@
                         <Grid>
                             <Grid>
                                 <Border x:Name="Panel" CornerRadius="3,3,0,0"
-                   BorderBrush="Black" 
-                   BorderThickness="0"/>
+                   BorderBrush="DarkGray" 
+                   BorderThickness="1"/>
                             </Grid>
                             <ContentPresenter ContentSource="Header" 
                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
@@ -330,7 +330,7 @@
                             <Setter TargetName="Panel" Property="Background" Value="White"/>
                         </Trigger>
                         <Trigger Property="IsSelected" Value="False">
-                            <Setter TargetName="Panel" Property="Background" Value="AliceBlue"/>
+                            <Setter TargetName="Panel" Property="Background" Value="LightGray"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
