@@ -5,13 +5,20 @@
              xmlns:visualizationToolkit="clr-namespace:System.Windows.Controls.DataVisualization;assembly=System.Windows.Controls.DataVisualization.Toolkit"
              xmlns:chartingprimitives="clr-namespace:System.Windows.Controls.DataVisualization.Charting.Primitives;assembly=System.Windows.Controls.DataVisualization.Toolkit"
              StartupUri="MainWindow.xaml">
+    
     <Application.Resources>
         <ResourceDictionary>
             <SolidColorBrush Color="#d0157820" x:Key="muddyBrush"/>
+            <Style TargetType="TextBlock" x:Key="MenuFont">
+                <Setter Property="Foreground" Value="Black"/>
+            </Style>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="DarkTheme.xaml"/>
                 <ResourceDictionary Source="LightTheme.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            
         </ResourceDictionary>
     </Application.Resources>
+    
+    
 </Application>

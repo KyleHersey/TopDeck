@@ -227,10 +227,6 @@
         <Setter Property="Foreground" Value="Black"/>
     </Style>
 
-    <Style x:Key="MenuFont" TargetType="TextBlock">
-        <Setter Property="Foreground" Value="Black"/>
-    </Style>
-
     <Style TargetType="MenuItem">
         <Setter Property="Foreground" Value="Black"/>
     </Style>
@@ -256,6 +252,7 @@
 
     <SolidColorBrush Color="#2f4f4f" x:Key="panelBrush"/>
     <SolidColorBrush Color="LightBlue" x:Key="buttonBrush"/>
+    <SolidColorBrush Color="#1F3434" x:Key="cardListBrush"/>
 
     <Style TargetType="TextBox">
         <Setter Property="Background" Value="Transparent"/>

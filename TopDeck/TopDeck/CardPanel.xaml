@@ -13,7 +13,7 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <Image x:Name="CardImage" Source="Magic_the_gathering-card_back.jpg" Grid.Column="0" Margin="10, 10, 10, 10" MaxWidth="300" MaxHeight="500"/>
-            <ListBox Grid.Column="1" x:Name="SetList" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionChanged="SetList_SelectionChanged" Margin="0, 10, 5, 5" Style="{StaticResource CardListBox}">
+            <ListBox Grid.Column="1" x:Name="SetList" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionChanged="SetList_SelectionChanged" Margin="0, 10, 5, 5" Style="{DynamicResource CardListBox}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Item1}"/>
@@ -28,7 +28,7 @@
         </Border>
         <Popup x:Name="RulingPopup" IsOpen="False" StaysOpen="False" PlacementTarget="{Binding ElementName=RulingsButton}">
             <DockPanel>
-                <ListBox x:Name="RulingsListView" Style="{StaticResource RulingsListBox}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListBox x:Name="RulingsListView" Style="{DynamicResource RulingsListBox}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 </ListBox>
             </DockPanel>
         </Popup>
