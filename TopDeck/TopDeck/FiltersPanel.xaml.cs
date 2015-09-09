@@ -203,5 +203,15 @@ namespace TopDeck
         {
             FilterQuery(null, null);
         }
+
+        private void Checkbox_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            FilterQuery(null, null);
+        }
+
+        private void ComboBox_DropDownClosed(object sender, EventArgs e)
+        {
+            FilterQuery(null, null);
+        }
     }
 }
