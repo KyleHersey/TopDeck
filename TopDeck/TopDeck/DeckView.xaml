@@ -12,8 +12,8 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <local:DecklistPanel x:Name="CardList" Grid.Column="0" BorderThickness="0, 0, 1, 0" BorderBrush="{StaticResource panelBrush}"/>
-        <local:CardPanel x:Name="CardView" Grid.Column="1" BorderThickness="1, 0, 1, 0" BorderBrush="{StaticResource panelBrush}"/>
-        <local:StatsPanel x:Name="DeckStats" Grid.Column="2" BorderThickness="1, 0, 0, 0" BorderBrush="{StaticResource panelBrush}"/>
+        <local:DecklistPanel x:Name="CardList" Grid.Column="0" BorderThickness="0, 0, 1, 0" BorderBrush="{DynamicResource panelBrush}"/>
+        <local:CardPanel x:Name="CardView" Grid.Column="1" BorderThickness="1, 0, 1, 0" BorderBrush="{DynamicResource panelBrush}"/>
+        <local:StatsPanel x:Name="DeckStats" Grid.Column="2" BorderThickness="1, 0, 0, 0" BorderBrush="{DynamicResource panelBrush}"/>
     </Grid>
 </UserControl>

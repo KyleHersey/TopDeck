@@ -210,6 +210,7 @@
 
     <SolidColorBrush Color="#a9a9a9" x:Key="panelBrush"/>
     <SolidColorBrush Color="Black" x:Key="buttonBrush"/>
+    <SolidColorBrush Color="AliceBlue" x:Key="cardListBrush"/>
 
     <Style TargetType="DockPanel">
         <Setter Property="Background" Value="#f1f1f1"/>
@@ -231,10 +232,6 @@
         <Setter Property="Foreground" Value="White"/>
     </Style>
 
-    <Style x:Key="MenuFont" TargetType="TextBlock">
-        <Setter Property="Foreground" Value="Black"/>
-    </Style>
-
     <Style TargetType="MenuItem">
         <Setter Property="Foreground" Value="White"/>
     </Style>
@@ -247,7 +244,7 @@
 
     <Style x:Key="CardListBox" TargetType="ListBox">
         <Setter Property="Background" Value="AliceBlue"/>
-        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="BorderBrush" Value="Black"/>
         <Style.Triggers>
             <DataTrigger 

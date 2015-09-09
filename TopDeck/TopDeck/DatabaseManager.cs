@@ -29,7 +29,10 @@ namespace TopDeck
             CheckForJSON();
 
             // check if DB exists
-            createDBFile();
+            //createDBFile();
+
+            // check if db is there. If not, download it
+            DownloadDB();
             
         }
 
@@ -83,6 +86,49 @@ namespace TopDeck
             Debug.WriteLine("Deleting copy of json file");
             //File.Delete("AllCards-x2.json");
             return false;
+        }
+
+        public void Update()
+        {
+            dbConnection.Close();
+            if (File.Exists("SetsDB.sqlite"))
+            {
+                File.Delete("SetsDB.sqlite");
+            }
+            using (WebClient myClient = new WebClient())
+            {
+                Debug.WriteLine("Downloading new file");
+                myClient.DownloadFile("http://Emerald-Baldwin.github.io/SetsDB.sqlite", "SetsDB.sqlite");
+                Debug.WriteLine("Downloaded file");
+            }
+
+            // connect to the database, stored in a connection object
+            // the string sets up the file we will be using
+            dbConnection = new SQLiteConnection("Data Source=SetsDB.sqlite;Version=3;");
+
+            // open the database, need to close later
+            dbConnection.Open();
+        }
+
+        public void DownloadDB()
+        {
+            if (!File.Exists("SetsDB.sqlite"))
+            {
+                using (WebClient myClient = new WebClient())
+                {
+                    Debug.WriteLine("Downloading new file");
+                    myClient.DownloadFile("http://Emerald-Baldwin.github.io/SetsDB.sqlite", "SetsDB.sqlite");
+                    Debug.WriteLine("Downloaded file");
+                }
+            }
+            // connect to the database, stored in a connection object
+            // the string sets up the file we will be using
+            dbConnection = new SQLiteConnection("Data Source=SetsDB.sqlite;Version=3;");
+
+            // open the database, need to close later
+            dbConnection.Open();
+
+            Debug.WriteLine("db file was opened");
         }
 
         // create the database, if needed

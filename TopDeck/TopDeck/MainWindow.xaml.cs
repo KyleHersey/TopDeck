@@ -434,7 +434,7 @@ namespace TopDeck
         // updates the database
         private void Update_Click(object sender, RoutedEventArgs e)
         {
-            db.UpdateDB();
+            db.Update();
         }
 
         // exports the deck to cockatrice

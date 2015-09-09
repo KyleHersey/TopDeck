@@ -73,21 +73,21 @@
             <StackPanel Grid.Row="1">
                 <Button x:Name="PlusButton"  Margin="5" Click="PlusButton_Click">
                     <Button.ToolTip>
-                        <TextBlock Style="{StaticResource MenuFont}">Add to deck</TextBlock>
+                        <TextBlock>Add to deck</TextBlock>
                     </Button.ToolTip>
                     <TextBlock FontSize="20">+</TextBlock>
                 </Button>
                 <Button x:Name="MinusButton" Margin="5" Click="MinusButton_Click">
                     <Button.ToolTip>
-                        <TextBlock Style="{StaticResource MenuFont}">Remove from deck</TextBlock>
+                        <TextBlock>Remove from deck</TextBlock>
                     </Button.ToolTip>
                     <TextBlock FontSize="20">-</TextBlock>
                 </Button>
                 <Button x:Name="AddSideboardButton" Margin="5" Click="AddSideboardButton_Click">
                     <Button.ToolTip>
-                        <TextBlock Style="{StaticResource MenuFont}">Add to sideboard</TextBlock>
+                        <TextBlock>Add to sideboard</TextBlock>
                     </Button.ToolTip>
-                    <Path Margin="5" Stroke="LightBlue" StrokeThickness="1" Fill="Gray" Data="M 3,0 L 20,0 M 20,0 L 20,16 M 20,16 L 3,16 M 0,8 L 13,8 M 13,8 L 10,13 M 13,8 L 10,3"/>
+                    <Path Margin="5" Stroke="{DynamicResource buttonBrush}" StrokeThickness="1" Fill="Gray" Data="M 3,0 L 20,0 M 20,0 L 20,16 M 20,16 L 3,16 M 0,8 L 13,8 M 13,8 L 10,13 M 13,8 L 10,3"/>
                 </Button>
             </StackPanel>
         </Grid>

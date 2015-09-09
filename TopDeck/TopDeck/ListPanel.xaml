@@ -22,15 +22,15 @@
             </Grid.RowDefinitions>
             <Button Margin="5" Click="AddToDeck_Click" Grid.Row="1">
                 <Button.ToolTip>
-                    <TextBlock Style="{StaticResource MenuFont}">Add to deck</TextBlock>
+                    <TextBlock>Add to deck</TextBlock>
                 </Button.ToolTip>
                 <TextBlock FontSize="20">+</TextBlock>
             </Button>
             <Button Margin="5" Grid.Row="2" Click="AddToSideBoard_Click">
                 <Button.ToolTip>
-                    <TextBlock Style="{StaticResource MenuFont}">Add to sideboard</TextBlock>
+                    <TextBlock>Add to sideboard</TextBlock>
                 </Button.ToolTip>
-                <Path Margin="5" Stroke="{StaticResource buttonBrush}" StrokeThickness="1" Fill="Gray" Data="M 3,0 L 20,0 M 20,0 L 20,16 M 20,16 L 3,16 M 0,8 L 13,8 M 13,8 L 10,13 M 13,8 L 10,3"/>
+                <Path Margin="5" Stroke="{DynamicResource buttonBrush}" StrokeThickness="1" Fill="Gray" Data="M 3,0 L 20,0 M 20,0 L 20,16 M 20,16 L 3,16 M 0,8 L 13,8 M 13,8 L 10,13 M 13,8 L 10,3"/>
             </Button>
         </Grid>
     </Grid>
