@@ -23,69 +23,11 @@ namespace TopDeck
         int hashedJSONFile;
         string mainJSONFileName = "AllSets-x.json";
 
-        public DatabaseManager() {
-
-            // first, check if our mtgjson file exists
-            CheckForJSON();
-
-            // check if DB exists
-            //createDBFile();
-
+        public DatabaseManager()
+        {
             // check if db is there. If not, download it
-            DownloadDB();
-            
-        }
+            LoadDB();
 
-        // check that we have the json file
-        public void CheckForJSON()
-        {
-            if (!File.Exists(mainJSONFileName))
-            {
-                Debug.WriteLine("Downloading file");
-                using (WebClient myClient = new WebClient())
-                {
-                    myClient.DownloadFile("http://mtgjson.com/json/AllSets-x.json", mainJSONFileName);
-                }
-                Debug.WriteLine("Finished!");
-            }
-
-            // has the json file to compare with later downloads
-            hashedJSONFile = HashJSON(mainJSONFileName);
-        }
-
-        // hashes a json file
-        public int HashJSON(string fileName)
-        {
-            string file = File.ReadAllText(fileName);
-            return file.GetHashCode();
-        }
-
-        // download a new file - if it is different from our old one,
-        // updated the DB
-        public bool DownloadNewFile() {
-            using (WebClient myClient = new WebClient()) {
-                Debug.WriteLine("Downloading new file");
-                myClient.DownloadFile("http://mtgjson.com/json/AllSets-x.json", "AllSets-x2.json");
-                Debug.WriteLine("Downloaded file");
-            }
-            if (hashedJSONFile != HashJSON("AllSets-x2.json")) {
-                dbConnection.Close();
-
-                if (File.Exists(mainJSONFileName))
-                {
-                    File.Delete(mainJSONFileName);
-                }
-                Debug.WriteLine("Copying the new file to the old file location");
-                /*File.Copy("AllCards-x2.json", mainJSONFileName);
-                Debug.WriteLine("Copied the new file");
-
-                Debug.WriteLine("Deleting database file");
-                File.Delete("TempDB.sqlite");*/
-                return true;
-            }
-            Debug.WriteLine("Deleting copy of json file");
-            //File.Delete("AllCards-x2.json");
-            return false;
         }
 
         public void Update()
@@ -110,7 +52,7 @@ namespace TopDeck
             dbConnection.Open();
         }
 
-        public void DownloadDB()
+        public void LoadDB()
         {
             if (!File.Exists("SetsDB.sqlite"))
             {
@@ -131,334 +73,10 @@ namespace TopDeck
             Debug.WriteLine("db file was opened");
         }
 
-        // create the database, if needed
-        public void createDBFile()
-        {
-            if (File.Exists("SetsDB.sqlite")) {
-                // connect to the database, stored in a connection object
-                // the string sets up the file we will be using
-                dbConnection = new SQLiteConnection("Data Source=SetsDB.sqlite;Version=3;");
-
-                // open the database, need to close later
-                dbConnection.Open();
-
-                Debug.WriteLine("db file was found");
-            }
-            else
-            {
-                Debug.WriteLine("db file not found");
-
-                // creates a new db file
-                SQLiteConnection.CreateFile("SetsDB.sqlite");
-
-                // connect to the database, stored in a connection object
-                // the string sets up the file we will be using
-                dbConnection = new SQLiteConnection("Data Source=SetsDB.sqlite;Version=3;");
-
-                dbConnection.Open();
-
-                try
-                {
-                    String mtgJSONText = File.ReadAllText("AllSets-x.json", Encoding.UTF8);
-
-                    // build our ARTISTS table
-                    string sql = @"create table ARTISTS
-                                   (name TEXT NOT NULL,
-                                    multiverse_id TEXT NOT NULL,
-                                    artist TEXT,
-                                    PRIMARY KEY(name, multiverse_id, artist))";
-                    CreateTable(sql);
-
-                    // build our RARITIES table
-                    sql = @"create table RARITIES
-                            (name TEXT NOT NULL,
-                             multiverse_id TEXT NOT NULL,
-                             rarity TEXT,
-                             PRIMARY KEY(name, multiverse_id, rarity))";
-                    CreateTable(sql);
-
-                    // build our RULINGS table
-                    sql = @"create table RULINGS
-                                   (name TEXT NOT NULL,
-                                    date TEXT NOT NULL,
-                                    ruling_text TEXT NOT NULL,
-                                    PRIMARY KEY(name, date, ruling_text))";
-                    CreateTable(sql);
-
-                    // build FOREIGN_NAMES table
-                   sql = @"create table FOREIGN_NAMES
-                            (name TEXT NOT NULL,
-                             foreign_name TEXT,
-                             language TEXT NOT NULL,
-                             PRIMARY KEY(name, language))";
-                    CreateTable(sql);
-
-                    // build LEGALITIES table
-                    sql = @"create table LEGALITIES
-                            (name TEXT NOT NULL,
-                             format TEXT NOT NULL,
-                             legality_for_format TEXT,
-                             PRIMARY KEY(name, format))";
-                    CreateTable(sql);
-
-                    // build COLORS table
-                    sql = @"create table COLORS 
-                            (name TEXT NOT NULL, 
-                             color TEXT, 
-                             PRIMARY KEY (name, color))";
-                    CreateTable(sql);
-
-                    // build SUBTYPES table
-                    sql = @"create table SUBTYPES 
-                            (name TEXT NOT NULL, 
-                             subtype TEXT, 
-                             PRIMARY KEY (name, subtype))";
-                    CreateTable(sql);
-
-                    // build TYPES table
-                    sql = @"create table TYPES 
-                            (name TEXT NOT NULL, 
-                             type TEXT, 
-                             PRIMARY KEY (name, type))";
-                    CreateTable(sql);
-
-                    // build SUPERTYPES table
-                    sql = @"create table SUPERTYPES 
-                            (name TEXT NOT NULL, 
-                             supertype TEXT, 
-                             PRIMARY KEY (name, supertype))";
-                    CreateTable(sql);
-
-                    // build MULTIVERSEID_SET table
-                    sql = @"create table MULTIVERSEID_SET
-                            (name TEXT NOT NULL,
-                             setName TEXT NOT NULL,
-                             multiverse_id TEXT,
-                             PRIMARY KEY (name, setName, multiverse_id))";
-                    CreateTable(sql);
-
-                    Debug.WriteLine("Creating card table");
-
-                    // build CARD table
-                    sql = @"create table CARD 
-                               (name TEXT NOT NULL, 
-                                toughness TEXT,
-                                manacost TEXT, 
-                                hand INTEGER, 
-                                cmc REAL,
-                                reserved NUMERIC,
-                                loyalty INTEGER,
-                                flavor TEXT, 
-                                power TEXT,
-                                card_text TEXT, 
-                                type TEXT, 
-                                PRIMARY KEY (name))";
-                    CreateTable(sql);
-
-                    JToken outer = JToken.Parse(mtgJSONText);
-
-                    List<String> elements = GetSetNames(mtgJSONText);
-
-                    Debug.WriteLine("Number of sets " + elements.Count);
-
-                    // this is a list of all of the cards we have seen previously
-                    List<String> cardsMet = new List<String>();
-
-                    var ser = new DataContractJsonSerializer(typeof(JSONDTO));
-                    for (int i = 0; i < elements.Count; i++)
-                    {
-                        JObject inner = outer[elements[i]].Value<JObject>();
-
-                        foreach (var cardInCards in inner["cards"].Children())
-                        {
-                            JObject cardJObject = JObject.Parse(cardInCards.ToString());
-                            if (!cardsMet.Contains(cardJObject["name"].ToString()))
-                            {
-                                AssembleDB(cardInCards, ser, cardJObject);
-                                cardsMet.Add(cardJObject["name"].ToString());
-                            }
-                            if (cardJObject["multiverseid"] != null)
-                            {
-                                AddMultiverseId(cardJObject["name"].ToString(), inner["name"].ToString(), cardJObject["multiverseid"].ToString());
-                                AddArtist(cardJObject["name"].ToString(), cardJObject["multiverseid"].ToString(), cardJObject["artist"].ToString());
-                                AddRarity(cardJObject["name"].ToString(), cardJObject["multiverseid"].ToString(), cardJObject["rarity"].ToString());
-                            }
-                        }
-                    }
-
-                    // save the last set name we saw, for updating
-                    using (StreamWriter file = new StreamWriter("lastSet.txt"))
-                    {
-                        file.WriteLine(elements[elements.Count - 1]);
-                    }
-                }
-                catch
-                {
-                    Debug.WriteLine("Unable to open AllCards-x.json file.");
-                }
-            }
-        }
-
-        // updates the database
-        public void UpdateDB()
-        {
-            if (File.Exists("SetsDB.sqlite"))
-            {
-                // connect to the database, stored in a connection object
-                // the string sets up the file we will be using
-                dbConnection = new SQLiteConnection("Data Source=SetsDB.sqlite;Version=3;");
-
-                // open the database, need to close later
-                dbConnection.Open();
-
-                Debug.WriteLine("db file was found");
-
-                String mtgJSONText = File.ReadAllText("AllSets-x.json", Encoding.UTF8);
-
-                JToken outer = JToken.Parse(mtgJSONText);
-
-                List<String> elements = GetSetNames(mtgJSONText);
-
-                using (StreamReader file = new StreamReader("lastSet.txt"))
-                {
-                    string lastSet = file.ReadLine();
-
-                    // if we havn't seen the last set before, add that set to database
-                    if (!lastSet.Equals(elements[elements.Count - 1])) {
-                        JObject inner = outer[elements[elements.Count - 1]].Value<JObject>();
-                        
-                        var ser = new DataContractJsonSerializer(typeof(JSONDTO));
-
-                        foreach (var cardInCards in inner["cards"].Children())
-                        {
-                            JObject cardJObject = JObject.Parse(cardInCards.ToString());
-
-                            string sql = @"select name
-                                           from CARD
-                                           where name = @name";
-
-                            
-                            var cmd = dbConnection.CreateCommand();
-                            cmd.CommandText = sql;
-                            cmd.Parameters.Add(new SQLiteParameter("@name") { Value = cardJObject["name"].ToString() });
-                            var reader = cmd.ExecuteReader();
-                            if (!reader.Read()) {
-                                AssembleDB(cardInCards, ser, cardJObject);
-                            }
-                            if (cardJObject["multiverseid"] != null)
-                            {
-                                AddMultiverseId(cardJObject["name"].ToString(), inner["name"].ToString(), cardJObject["multiverseid"].ToString());
-                                AddArtist(cardJObject["name"].ToString(), cardJObject["multiverseid"].ToString(), cardJObject["artist"].ToString());
-                                AddRarity(cardJObject["name"].ToString(), cardJObject["multiverseid"].ToString(), cardJObject["rarity"].ToString());
-                            }
-                        }
-                    }
-                }
-            }
-            else
-            {
-                createDBFile();
-            }
-        }
-
-        // add each card to the database and its other information
-        private void AssembleDB(JToken cardInCards, DataContractJsonSerializer ser, JObject cardJObject)
-        {
-            byte[] byteArray = Encoding.UTF8.GetBytes(cardInCards.ToString());
-            MemoryStream stream1 = new MemoryStream(byteArray);
-
-            var info = (JSONDTO)ser.ReadObject(stream1);
-
-            if (cardJObject["colors"] != null)
-                foreach (var c in cardJObject["colors"].Children())
-                    AddColors(info.name, c.ToString());
-
-            if (cardJObject["subtypes"] != null)
-                foreach (var c in cardJObject["subtypes"].Children())
-                    AddSubtypes(info.name, c.ToString());
-
-            if (cardJObject["types"] != null)
-                foreach (var c in cardJObject["types"].Children())
-                    AddTypes(info.name, c.ToString());
-
-            if (cardJObject["supertypes"] != null)
-                foreach (var c in cardJObject["supertypes"].Children())
-                    AddSupertypes(info.name, c.ToString());
-
-            // add the rulings
-            if (cardJObject["rulings"] != null)
-            {
-                foreach (var c in cardJObject["rulings"].Children())
-                {
-                    string date = (string)c["date"];
-                    string text = (string)c["text"];
-                    AddRuling(info.name, date, text);
-                }
-            }
-
-            if (cardJObject["legalities"] != null)
-            {
-                var c = cardJObject["legalities"].Value<JObject>();
-                string modern = "", legacy = "", vintage = "", freeform = "", prismatic = "", tribal = "", singleton = "", commander = "";
-                if (c["Modern"] != null)
-                    modern = (string)c["Modern"];
-                if (c["Legacy"] != null)
-                    legacy = (string)c["Legacy"];
-                if (c["Vintage"] != null)
-                    vintage = (string)c["Vintage"];
-                if (c["Freeform"] != null)
-                    freeform = (string)c["Freeform"];
-                if (c["Prismatic"] != null)
-                    prismatic = (string)c["Prismatic"];
-                if (c["Tribal Wars Legacy"] != null)
-                    tribal = (string)c["Tribal Wars Legacy"];
-                if (c["Singleton 100"] != null)
-                    singleton = (string)c["Singleton 100"];
-                if (c["Commander"] != null)
-                    commander = (string)c["Commander"];
-                AddLegality(info.name, modern, legacy, vintage, freeform, prismatic, tribal, singleton, commander);
-            }
-
-            if (cardJObject["foreignNames"] != null)
-            {
-                foreach (var c in cardJObject["foreignNames"].Children())
-                {
-                    string language = (string)c["language"];
-                    string text = (string)c["name"];
-                    AddLanguage(info.name, language, text);
-                }
-            }
-
-            // add this card to the CARD table
-            AddToCard(info);
-        }
-
-        // gets all of the sets in this file
-        private List<string> GetSetNames(string mtgJSONText)
-        {
-            var o = JObject.Parse(mtgJSONText);
-
-            List<String> elements = new List<String>();
-            foreach (JToken child in o.Children())
-            {
-                var property = child as JProperty;
-
-                if (property != null)
-                {
-                    elements.Add(property.Name);
-                }
-                else
-                {
-                    Debug.WriteLine("null");
-                }
-            }
-            return elements;
-        }
-
         // use filters to get a list of cards from the DB
-        public List<string> GetCards(string name, string toughness, string hand, 
-            string cmc, string multiverseId, string loyalty, List<string> rarities, 
-            string flavor, string artist, string power, string cardText, 
+        public List<string> GetCards(string name, string toughness, string hand,
+            string cmc, string multiverseId, string loyalty, List<string> rarities,
+            string flavor, string artist, string power, string cardText,
             List<string> types, bool reserved, bool requireMultiColor, bool excludeUnselected,
             string legality, List<string> setNames, List<string> colors, List<string> subtypes, List<string> supertypes)
         {
@@ -481,7 +99,8 @@ namespace TopDeck
                            and hand like @hand
                            and (flavor like @flavor or flavor is null)";
 
-            if (!cardText.Equals("")) {
+            if (!cardText.Equals(""))
+            {
                 sqlCard += @" and card_text like @cardText";
             }
 
@@ -493,19 +112,19 @@ namespace TopDeck
             var cmd = dbConnection.CreateCommand();
             cmd.CommandText = sqlCard;
             cmd.Parameters.Add(new SQLiteParameter("@name") { Value = "%" + name + "%" });
-            cmd.Parameters.Add(new SQLiteParameter("@hand") { Value = "%" + hand + "%"});
-            cmd.Parameters.Add(new SQLiteParameter("@flavor") { Value = "%" + flavor + "%"});
-            
+            cmd.Parameters.Add(new SQLiteParameter("@hand") { Value = "%" + hand + "%" });
+            cmd.Parameters.Add(new SQLiteParameter("@flavor") { Value = "%" + flavor + "%" });
+
             if (!cardText.Equals(""))
             {
-                cmd.Parameters.Add(new SQLiteParameter("@cardText") { Value = "%" + cardText + "%"});
+                cmd.Parameters.Add(new SQLiteParameter("@cardText") { Value = "%" + cardText + "%" });
             }
 
             SQLiteDataReader reader = cmd.ExecuteReader();
 
             HashSet<string> cardNamesWithoutColors = new HashSet<string>();
             while (reader.Read())
-                cardNamesWithoutColors.Add((string) reader["name"]);
+                cardNamesWithoutColors.Add((string)reader["name"]);
 
             reader.Close();
 
@@ -522,7 +141,8 @@ namespace TopDeck
 
             // finds the cards with the wanted colors
             HashSet<string> cardNamesWithColors = null;
-            for (int i = 0; i < colors.Count; i++) {
+            for (int i = 0; i < colors.Count; i++)
+            {
                 string sqlColor = @"select name
                                 from COLORS
                                 where color like @color";
@@ -535,13 +155,15 @@ namespace TopDeck
                 HashSet<string> tempCardsWithColors = new HashSet<string>();
 
                 while (reader2.Read())
-                    tempCardsWithColors.Add((string) reader2["name"]);
+                    tempCardsWithColors.Add((string)reader2["name"]);
                 reader2.Close();
 
                 if (i == 0)
                 {
                     cardNamesWithColors = tempCardsWithColors;
-                } else if (cardNamesWithColors != null) {
+                }
+                else if (cardNamesWithColors != null)
+                {
                     // if we require multicolor, only have the cards that overlap in colors
                     // else, just have all of the cards
                     if (requireMultiColor)
@@ -772,7 +394,7 @@ namespace TopDeck
                     HashSet<string> cardNamesFromSet = new HashSet<string>();
                     while (reader.Read())
                     {
-                       cardNamesFromSet.Add((string)reader["name"]);
+                        cardNamesFromSet.Add((string)reader["name"]);
                     }
 
                     reader.Close();
@@ -812,7 +434,7 @@ namespace TopDeck
                 cardNamesWithoutColors.IntersectWith(cardNamesWithLegality);
             }
 
-            return cardNamesWithoutColors.ToList(); 
+            return cardNamesWithoutColors.ToList();
         }
 
         public List<string> ParseOperators(string fieldType, string query)
@@ -832,8 +454,8 @@ namespace TopDeck
                 {
                     searchBy = query.Substring(1);
                     ops = query.Substring(0, 1);
-                } 
-                else 
+                }
+                else
                 {
                     return null;
                 }
@@ -909,13 +531,13 @@ namespace TopDeck
             {
                 c = new Card();
 
-                c.CMC = (double) reader["cmc"];
+                c.CMC = (double)reader["cmc"];
 
                 if (!(reader["flavor"] is DBNull))
                     c.Flavor = (string)reader["flavor"];
 
                 c.Name = (string)reader["name"];
-                
+
                 if (!(reader["power"] is DBNull))
                     c.Power = (string)reader["power"];
 
@@ -1080,268 +702,5 @@ namespace TopDeck
             }
             return largestMultiverseId;
         }
-
-        private void AddToCard(JSONDTO info)
-        {
-            // add this card
-            string sql = @"insert into CARD(name, toughness, hand, cmc, reserved, loyalty, flavor, power, card_text, type, manacost)  values (@name, @toughness, @hand, @cmc, @reserved, @loyalty, @flavor, @power, @card_text, @type, @manacost)";
-
-            // this is for passing in params
-            var cmd = dbConnection.CreateCommand();
-            cmd.CommandText = sql;
-            cmd.Parameters.Add(new SQLiteParameter("@name") { Value = info.name });
-            cmd.Parameters.Add(new SQLiteParameter("@toughness") { Value = info.toughness });
-            cmd.Parameters.Add(new SQLiteParameter("@hand") { Value = info.hand });
-            cmd.Parameters.Add(new SQLiteParameter("@cmc") { Value = info.cmc });
-            cmd.Parameters.Add(new SQLiteParameter("@reserved") { Value = info.reserved });
-            cmd.Parameters.Add(new SQLiteParameter("@loyalty") { Value = info.loyalty });
-            cmd.Parameters.Add(new SQLiteParameter("@flavor") { Value = info.flavor });
-            cmd.Parameters.Add(new SQLiteParameter("@power") { Value = info.power });
-            cmd.Parameters.Add(new SQLiteParameter("@card_text") { Value = info.text });
-            cmd.Parameters.Add(new SQLiteParameter("@type") { Value = info.type });
-            cmd.Parameters.Add(new SQLiteParameter("@manacost") { Value = info.manaCost });
-
-            cmd.ExecuteNonQuery();
-        }
-
-        private void AddRarity(string name, string multiverseId, string rarity)
-        {
-            string sql = @"insert into RARITIES(name, multiverse_id, rarity) values (@name, @multiverse_id, @rarity)";
-            var cmd = dbConnection.CreateCommand();
-            cmd.CommandText = sql;
-            cmd.Parameters.Add(new SQLiteParameter("@name") { Value = name });
-            cmd.Parameters.Add(new SQLiteParameter("@multiverse_id") { Value = multiverseId });
-            cmd.Parameters.Add(new SQLiteParameter("@rarity") { Value = rarity });
-            cmd.ExecuteNonQuery();
-        }
-
-        private void AddArtist(string name, string multiverseId, string artist)
-        {
-            string sql = @"insert into ARTISTS(name, multiverse_id, artist) values (@name, @multiverse_id, @artist)";
-            var cmd = dbConnection.CreateCommand();
-            cmd.CommandText = sql;
-            cmd.Parameters.Add(new SQLiteParameter("@name") { Value = name });
-            cmd.Parameters.Add(new SQLiteParameter("@multiverse_id") { Value = multiverseId});
-            cmd.Parameters.Add(new SQLiteParameter("@artist") { Value = artist });
-            cmd.ExecuteNonQuery();
-        }
-
-        private void AddMultiverseId(string name, string set, string multiverseId)
-        {
-            string sql = @"insert into MULTIVERSEID_SET(name, setName, multiverse_id) values (@name, @setName, @multiverse_id)";
-            var cmd = dbConnection.CreateCommand();
-            cmd.CommandText = sql;
-            cmd.Parameters.Add(new SQLiteParameter("@name") { Value = name });
-            cmd.Parameters.Add(new SQLiteParameter("@setName") { Value = set });
-            cmd.Parameters.Add(new SQLiteParameter("@multiverse_id") { Value = multiverseId });
-            cmd.ExecuteNonQuery();
-        }
-
-        private void AddLanguage(string name, string language, string text)
-        {
-            string sql = @"insert into FOREIGN_NAMES(name, foreign_name, language) values (@name, @foreign_name, @language)";
-            var cmd = dbConnection.CreateCommand();
-            cmd.CommandText = sql;
-            cmd.Parameters.Add(new SQLiteParameter("@name") { Value = name });
-            cmd.Parameters.Add(new SQLiteParameter("@foreign_name") { Value = text });
-            cmd.Parameters.Add(new SQLiteParameter("@language") { Value = language });
-            cmd.ExecuteNonQuery();
-        }
-
-        private void AddRuling(string name, string date, string text)
-        {
-            string sql = @"insert into RULINGS(name, date, ruling_text) values (@name, @date, @ruling_text)";
-            var cmd = dbConnection.CreateCommand();
-            cmd.CommandText = sql;
-            cmd.Parameters.Add(new SQLiteParameter("@name") { Value = name });
-            cmd.Parameters.Add(new SQLiteParameter("@date") { Value = date });
-            cmd.Parameters.Add(new SQLiteParameter("@ruling_text") { Value = text });
-            cmd.ExecuteNonQuery();
-        }
-
-        private void AddLegality(string name, string modern, string legacy, string vintage, string freeform, string prismatic, string tribal, string singleton, string commander)
-        {
-            string sql = @"insert into LEGALITIES(name, format, legality_for_format) values (@name, @format, @legality_for_format)";
-            var cmd = dbConnection.CreateCommand();
-            cmd.CommandText = sql;
-
-            if (modern != "")
-            {
-                cmd.Parameters.Add(new SQLiteParameter("@name") { Value = name });
-                cmd.Parameters.Add(new SQLiteParameter("@format") { Value = "modern" });
-                cmd.Parameters.Add(new SQLiteParameter("@legality_for_format") { Value = modern });
-                cmd.ExecuteNonQuery();
-            }
-            if (legacy != "")
-            {
-                cmd.Parameters.Add(new SQLiteParameter("@name") { Value = name });
-                cmd.Parameters.Add(new SQLiteParameter("@format") { Value = "legacy" });
-                cmd.Parameters.Add(new SQLiteParameter("@legality_for_format") { Value = legacy });
-                cmd.ExecuteNonQuery();
-            }
-            if (vintage != "")
-            {
-                cmd.Parameters.Add(new SQLiteParameter("@name") { Value = name });
-                cmd.Parameters.Add(new SQLiteParameter("@format") { Value = "vintage" });
-                cmd.Parameters.Add(new SQLiteParameter("@legality_for_format") { Value = vintage });
-                cmd.ExecuteNonQuery();
-            }
-            if (freeform != "")
-            {
-                cmd.Parameters.Add(new SQLiteParameter("@name") { Value = name });
-                cmd.Parameters.Add(new SQLiteParameter("@format") { Value = "freeform" });
-                cmd.Parameters.Add(new SQLiteParameter("@legality_for_format") { Value = freeform });
-                cmd.ExecuteNonQuery();
-            }
-            if (prismatic != "")
-            {
-                cmd.Parameters.Add(new SQLiteParameter("@name") { Value = name });
-                cmd.Parameters.Add(new SQLiteParameter("@format") { Value = "prismatic" });
-                cmd.Parameters.Add(new SQLiteParameter("@legality_for_format") { Value = prismatic });
-                cmd.ExecuteNonQuery();
-            }
-            if (tribal != "")
-            {
-                cmd.Parameters.Add(new SQLiteParameter("@name") { Value = name });
-                cmd.Parameters.Add(new SQLiteParameter("@format") { Value = "tribal wars legacy" });
-                cmd.Parameters.Add(new SQLiteParameter("@legality_for_format") { Value = tribal });
-                cmd.ExecuteNonQuery();
-            }
-            if (singleton != "")
-            {
-                cmd.Parameters.Add(new SQLiteParameter("@name") { Value = name });
-                cmd.Parameters.Add(new SQLiteParameter("@format") { Value = "singleton 100" });
-                cmd.Parameters.Add(new SQLiteParameter("@legality_for_format") { Value = singleton });
-                cmd.ExecuteNonQuery();
-            }
-            if (commander != "")
-            {
-                cmd.Parameters.Add(new SQLiteParameter("@name") { Value = name });
-                cmd.Parameters.Add(new SQLiteParameter("@format") { Value = "commander" });
-                cmd.Parameters.Add(new SQLiteParameter("@legality_for_format") { Value = commander });
-                cmd.ExecuteNonQuery();
-            }
-        }
-
-        private void AddColors(string name, string color)
-        {
-            string sql = "insert into COLORS (name, color) values (@name, @color)";
-            var cmd = dbConnection.CreateCommand();
-            cmd.CommandText = sql;
-            cmd.Parameters.Add(new SQLiteParameter("@name") { Value = name });
-            cmd.Parameters.Add(new SQLiteParameter("@color") { Value = color });
-            cmd.ExecuteNonQuery();
-        }
-
-        private void AddSupertypes(string name, string supertype)
-        {
-            string sql = "insert into SUPERTYPES (name, supertype) values (@name, @supertype)";
-            var cmd = dbConnection.CreateCommand();
-            cmd.CommandText = sql;
-            cmd.Parameters.Add(new SQLiteParameter("@name") { Value = name });
-            cmd.Parameters.Add(new SQLiteParameter("@supertype") { Value = supertype });
-            cmd.ExecuteNonQuery();
-        }
-
-
-        private void AddSubtypes(string name, string subtype)
-        {
-            string sql = "insert into SUBTYPES (name, subtype) values (@name, @subtype)";
-            var cmd = dbConnection.CreateCommand();
-            cmd.CommandText = sql;
-            cmd.Parameters.Add(new SQLiteParameter("@name") { Value = name });
-            cmd.Parameters.Add(new SQLiteParameter("@subtype") { Value = subtype });
-            cmd.ExecuteNonQuery();
-        }
-
-        private void AddTypes(string name, string type)
-        {
-            string sql = "insert into TYPES (name, type) values (@name, @type)";
-            var cmd = dbConnection.CreateCommand();
-            cmd.CommandText = sql;
-            cmd.Parameters.Add(new SQLiteParameter("@name") { Value = name });
-            cmd.Parameters.Add(new SQLiteParameter("@type") { Value = type });
-            cmd.ExecuteNonQuery();
-        }
-
-        private void CreateTable(string sql)
-        {
-            // create command to execute building of table
-            SQLiteCommand command = new SQLiteCommand(sql, dbConnection);
-
-            // execute the command and expect no response
-            command.ExecuteNonQuery();
-        }
-    }
-
-    [DataContract]
-    public class JSONDTO
-    {
-        [DataMember(Name = "name")]
-        public string name { get; set; }
-
-        [DataMember(Name = "cmc")]
-        public double cmc { get; set; }
-
-        [DataMember(Name = "type")]
-        public string type { get; set; }
-
-        [DataMember(Name = "text")]
-        public string text { get; set; }
-
-        [DataMember(Name = "flavor")]
-        public string flavor { get; set; }
-
-        [DataMember(Name = "power")]
-        public string power { get; set; }
-
-        [DataMember(Name = "toughness")]
-        public string toughness { get; set; }
-
-        [DataMember(Name = "loyalty")]
-        public int loyalty { get; set; }
-
-        [DataMember(Name = "multiverseid")]
-        public int multiverseid { get; set; }
-
-        [DataMember(Name = "variations")]
-        public List<int> variations { get; set; }
-
-        [DataMember(Name = "hand")]
-        public int hand { get; set; }
-
-        [DataMember(Name = "reserved")]
-        public bool reserved { get; set; }
-
-        [DataMember(Name = "manaCost")]
-        public string manaCost { get; set; }
-    }
-
-    [DataContract]
-    class LegalitiesDTO
-    {
-        [DataMember(Name = "Modern")]
-        public string Modern { get; set; }
-
-        [DataMember(Name = "Legacy")]
-        public string Legacy { get; set; }
-
-        [DataMember(Name = "Vintage")]
-        public string Vintage { get; set; }
-
-        [DataMember(Name = "Freeform")]
-        public string Freeform { get; set; }
-
-        [DataMember(Name = "Prismatic")]
-        public string Prismatic { get; set; }
-
-        [DataMember(Name = "Tribal Wars Legacy")]
-        public string TribalWarsLegacy { get; set; }
-
-        [DataMember(Name = "Singleton 100")]
-        public string Singleton100 { get; set; }
-
-        [DataMember(Name = "Commander")]
-        public string Commander { get; set; }
     }
 }
