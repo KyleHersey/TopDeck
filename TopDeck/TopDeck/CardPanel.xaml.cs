@@ -72,19 +72,10 @@ namespace TopDeck
             img.BeginInit();
             Console.WriteLine("begin init");
 
-            if (id != null) // && !File.Exists(id + ".jpg"))
+            if (id != null)
             {
-                /*using (WebClient myClient = new WebClient())
-                {
-                    myClient.DownloadFile("http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=" + id + "&type=card", id + ".jpg");
-                } */
-                //img.UriSource = new Uri(id + ".jpg", UriKind.Relative);
                 img.UriSource = new Uri("http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=" + id + "&type=card");
             }
-            /* else if (id != null)
-            {
-                img.UriSource = new Uri(id + ".jpg", UriKind.Relative);
-            } */
             else
             {
                 img.UriSource = new Uri("Magic_the_gathering-card_back.jpg", UriKind.Relative);

@@ -14,14 +14,13 @@ using System.Text.RegularExpressions;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Windows;
 
 namespace TopDeck
 {
     public class DatabaseManager
     {
         SQLiteConnection dbConnection;
-        int hashedJSONFile;
-        string mainJSONFileName = "AllSets-x.json";
 
         public DatabaseManager()
         {
@@ -56,12 +55,15 @@ namespace TopDeck
         {
             if (!File.Exists("SetsDB.sqlite"))
             {
+                SplashScreen splashScreen = new SplashScreen("TopDeckSplashScreen.png");
+                splashScreen.Show(true);
                 using (WebClient myClient = new WebClient())
                 {
                     Debug.WriteLine("Downloading new file");
                     myClient.DownloadFile("http://Emerald-Baldwin.github.io/SetsDB.sqlite", "SetsDB.sqlite");
                     Debug.WriteLine("Downloaded file");
                 }
+                splashScreen.Show(false);
             }
             // connect to the database, stored in a connection object
             // the string sets up the file we will be using
