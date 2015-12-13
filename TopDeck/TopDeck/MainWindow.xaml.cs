@@ -601,25 +601,25 @@ namespace TopDeck
 
         private void ChangeTheme(int themeChoice)
         {
-            ResourceDictionary dict;
-            var assembly = Assembly.GetEntryAssembly() ?? Assembly.GetCallingAssembly();
-            var path = System.IO.Path.GetDirectoryName(assembly.Location);
-            path = path.Replace("bin\\Debug", "");
-            path = path.Replace("bin\\Release", "");
+            ResourceDictionary themeDict = new ResourceDictionary();
 
             if (themeChoice == 0)
             {
-                dict = (ResourceDictionary)XamlReader.Load(new FileStream(System.IO.Path.Combine(path, "LightTheme.xaml"), FileMode.Open));
+                var uriPath = string.Format("/{0};component/LightTheme.xaml", Assembly.GetEntryAssembly().GetName().Name);
+                var uri = new Uri(uriPath, UriKind.RelativeOrAbsolute);
+                themeDict.Source = uri;
                 theme = "LightTheme.xaml";
             }
             else
             {
-                dict = (ResourceDictionary)XamlReader.Load(new FileStream(System.IO.Path.Combine(path, "DarkTheme.xaml"), FileMode.Open));
+                var uriPath = string.Format("/{0};component/DarkTheme.xaml", Assembly.GetEntryAssembly().GetName().Name);
+                var uri = new Uri(uriPath, UriKind.RelativeOrAbsolute);
+                themeDict.Source = uri;
                 theme = "DarkTheme.xaml";
             }
 
             Application.Current.Resources.MergedDictionaries.Clear();
-            Application.Current.Resources.MergedDictionaries.Add(dict);
+            Application.Current.Resources.MergedDictionaries.Add(themeDict);
 
         }
     }
