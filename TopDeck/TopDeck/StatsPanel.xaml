@@ -17,7 +17,7 @@
             <Setter Property="SnapsToDevicePixels" Value="True"/>
             <Setter Property="Palette">
                 <Setter.Value>
-                    <visualization:ResourceDictionaryCollection>
+                    <visualization:ResourceDictionaryCollection x:Name="ChartPalette">
                         <ResourceDictionary>
                             <Style x:Key="DataPointStyle" TargetType="{x:Type Control}">
                                 <Setter Property="Background">

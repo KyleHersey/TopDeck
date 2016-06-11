@@ -5,7 +5,8 @@
              xmlns:local="clr-namespace:TopDeck"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300"
+             KeyDown="UserControl_KeyDown">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -24,9 +25,9 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         
-        <local:FilterRowTextBox x:Name="NameFilterField" FilterText="Name" Grid.Row="0" Margin="0,15,0,0" KeyUp="NameFilterField_KeyUp" />
+        <local:FilterRowTextBox x:Name="NameFilterField" FilterText="Name" Grid.Row="0" Margin="0,15,0,0"  />
 
-        <local:FilterRowTextBox x:Name="MultiverseID" FilterText="Multiverse ID" Grid.Row="1" KeyUp="NameFilterField_KeyUp"/>
+        <local:FilterRowTextBox x:Name="MultiverseID" FilterText="Multiverse ID" Grid.Row="1" />
         
         <Grid Name="ColorSpecifiers" Grid.Row="2">
             <Grid.RowDefinitions>
@@ -34,21 +35,21 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <WrapPanel Name="ColorFilters" Orientation="Horizontal" Grid.Row="0" >
-                <local:FilterRowCheckBox x:Name="WhiteColor" FilterText="White" PropertyChanged="Checkbox_PropertyChanged"/>
-                <local:FilterRowCheckBox x:Name="BlueColor" FilterText="Blue" PropertyChanged="Checkbox_PropertyChanged"/>
-                <local:FilterRowCheckBox x:Name="BlackColor" FilterText="Black" PropertyChanged="Checkbox_PropertyChanged"/>
-                <local:FilterRowCheckBox x:Name="RedColor" FilterText="Red" PropertyChanged="Checkbox_PropertyChanged"/>
-                <local:FilterRowCheckBox x:Name="GreenColor" FilterText="Green" PropertyChanged="Checkbox_PropertyChanged"/>
-                <local:FilterRowCheckBox x:Name="ColorlessColor" FilterText="Colorless" PropertyChanged="Checkbox_PropertyChanged"/>
+            <WrapPanel Name="ColorFilters" Orientation="Horizontal" Grid.Row="0">
+                <local:FilterRowCheckBox x:Name="WhiteColor" FilterText="White" KeyboardNavigation.TabNavigation="None"/>
+                <local:FilterRowCheckBox x:Name="BlueColor" FilterText="Blue" KeyboardNavigation.TabNavigation="None"/>
+                <local:FilterRowCheckBox x:Name="BlackColor" FilterText="Black" KeyboardNavigation.TabNavigation="None"/>
+                <local:FilterRowCheckBox x:Name="RedColor" FilterText="Red" KeyboardNavigation.TabNavigation="None"/>
+                <local:FilterRowCheckBox x:Name="GreenColor" FilterText="Green" KeyboardNavigation.TabNavigation="None"/>
+                <local:FilterRowCheckBox x:Name="ColorlessColor" FilterText="Colorless" KeyboardNavigation.TabNavigation="None"/>
             </WrapPanel>
-            <local:FilterRowCheckBox x:Name="RequireMulticolored" FilterText="Require Multicolored" Grid.Row="1" PropertyChanged="Checkbox_PropertyChanged"/>
-            <local:FilterRowCheckBox x:Name="ExcludeUnselected" FilterText="Exclude Unselected" Grid.Row="2" PropertyChanged="Checkbox_PropertyChanged"/>
+            <local:FilterRowCheckBox x:Name="RequireMulticolored" FilterText="Require Multicolored" Grid.Row="1" KeyboardNavigation.TabNavigation="None"/>
+            <local:FilterRowCheckBox x:Name="ExcludeUnselected" FilterText="Exclude Unselected" Grid.Row="2" KeyboardNavigation.TabNavigation="None"/>
         </Grid>
 
-        <local:FilterRowTextBox x:Name="ConvertedManaCostFilterField" FilterText="Converted Mana Cost" Grid.Row="3" KeyUp="NameFilterField_KeyUp"/>
+        <local:FilterRowTextBox x:Name="ConvertedManaCostFilterField" FilterText="Converted Mana Cost" Grid.Row="3" />
 
-        <local:FilterRowTextBox x:Name="Supertypes" FilterText="Supertype" Grid.Row="4" KeyUp="NameFilterField_KeyUp"/>
+        <local:FilterRowTextBox x:Name="Supertypes" FilterText="Supertype" Grid.Row="4" />
         
         <Grid Grid.Row="5">
             <Grid.RowDefinitions>
@@ -58,37 +59,37 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <WrapPanel Name="Types" Orientation="Horizontal" Grid.Row="0">
-                <local:FilterRowCheckBox x:Name="ArtifactCheckbox" FilterText="Artifact" PropertyChanged="Checkbox_PropertyChanged"/>
-                <local:FilterRowCheckBox x:Name="CreatureCheckbox" FilterText="Creature" PropertyChanged="Checkbox_PropertyChanged"/>
-                <local:FilterRowCheckBox x:Name="EnchantmentCheckbox" FilterText="Enchantment" PropertyChanged="Checkbox_PropertyChanged"/>
-                <local:FilterRowCheckBox x:Name="InstantCheckbox" FilterText="Instant" PropertyChanged="Checkbox_PropertyChanged"/>
-                <local:FilterRowCheckBox x:Name="SorceryCheckbox" FilterText="Sorcery" PropertyChanged="Checkbox_PropertyChanged"/>
-                <local:FilterRowCheckBox x:Name="LandCheckbox" FilterText="Land" PropertyChanged="Checkbox_PropertyChanged"/>
-                <local:FilterRowCheckBox x:Name="PlaneswalkerCheckbox" FilterText="Planeswalker" PropertyChanged="Checkbox_PropertyChanged"/>
+                <local:FilterRowCheckBox x:Name="ArtifactCheckbox" FilterText="Artifact" KeyboardNavigation.TabNavigation="None"/>
+                <local:FilterRowCheckBox x:Name="CreatureCheckbox" FilterText="Creature" KeyboardNavigation.TabNavigation="None"/>
+                <local:FilterRowCheckBox x:Name="EnchantmentCheckbox" FilterText="Enchantment" KeyboardNavigation.TabNavigation="None"/>
+                <local:FilterRowCheckBox x:Name="InstantCheckbox" FilterText="Instant" KeyboardNavigation.TabNavigation="None"/>
+                <local:FilterRowCheckBox x:Name="SorceryCheckbox" FilterText="Sorcery" KeyboardNavigation.TabNavigation="None"/>
+                <local:FilterRowCheckBox x:Name="LandCheckbox" FilterText="Land" KeyboardNavigation.TabNavigation="None"/>
+                <local:FilterRowCheckBox x:Name="PlaneswalkerCheckbox" FilterText="Planeswalker" KeyboardNavigation.TabNavigation="None"/>
             </WrapPanel>
-            <local:FilterRowTextBox x:Name="PowerFilterField" FilterText="Power" Grid.Row="1" KeyUp="NameFilterField_KeyUp"/>
-            <local:FilterRowTextBox x:Name="ToughnessFilterField" FilterText="Toughness" Grid.Row="2" KeyUp="NameFilterField_KeyUp"/>
-            <local:FilterRowTextBox x:Name="LoyaltyFilterField" FilterText="Loyalty" Grid.Row="3" KeyUp="NameFilterField_KeyUp"/>
+            <local:FilterRowTextBox x:Name="PowerFilterField" FilterText="Power" Grid.Row="1" />
+            <local:FilterRowTextBox x:Name="ToughnessFilterField" FilterText="Toughness" Grid.Row="2" />
+            <local:FilterRowTextBox x:Name="LoyaltyFilterField" FilterText="Loyalty" Grid.Row="3" />
         </Grid>
 
-        <local:FilterRowTextBox x:Name="SubtypeTextbox" FilterText="Subtypes" Grid.Row="6" KeyUp="NameFilterField_KeyUp"/>
+        <local:FilterRowTextBox x:Name="SubtypeTextbox" FilterText="Subtypes" Grid.Row="6" />
 
-        <local:FilterRowTextBox x:Name="Text" FilterText="Text" Grid.Row="7" KeyUp="NameFilterField_KeyUp"/>
+        <local:FilterRowTextBox x:Name="Text" FilterText="Text" Grid.Row="7" />
         
         <WrapPanel Name="Rarities" Orientation="Horizontal" Grid.Row="8">
-            <local:FilterRowCheckBox x:Name="Common" FilterText="Common" PropertyChanged="Checkbox_PropertyChanged"/>
-            <local:FilterRowCheckBox x:Name="Uncommon" FilterText="Uncommon" PropertyChanged="Checkbox_PropertyChanged"/>
-            <local:FilterRowCheckBox x:Name="Rare" FilterText="Rare" PropertyChanged="Checkbox_PropertyChanged"/>
-            <local:FilterRowCheckBox x:Name="MythicRare" FilterText="Mythic Rare" PropertyChanged="Checkbox_PropertyChanged"/>
+            <local:FilterRowCheckBox x:Name="Common" FilterText="Common" KeyboardNavigation.TabNavigation="None"/>
+            <local:FilterRowCheckBox x:Name="Uncommon" FilterText="Uncommon" KeyboardNavigation.TabNavigation="None"/>
+            <local:FilterRowCheckBox x:Name="Rare" FilterText="Rare" KeyboardNavigation.TabNavigation="None"/>
+            <local:FilterRowCheckBox x:Name="MythicRare" FilterText="Mythic Rare" KeyboardNavigation.TabNavigation="None"/>
         </WrapPanel>
 
-        <local:FilterRowTextBox x:Name="Artist" FilterText="Artist" Grid.Row="9" KeyUp="NameFilterField_KeyUp"/>
+        <local:FilterRowTextBox x:Name="Artist" FilterText="Artist" Grid.Row="9" />
 
-        <local:FilterRowTextBox x:Name="Flavor" FilterText="Flavor" Grid.Row="10" KeyUp="NameFilterField_KeyUp"/>
+        <local:FilterRowTextBox x:Name="Flavor" FilterText="Flavor" Grid.Row="10" />
 
-        <local:FilterRowTextBox x:Name="Sets" FilterText="Sets" Grid.Row="11" KeyUp="NameFilterField_KeyUp"/>
+        <local:FilterRowTextBox x:Name="Sets" FilterText="Sets" Grid.Row="11" />
 
-        <ComboBox x:Name="Legality" Grid.Row="12" Margin="10, 5, 10, 5" DropDownClosed="ComboBox_DropDownClosed" >
+        <ComboBox x:Name="Legality" Grid.Row="12" Margin="10, 5, 10, 5">
             <ComboBoxItem>None</ComboBoxItem>
             <ComboBoxItem>Modern</ComboBoxItem>
             <ComboBoxItem>Legacy</ComboBoxItem>
@@ -100,7 +101,7 @@
             <ComboBoxItem>Commander</ComboBoxItem>
         </ComboBox>
 
-        <local:FilterRowCheckBox x:Name="Reserved" FilterText="Reserved" Grid.Row="13" PropertyChanged="Checkbox_PropertyChanged"/>
+        <local:FilterRowCheckBox x:Name="Reserved" FilterText="Reserved" Grid.Row="13" KeyboardNavigation.TabNavigation="None"/>
 
     </Grid>
 </UserControl>

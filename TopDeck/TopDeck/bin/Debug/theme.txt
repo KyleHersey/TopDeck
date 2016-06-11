@@ -1,1 +1,1 @@
-DarkTheme.xaml
+LightTheme.xaml

@@ -36,6 +36,14 @@ namespace TopDeck
             InitializeComponent();
         }
 
+        private void UserControl_KeyDown(Object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                FilterQuery(null, null);
+            }
+        }
+
         // called when "search" is clicked
         // accumulates all of the filters to send to the DBMan
         private void FilterQuery(object sender, RoutedEventArgs e)
@@ -192,26 +200,6 @@ namespace TopDeck
         public void setDatabaseManager(DatabaseManager db)
         {
             DBMan = db;
-        }
-
-        private void NameFilterField_KeyUp(object sender, KeyEventArgs e)
-        {
-            FilterQuery(null, null);
-        }
-
-        private void NameFilterField_KeyUp(object sender, MouseButtonEventArgs e)
-        {
-            FilterQuery(null, null);
-        }
-
-        private void Checkbox_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            FilterQuery(null, null);
-        }
-
-        private void ComboBox_DropDownClosed(object sender, EventArgs e)
-        {
-            FilterQuery(null, null);
         }
     }
 }

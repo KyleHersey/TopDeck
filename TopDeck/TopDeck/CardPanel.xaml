@@ -6,14 +6,18 @@
              xmlns:l="clr-namespace:TopDeck"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <StackPanel>
-        <Grid MaxWidth="500" MaxHeight="500">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="3*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
             <Image x:Name="CardImage" Source="Magic_the_gathering-card_back.jpg" Grid.Column="0" Margin="10, 10, 10, 10" MaxWidth="300" MaxHeight="500"/>
-            <ListBox Grid.Column="1" x:Name="SetList" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionChanged="SetList_SelectionChanged" Margin="0, 10, 5, 5" Style="{DynamicResource CardListBox}">
+            <ListBox Grid.Column="1" x:Name="SetList" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionChanged="SetList_SelectionChanged" Margin="0, 10, 10, 10" Style="{DynamicResource CardListBox}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Item1}"/>
@@ -21,6 +25,7 @@
                 </ListBox.ItemTemplate>
             </ListBox>
         </Grid>
+        <StackPanel Grid.Row="1">
         <Border Margin="10, 5, 10, 5" x:Name="RulingsButtonBorder">
             <Button x:Name="RulingsButton" Click="RulingsClick">
                 <TextBlock FontSize="20">Rulings</TextBlock>
@@ -32,6 +37,7 @@
                 </ListBox>
             </DockPanel>
         </Popup>
-        <TextBlock x:Name="RulesText" Grid.Row="1" Margin="10, 5, 10, 5" TextWrapping="Wrap"/>
-    </StackPanel>    
+        <TextBlock x:Name="RulesText" Margin="10, 5, 10, 5" TextWrapping="Wrap"/>
+        </StackPanel>
+    </Grid>    
 </UserControl>

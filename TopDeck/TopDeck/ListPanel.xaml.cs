@@ -118,5 +118,27 @@ namespace TopDeck
                 list.Add(new LocalTuple(1, theList.SelectedItem.ToString(), RightPanel.selectedCard.MultiverseIds[0].Item2));
             }
         }
+
+        private void UserControl_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                // change focus to next tab
+                // FIX
+                Keyboard.Focus(RightPanel.SetList);
+            }
+            // add checks for + key
+            else if (e.Key == Key.Add)
+            {
+                // increment the count of this card in the list
+                AddToDeck_Click(null, null);
+            }
+            else if (e.Key == Key.A && (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)))
+            {
+                // increment the count of this card in the sideboard
+                // FIX
+                AddToSideBoard_Click(null, null);
+            }
+        }
     }
 }
