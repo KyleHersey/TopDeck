@@ -88,17 +88,39 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BoardPanel.xaml.cs">
+      <DependentUpon>BoardPanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Card.cs" />
+    <Compile Include="CounterPanel.xaml.cs">
+      <DependentUpon>CounterPanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DatabaseManager.cs" />
     <Compile Include="DecklistManager.cs" />
     <Compile Include="DecklistPanel.xaml.cs">
       <DependentUpon>DecklistPanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="HandPanel.xaml.cs">
+      <DependentUpon>HandPanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="LocalTuple.cs" />
+    <Compile Include="MovableCard.cs" />
+    <Compile Include="PlayView.xaml.cs">
+      <DependentUpon>PlayView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ResizingObservableCollection.cs" />
     <Compile Include="StatsPanel.xaml.cs">
       <DependentUpon>StatsPanel.xaml</DependentUpon>
     </Compile>
+    <Page Include="BoardPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="CardPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CounterPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -123,6 +145,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="FiltersPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="HandPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -171,6 +197,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="PlayView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="StatsPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

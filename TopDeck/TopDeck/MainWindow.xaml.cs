@@ -50,6 +50,7 @@ namespace TopDeck
             DeckTab.CardList.DLMan = DLMan;
             DeckTab.DeckStats.DLMan = DLMan;
             FiltersTab.FilterListPanel.DLMan = DLMan;
+            PlayTab.CounterPanel.DLMan = DLMan;
 
             DeckTab.CardList.RightPanel = DeckTab.CardView;
             DeckTab.CardView.SetList.Visibility = System.Windows.Visibility.Collapsed;

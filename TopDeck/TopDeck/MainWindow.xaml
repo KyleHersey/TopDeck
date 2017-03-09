@@ -86,6 +86,9 @@
             <TabItem Header="Deck">
                 <local:DeckView  x:Name="DeckTab"/>
             </TabItem>
+            <TabItem Header="Play">
+                <local:PlayView  x:Name="PlayTab"/>
+            </TabItem>
         </TabControl>
     </DockPanel>
 </Window>

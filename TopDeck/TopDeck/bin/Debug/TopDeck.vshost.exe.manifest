@@ -78,14 +78,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="TopDeck.exe" size="200192">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="TopDeck.exe" size="211968">
       <assemblyIdentity name="TopDeck" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>FGuvfW6CiR4F7jIk54ZFvQcuE5gzcdgPr5Gl3KXFJ6I=</dsig:DigestValue>
+        <dsig:DigestValue>eU08clqxzcHbincSlaRWQRaSUEsA3Aq9ASKhyHvYFfg=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
