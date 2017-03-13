@@ -35,14 +35,11 @@ namespace TopDeck
             InitializeComponent();
             this.Closed += MainWindow_Closed;
 
-            IKernel kernel = new StandardKernel(new TopdeckModule(DeckTab.CardList, DeckTab.DeckStats, FiltersTab.FilterListPanel, FiltersTab.FilterListPanel.RightPanel));
+            IKernel kernel = new StandardKernel(new TopdeckModule(DeckTab.CardList, DeckTab.DeckStats));
             kernel.Inject(this);
-            kernel.Inject(DeckTab.DeckStats);
             kernel.Inject(DeckTab.CardList);
-            kernel.Inject(FiltersTab);
             kernel.Inject(FiltersTab.FilterFiltersPanel);
             kernel.Inject(FiltersTab.FilterListPanel);
-            kernel.Inject(FiltersTab.FilterListPanel.RightPanel);
 
             RecentFilesTabSetup();
 

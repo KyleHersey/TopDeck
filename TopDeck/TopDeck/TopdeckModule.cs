@@ -6,27 +6,19 @@ namespace TopDeck
     {
         private DecklistPanel decklistPanel;
         private StatsPanel statsPanel;
-        private ListPanel listPanel;
-        private CardPanel cardPanel;
 
-        public TopdeckModule(DecklistPanel dlPanel, StatsPanel sPanel, ListPanel lPanel, CardPanel cPanel)
+        public TopdeckModule(DecklistPanel dlPanel, StatsPanel sPanel)
         {
             decklistPanel = dlPanel;
             statsPanel = sPanel;
-            listPanel = lPanel;
-            cardPanel = cPanel;
         }
         public override void Load()
         {
             DatabaseManager db = new DatabaseManager();
             Bind<DatabaseManager>().ToConstant(db);
+            Bind<StatsPanel>().ToConstant(statsPanel);
 
-            //Bind<ListPanel>().ToConstant(listPanel);
-            //Bind<DecklistPanel>().ToConstant(decklistPanel);
-            //Bind<StatsPanel>().ToConstant(statsPanel);
-            //Bind<CardPanel>().ToConstant(cardPanel);
-
-            DecklistManager dl = new DecklistManager(decklistPanel, statsPanel);
+            DecklistManager dl = new DecklistManager(decklistPanel);
             Bind<DecklistManager>().ToConstant(dl);
         }
     }

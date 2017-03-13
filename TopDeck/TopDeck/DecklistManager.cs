@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ninject;
+using System;
 using System.Collections.ObjectModel;
 
 namespace TopDeck
@@ -29,13 +30,14 @@ namespace TopDeck
         }
 
         //reference to the Stats Panel
+        [Inject]
         public StatsPanel statsPanel
         {
             get;
             set;
         }
 
-        public DecklistManager(DecklistPanel dlPan, StatsPanel sPan)
+        public DecklistManager(DecklistPanel dlPan)
         //public DecklistManager()
         {
             //no deck currently loaded
@@ -45,7 +47,6 @@ namespace TopDeck
 
             //set references to gui
             decklistPanel = dlPan;
-            statsPanel = sPan;
             decklistPanel.theList.ItemsSource = currentDeck;
             decklistPanel.theSideboard.ItemsSource = sideboard;
         }

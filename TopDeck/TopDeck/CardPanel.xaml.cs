@@ -21,7 +21,7 @@ namespace TopDeck
             InitializeComponent();
 
             // hide rulings button unless the card has it
-            RulingsButtonBorder.Visibility = System.Windows.Visibility.Hidden;
+            RulingsButtonBorder.Visibility = Visibility.Hidden;
         }
 
         //stop displaying card
@@ -30,7 +30,7 @@ namespace TopDeck
             RulesText.Text = "";                    //no rules text
             UpdateImage(null);                      //image to default image
             RulingsListView.ItemsSource = null;     //no rulings
-            RulingsButtonBorder.Visibility = System.Windows.Visibility.Hidden;
+            RulingsButtonBorder.Visibility = Visibility.Hidden;
         }
 
         //display card
@@ -43,11 +43,11 @@ namespace TopDeck
             if (c.Rulings != null && c.Rulings.Count > 0)
             {
                 RulingsListView.ItemsSource = c.Rulings;
-                RulingsButtonBorder.Visibility = System.Windows.Visibility.Visible;
+                RulingsButtonBorder.Visibility = Visibility.Visible;
             }
             else
             {
-                RulingsButtonBorder.Visibility = System.Windows.Visibility.Hidden;
+                RulingsButtonBorder.Visibility = Visibility.Hidden;
             }
             SetList.ItemsSource = c.MultiverseIds;
         }

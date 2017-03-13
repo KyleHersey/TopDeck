@@ -23,21 +23,18 @@ namespace TopDeck
             set;
         }
 
-        [Inject]
         public ObservableCollection<KeyValuePair<string, int>> ColorSource
         {
             get;
             set;
         }
 
-        [Inject]
         public ObservableCollection<KeyValuePair<string, int>> TypeSource
         {
             get;
             set;
         }
 
-        [Inject]
         public ObservableCollection<KeyValuePair<int, int>> CostSource
         {
             get;
@@ -48,9 +45,9 @@ namespace TopDeck
         {
             InitializeComponent();
 
-            //ColorSource = new ObservableCollection<KeyValuePair<string, int>>();
-            //TypeSource = new ObservableCollection<KeyValuePair<string, int>>();
-            //CostSource = new ObservableCollection<KeyValuePair<int, int>>();
+            ColorSource = new ObservableCollection<KeyValuePair<string, int>>();
+            TypeSource = new ObservableCollection<KeyValuePair<string, int>>();
+            CostSource = new ObservableCollection<KeyValuePair<int, int>>();
 
             TypesPie.DataContext = this;
             ColorPie.DataContext = this;
