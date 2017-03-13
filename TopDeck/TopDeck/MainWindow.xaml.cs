@@ -3,56 +3,51 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Collections.ObjectModel;
 using System.Reflection;
-using System.Windows.Markup;
+using Ninject;
 
 namespace TopDeck
 {
     public partial class MainWindow : Window
     {
-        DecklistManager DLMan;
-        DatabaseManager db;
+        [Inject]
+        public DatabaseManager db
+        {
+            get;
+            set;
+        }
+
+        [Inject]
+        public DecklistManager DLMan
+        {
+            get;
+            set;
+        }
+
         List<string> recentFiles;
         string theme;
 
         public MainWindow()
         {
-
             InitializeComponent();
             this.Closed += MainWindow_Closed;
 
-            DLMan = new DecklistManager(DeckTab.CardList, DeckTab.DeckStats);
-
-            db = new DatabaseManager();
+            IKernel kernel = new StandardKernel(new TopdeckModule(DeckTab.CardList, DeckTab.DeckStats, FiltersTab.FilterListPanel, FiltersTab.FilterListPanel.RightPanel));
+            kernel.Inject(this);
+            kernel.Inject(DeckTab.DeckStats);
+            kernel.Inject(DeckTab.CardList);
+            kernel.Inject(FiltersTab);
+            kernel.Inject(FiltersTab.FilterFiltersPanel);
+            kernel.Inject(FiltersTab.FilterListPanel);
+            kernel.Inject(FiltersTab.FilterListPanel.RightPanel);
 
             RecentFilesTabSetup();
 
-            // assign the database manager to relevant classes
-            FiltersTab.setDatabaseManager(db);
-            DeckTab.CardList.setDatabaseManager(db);
-            DeckTab.DeckStats.DBMan = db;
-
-            // assign deck list manager to relevant classes
-            DeckTab.CardList.DLMan = DLMan;
-            DeckTab.DeckStats.DLMan = DLMan;
-            FiltersTab.FilterListPanel.DLMan = DLMan;
-
             DeckTab.CardList.RightPanel = DeckTab.CardView;
-            DeckTab.CardView.SetList.Visibility = System.Windows.Visibility.Collapsed;
+            DeckTab.CardView.SetList.Visibility = Visibility.Collapsed;
 
             if (File.Exists("theme.txt"))
             {
@@ -126,10 +121,10 @@ namespace TopDeck
 
             // hide the ability to pick recents until we know that we
             // have recent files to select
-            Recents.Visibility = System.Windows.Visibility.Collapsed;
-            RecentFileOne.Visibility = System.Windows.Visibility.Collapsed;
-            RecentFileTwo.Visibility = System.Windows.Visibility.Collapsed;
-            RecentFileThree.Visibility = System.Windows.Visibility.Collapsed;
+            Recents.Visibility = Visibility.Collapsed;
+            RecentFileOne.Visibility = Visibility.Collapsed;
+            RecentFileTwo.Visibility = Visibility.Collapsed;
+            RecentFileThree.Visibility = Visibility.Collapsed;
 
             List<TextBlock> recentTextBlocks = new List<TextBlock>();
             recentTextBlocks.Add(RecentFileOne);
@@ -145,8 +140,8 @@ namespace TopDeck
                 string[] fileSections = recentfile.Split(delimiters);
                 recentTextBlocks[index].Text = fileSections[fileSections.Length - 1];
 
-                Recents.Visibility = System.Windows.Visibility.Visible;
-                recentTextBlocks[index].Visibility = System.Windows.Visibility.Visible;
+                Recents.Visibility = Visibility.Visible;
+                recentTextBlocks[index].Visibility = Visibility.Visible;
 
                 index++;
             }

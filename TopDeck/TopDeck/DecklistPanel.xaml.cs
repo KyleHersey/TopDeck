@@ -1,30 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Collections.ObjectModel;
+using Ninject;
 
 namespace TopDeck
 {
     public partial class DecklistPanel : UserControl
     {
-
+        [Inject]
         public DecklistManager DLMan
         {
             get;
             set;
         }
 
+        [Inject]
         public DatabaseManager DBMan
         {
             get;
@@ -103,11 +96,6 @@ namespace TopDeck
         public void setSideboardItemsSource()
         {
             theSideboard.ItemsSource = DLMan.sideboard;
-        }
-
-        public void setDatabaseManager(DatabaseManager db)
-        {
-            DBMan = db;
         }
 
         //update the CardPanel to show the selected card

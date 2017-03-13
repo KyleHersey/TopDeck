@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 
 namespace TopDeck
@@ -40,6 +36,7 @@ namespace TopDeck
         }
 
         public DecklistManager(DecklistPanel dlPan, StatsPanel sPan)
+        //public DecklistManager()
         {
             //no deck currently loaded
             currentDeckName = "";

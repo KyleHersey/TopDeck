@@ -2,17 +2,9 @@
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Runtime.Serialization;
-using Newtonsoft;
-using System.Runtime.Serialization.Json;
 using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Windows;
 

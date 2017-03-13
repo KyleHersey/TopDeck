@@ -1,47 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Collections.ObjectModel;
+using Ninject;
 
 namespace TopDeck
 {
     public partial class StatsPanel : UserControl
     {
+        [Inject]
         public DatabaseManager DBMan
         {
             get;
             set;
         }
 
+        [Inject]
         public DecklistManager DLMan
         {
             get;
             set;
         }
 
+        [Inject]
         public ObservableCollection<KeyValuePair<string, int>> ColorSource
         {
             get;
             set;
         }
 
+        [Inject]
         public ObservableCollection<KeyValuePair<string, int>> TypeSource
         {
             get;
             set;
         }
 
+        [Inject]
         public ObservableCollection<KeyValuePair<int, int>> CostSource
         {
             get;
@@ -52,16 +48,16 @@ namespace TopDeck
         {
             InitializeComponent();
 
-            ColorSource = new ObservableCollection<KeyValuePair<string, int>>();
-            TypeSource = new ObservableCollection<KeyValuePair<string, int>>();
-            CostSource = new ObservableCollection<KeyValuePair<int, int>>();
+            //ColorSource = new ObservableCollection<KeyValuePair<string, int>>();
+            //TypeSource = new ObservableCollection<KeyValuePair<string, int>>();
+            //CostSource = new ObservableCollection<KeyValuePair<int, int>>();
 
             TypesPie.DataContext = this;
             ColorPie.DataContext = this;
             CostBar.DataContext = this;
         }
 
-        public void removeCard(String name) {
+        public void removeCard(string name) {
             Card card = DBMan.GetCard(name);
 
             //update colors
@@ -71,7 +67,7 @@ namespace TopDeck
                 {
                     if (ColorSource[i].Key.Equals("Colorless"))
                     {
-                        KeyValuePair<String, int> newKV = new KeyValuePair<string, int>(ColorSource[i].Key, ColorSource[i].Value - 1);
+                        KeyValuePair<string, int> newKV = new KeyValuePair<string, int>(ColorSource[i].Key, ColorSource[i].Value - 1);
                         ColorSource.RemoveAt(i);
                         ColorSource.Insert(i, newKV);
                     }
@@ -79,13 +75,13 @@ namespace TopDeck
             }
             else
             {
-                foreach (String color in card.Colors)
+                foreach (string color in card.Colors)
                 {
                     for (int i = 0; i < ColorSource.Count; i++)
                     {
                         if (ColorSource[i].Key.Equals(color))
                         {
-                            KeyValuePair<String, int> newKV = new KeyValuePair<string, int>(ColorSource[i].Key, ColorSource[i].Value - 1);
+                            KeyValuePair<string, int> newKV = new KeyValuePair<string, int>(ColorSource[i].Key, ColorSource[i].Value - 1);
                             ColorSource.RemoveAt(i);
                             ColorSource.Insert(i, newKV);
                         }
@@ -119,7 +115,7 @@ namespace TopDeck
             }
         }
 
-        public void addCard(String name)
+        public void addCard(string name)
         {
             Card card = DBMan.GetCard(name);
 
@@ -130,7 +126,7 @@ namespace TopDeck
                 {
                     if (ColorSource[i].Key.Equals("Colorless"))
                     {
-                        KeyValuePair<String, int> newKV = new KeyValuePair<string, int>(ColorSource[i].Key, ColorSource[i].Value + 1);
+                        KeyValuePair<string, int> newKV = new KeyValuePair<string, int>(ColorSource[i].Key, ColorSource[i].Value + 1);
                         ColorSource.RemoveAt(i);
                         ColorSource.Insert(i, newKV);
                     }
@@ -144,7 +140,7 @@ namespace TopDeck
                     {
                         if (ColorSource[i].Key.Equals(color))
                         {
-                            KeyValuePair<String, int> newKV = new KeyValuePair<string, int>(ColorSource[i].Key, ColorSource[i].Value + 1);
+                            KeyValuePair<string, int> newKV = new KeyValuePair<string, int>(ColorSource[i].Key, ColorSource[i].Value + 1);
                             ColorSource.RemoveAt(i);
                             ColorSource.Insert(i, newKV);
                         }
@@ -224,12 +220,12 @@ namespace TopDeck
                 TypeSource.RemoveAt(0);
             }
 
-            Dictionary<String, int> typeDict = new Dictionary<string, int>();
+            Dictionary<string, int> typeDict = new Dictionary<string, int>();
 
             foreach (LocalTuple tup in DLMan.currentDeck)
             {
                 Card card = DBMan.GetACardFromMultiverseId(tup.MultiverseId);
-                foreach (String type in card.Types)
+                foreach (string type in card.Types)
                 {
                     if (typeDict.Keys.Contains(type))
                     {
@@ -242,7 +238,7 @@ namespace TopDeck
                 }
             }
 
-            foreach (String type in typeDict.Keys)
+            foreach (string type in typeDict.Keys)
             {
                 TypeSource.Add(new KeyValuePair<string, int>(type, typeDict[type]));
             }
@@ -256,7 +252,7 @@ namespace TopDeck
             }
 
             //initialize list before going through deck
-            Dictionary<String, int> colorDict = new Dictionary<String, int>();
+            Dictionary<string, int> colorDict = new Dictionary<string, int>();
 
             //add each card from deck into dictionary
             foreach(LocalTuple tup in DLMan.currentDeck){
@@ -271,7 +267,7 @@ namespace TopDeck
                         colorDict.Add("Colorless", tup.Count);
                     }              
                 }
-                foreach (String color in card.Colors)
+                foreach (string color in card.Colors)
                 {
                     if (colorDict.Keys.Contains(color))
                     {
@@ -285,7 +281,7 @@ namespace TopDeck
             }
 
             //go through dictionary
-            foreach (String color in colorDict.Keys)
+            foreach (string color in colorDict.Keys)
             {
                     ColorSource.Add(new KeyValuePair<string, int>(color, colorDict[color]));
             }

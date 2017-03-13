@@ -1,24 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Collections.ObjectModel;
-using System.Threading;
+using Ninject;
 
 namespace TopDeck
 {
     public partial class ListPanel : UserControl
     {
+        [Inject]
         public DatabaseManager DBMan
         {
             get;
@@ -31,6 +22,7 @@ namespace TopDeck
             set;
         }
 
+        [Inject]
         public DecklistManager DLMan
         {
             get;
@@ -46,11 +38,6 @@ namespace TopDeck
         public void setItemsSource(List<string> names){
             theList.ItemsSource = names;
             names.Sort();
-        }
-
-        public void setDatabaseManager(DatabaseManager db)
-        {
-            DBMan = db;
         }
 
         private void theList_SelectionChanged(object sender, SelectionChangedEventArgs e)
