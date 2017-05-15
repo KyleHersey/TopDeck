@@ -2,18 +2,13 @@
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Runtime.Serialization;
-using Newtonsoft;
-using System.Runtime.Serialization.Json;
 using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Runtime.Caching;
+using System.Runtime.CompilerServices;
 using System.Windows;
 
 namespace TopDeck
@@ -22,11 +17,36 @@ namespace TopDeck
     {
         SQLiteConnection dbConnection;
 
+        private MemoryCache QueryCache { get; }
+
+        private static ThreadSafeRandom Random { get; } = new ThreadSafeRandom();
+
+        private static CacheItemPolicy NewArbitraryCacheExpiryPolicy
+        {
+            get
+            {
+                const int minSeconds = 60 * 5; // 5 minutes
+                const int maxSeconds = 60 * 10; // 10 minutes
+                int expirySeconds = Random.Next(minSeconds, maxSeconds);
+                TimeSpan expiry = TimeSpan.FromSeconds(expirySeconds);
+
+                CacheItemPolicy arbitraryExpiryPolicy = new CacheItemPolicy {SlidingExpiration = expiry};
+                return arbitraryExpiryPolicy;
+            }
+        }
+
+        /*
+            We're using the cache to as a catch-all across several different methods. We want to distinguish the keys for each of the call
+            sites. A fairly trivial and terrible approach is to just concat the key with whatever method is calling it, so... that's what 
+            we're going to do. We can lean pretty heavily on the compiler service to auto serve us the caller's method name.
+        */
+        private static string GetCacheKey(string key, [CallerMemberName] string propertyName = null) => $"{key}.{propertyName}";
+
         public DatabaseManager()
         {
             // check if db is there. If not, download it
             LoadDB();
-
+            QueryCache = MemoryCache.Default;
         }
 
         public void Update()
@@ -472,7 +492,6 @@ namespace TopDeck
                 return null;
             }
 
-
             if (ops[0] == '<')
             {
                 for (int i = 0; i < Int32.Parse(searchBy); i++)
@@ -518,7 +537,15 @@ namespace TopDeck
         // gets a card object by name
         public Card GetCard(string name)
         {
-            Card c = null;
+            string cacheKey = GetCacheKey(name);
+            Card c = QueryCache.Get(cacheKey) as Card;
+            if(!ReferenceEquals(c, null))
+            {
+                return c;
+            }
+
+            // TODO: Split these bad boys up
+            
             string sql = @"select *
                            from CARD
                            where name = @name";
@@ -529,26 +556,30 @@ namespace TopDeck
 
             SQLiteDataReader reader = cmd.ExecuteReader();
 
-            if (reader.Read())
+            if(!reader.Read())
             {
-                c = new Card();
-
-                c.CMC = (double)reader["cmc"];
-
-                if (!(reader["flavor"] is DBNull))
-                    c.Flavor = (string)reader["flavor"];
-
-                c.Name = (string)reader["name"];
-
-                if (!(reader["power"] is DBNull))
-                    c.Power = (string)reader["power"];
-
-                if (!(reader["card_text"] is DBNull))
-                    c.Text = (string)reader["card_text"];
-
-                if (!(reader["toughness"] is DBNull))
-                    c.Toughness = (string)reader["toughness"];
+                // We cannot continue :(
+                // TODO: Throw, or change this API? How often can we not read?
+                return null;
             }
+
+            c = new Card();
+
+            c.CMC = (double)reader["cmc"];
+
+            if (!(reader["flavor"] is DBNull))
+                c.Flavor = (string)reader["flavor"];
+
+            c.Name = (string)reader["name"];
+
+            if (!(reader["power"] is DBNull))
+                c.Power = (string)reader["power"];
+
+            if (!(reader["card_text"] is DBNull))
+                c.Text = (string)reader["card_text"];
+
+            if (!(reader["toughness"] is DBNull))
+                c.Toughness = (string)reader["toughness"];
 
             // add colors from table
             sql = @"select color
@@ -651,6 +682,8 @@ namespace TopDeck
             c.Rulings = rulings;
 
             // legalities - TODO
+
+            QueryCache.Add(cacheKey, c, NewArbitraryCacheExpiryPolicy);
             return c;
         }
 
@@ -668,6 +701,13 @@ namespace TopDeck
         //gets a name from a multiverse ID
         public string GetAName(string multiverseID)
         {
+            string cacheKey = GetCacheKey(multiverseID);
+            string cachedName = QueryCache.Get(cacheKey) as string;
+            if(!ReferenceEquals(cachedName, null))
+            {
+                return cachedName;
+            }
+
             string sql = @"select name
                             from MULTIVERSEID_SET
                             where multiverse_id = @mv";
@@ -678,7 +718,9 @@ namespace TopDeck
 
             if (reader.Read())
             {
-                return (string)reader["name"];
+                string cardName =  (string) reader["name"];
+                QueryCache.Add(cacheKey, cardName, NewArbitraryCacheExpiryPolicy);
+                return cardName;
             }
             return null;
         }
@@ -686,6 +728,13 @@ namespace TopDeck
         // get the earliest multiverse id
         public string GetHighestMultiverseId(string name)
         {
+            string cacheKey = GetCacheKey(name);
+            string cachedLargestMultiverseId = QueryCache.Get(cacheKey) as string;
+            if(!ReferenceEquals(cachedLargestMultiverseId, null))
+            {
+                return cachedLargestMultiverseId;
+            }
+
             string sql = @"select multiverse_id
                            from MULTIVERSEID_SET
                            where name like @name";
@@ -702,6 +751,7 @@ namespace TopDeck
                     largestMultiverseId = currentId;
                 }
             }
+            QueryCache.Add(cacheKey, largestMultiverseId, NewArbitraryCacheExpiryPolicy);
             return largestMultiverseId;
         }
     }
